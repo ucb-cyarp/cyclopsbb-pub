@@ -41,6 +41,14 @@ nSTFRep = 0:1:(16*128-1);
 nSTFNeg = (16*128):1:(17*128-1);
 
 %Complex Baseband Preamble Signal
-xSTF = cat(2, Ga_128(mod(nSTFRep, 128)+1).*exp(j*pi*nSTFRep/2), -Ga_128(mod(nSTFNeg, 128)+1).*exp(j*pi*nSTFNeg/2)); %+1 is for matlab
+xSTF = cat(2, Ga_128(mod(nSTFRep, 128)+1), -Ga_128(mod(nSTFNeg, 128)+1)); %+1 is for matlab
+%xSTF = cat(2, Ga_128(mod(nSTFRep, 128)+1).*exp(j*pi*nSTFRep/2), -Ga_128(mod(nSTFNeg, 128)+1).*exp(j*pi*nSTFNeg/2)); %+1 is for matlab
+xSTF = transpose(xSTF);
+
+n = 0:1:(17*128-1);
+n = transpose(n);
+xSTF = cat(2, n, xSTF);
+xSTF_I = real(xSTF);
+xSTF_Q = imag(xSTF);
 
 %% 
