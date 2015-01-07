@@ -42,13 +42,41 @@ nSTFNeg = (16*128):1:(17*128-1);
 
 %Complex Baseband Preamble Signal
 xSTF = cat(2, Ga_128(mod(nSTFRep, 128)+1), -Ga_128(mod(nSTFNeg, 128)+1)); %+1 is for matlab
-%xSTF = cat(2, Ga_128(mod(nSTFRep, 128)+1).*exp(j*pi*nSTFRep/2), -Ga_128(mod(nSTFNeg, 128)+1).*exp(j*pi*nSTFNeg/2)); %+1 is for matlab
+rSTF = cat(2, Ga_128(mod(nSTFRep, 128)+1).*exp(j*pi*nSTFRep/2), -Ga_128(mod(nSTFNeg, 128)+1).*exp(j*pi*nSTFNeg/2)); %+1 is for matlab
+
 xSTF = transpose(xSTF);
 
 n = 0:1:(17*128-1);
 n = transpose(n);
 xSTF = cat(2, n, xSTF);
-xSTF_I = real(xSTF);
-xSTF_Q = imag(xSTF);
 
-%% 
+rSTF = cat(2, n, xSTF);
+rSTF_I = real(xSTF);
+rSTF_Q = imag(xSTF);
+
+%% Generate Sequence
+D = D_128;
+W = W_128;
+
+c = golayGen(W, D, 128);
+disp(mat2str(c(1,:)));
+disp(mat2str(c(2,:)));
+
+%% Test Correlation
+
+input = xSTF(:, 2);
+input = transpose(input);
+%input = genA;
+input = cat(2, zeros(1, 1000), input);
+input = cat(2, input, zeros(1, 1000));
+
+D = D_128;
+W = W_128;
+
+c = golayCorrelate(input, W, D);
+
+figure
+subplot(2, 1, 1);
+plot(c(1, :))
+subplot(2, 1, 2);
+plot(c(2, :))
