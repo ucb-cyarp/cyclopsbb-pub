@@ -127,3 +127,38 @@ title('Correlators Superimposed');
 xlabel('Sample');
 ylabel('Correlator Output');
 legend('Ca', 'Cb');
+
+%% Test summation of a and b correlations
+Ca = golayCorrelate(cat(2, Ga_128, zeros(1, 128)), W_128, D_128);
+Ca = Ca(1, :);
+Cb = golayCorrelate(cat(2, Gb_128, zeros(1, 128)), W_128, D_128);
+Cb = Cb(2, :);
+
+S = Ca+Cb;
+
+figure
+subplot(3, 1, 1);
+plot(Ca);
+title('Ca');
+xlabel('Sample');
+ylabel('Correlator Output');
+subplot(3, 1, 2);
+plot(Cb);
+title('Cb');
+xlabel('Sample');
+ylabel('Correlator Output');
+subplot(3, 1, 3);
+plot(S);
+title('Ca+Cb');
+xlabel('Sample');
+ylabel('Correlator Output');
+
+fftS = fft(S);
+figure
+subplot(2, 1, 1)
+plot(abs(fftS))
+title('Frequency Response of Perfect Channel (From Ca+Cb)')
+ylabel('Magnitude')
+subplot(2, 1, 2)
+plot(atan(imag(fftS)./real(fftS)));
+ylabel('Phase')
