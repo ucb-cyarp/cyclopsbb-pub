@@ -78,5 +78,11 @@ c = golayCorrelate(input, W, D);
 figure
 subplot(2, 1, 1);
 plot(c(1, :))
+title('Ca');
+xlabel('Sample')
+ylabel('Correlator Output')
 subplot(2, 1, 2);
 plot(c(2, :))
+title('Cb')
+xlabel('Sample')
+ylabel('Correlator Output')
