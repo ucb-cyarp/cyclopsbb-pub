@@ -51,7 +51,7 @@ nCTRL_STFFin = (49*128):1:(50*128-1);
 
 %Complex Baseband Preamble Signal
 xSC_STF   = cat(2, Ga_128(mod(nSC_STFRep, 128)+1), -Ga_128(mod(nSC_STFNeg, 128)+1)); %+1 is for matlab
-xCTRL_STF = cat(2, Gb_128(mod(nCTRL_STFRep, 128)+1), -Gb_128(mod(nCTRL_STFNeg, 128)+1), Ga_128(mod(nCTRL_STFFin, 128)+1)); %+1 is for matlab
+xCTRL_STF = cat(2, Gb_128(mod(nCTRL_STFRep, 128)+1), -Gb_128(mod(nCTRL_STFNeg, 128)+1), -Ga_128(mod(nCTRL_STFFin, 128)+1)); %+1 is for matlab
 xSC_CEF   = cat(2, Gu_512, Gv_512, Gv_128);
 xCTRL_CEF = xSC_CEF;
 xSC_PRE   = cat(2, xSC_STF, xSC_CEF);
@@ -72,6 +72,9 @@ rSC_STF   = cat(2, Ga_128(mod(nSC_STFRep, 128)+1).*exp(j*pi*nSC_STFRep/2), -Ga_1
 rSC_STF = transpose(rSC_STF);
 rSC_STF_I = real(xSC_STF);
 rSC_STF_Q = imag(xSC_STF);
+
+tol = 15;
+cbTol = 5;
 
 figure;
 plot(rSC_STF);
