@@ -24,6 +24,11 @@ Gv_512 = cat(2, -Gb_128, Ga_128, -Gb_128, -Ga_128);
 
 Gv_128 = Gv_512(1:1:128);
 
+Gu_512_note = [-2, -1, 2, -1];
+Gv_512_note = [-2, 1, -2, -1];
+
+Gv_128_note = Gv_512_note(1);
+
 %From 802.11ad - Can Reconstruct Ga and Gb
 %A0 (n)= delta(n)
 %B0 (n)= delta(n)
@@ -63,6 +68,8 @@ xSC_CEF   = transpose(xSC_CEF);
 xCTRL_CEF = transpose(xCTRL_CEF);
 xSC_PRE   = transpose(xSC_PRE);
 xCTRL_PRE = transpose(xCTRL_PRE);
+
+cef_note  = cat(2, Gu_512_note, Gv_512_note, Gv_128_note);
 
 simX.time = [];
 simX.signals.values = xCTRL_PRE;
