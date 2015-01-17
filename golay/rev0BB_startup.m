@@ -77,7 +77,7 @@ testText = 'We the People of the United States, in Order to form a more perfect 
 testTextTrunk = testText(1:(1024/8));
 testTextTrunkDouble = double(testTextTrunk);
 startWord = ones(8, 1);
-guard = zeros(10, 1); %guard must be >5 or else start word is missed
+guard = zeros(4, 1); 
 after = zeros(100, 1);
 
 
@@ -101,7 +101,8 @@ rSC_STF_Q = imag(xSC_STF);
 
 tol = 15;
 cbTol = 5;
-guardInt = 10; %guard must be >5 or else start word is missed
+guardInt = 4;
+wordLen  = 8;
 guardTol = 5;
 
 outBuffer = zeros(1024,1);
