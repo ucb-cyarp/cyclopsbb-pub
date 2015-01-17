@@ -73,8 +73,25 @@ xCTRL_PRE = transpose(xCTRL_PRE);
 
 cef_note  = cat(2, Gu_512_note, Gv_512_note, Gv_128_note);
 
+testText = 'We the People of the United States, in Order to form a more perfect Union, establish Justice, insure domestic Tranquility, provide for the common defence, promote the general Welfare, and secure the Blessings of Liberty to ourselves and our Posterity, do ordain and establish this Constitution for the United States of America.';
+testTextTrunk = testText(1:(1024/8));
+testTextTrunkDouble = double(testTextTrunk);
+startWord = ones(8, 1);
+guard = zeros(5, 1);
+after = zeros(100, 1);
+
+
+testTextTrunkBin = [];
+for ind = 1:(1024/8)
+    newStr = dec2bin(testText(ind), 8);
+    testTextTrunkBin=cat(1, testTextTrunkBin, [str2num(newStr(:))]);
+end
+
+xCTRL_PRE_adj = (xCTRL_PRE + 1)./2;
+testMsg = cat(1, xCTRL_PRE_adj, guard, startWord, testTextTrunkBin, after);
+
 simX.time = [];
-simX.signals.values = xCTRL_PRE;
+simX.signals.values = testMsg;
 simX.signals.dimensions = 1;
 
 rSC_STF   = cat(2, Ga_128(mod(nSC_STFRep, 128)+1).*exp(j*pi*nSC_STFRep/2), -Ga_128(mod(nSC_STFNeg, 128)+1).*exp(j*pi*nSC_STFNeg/2)); %+1 is for matlab
