@@ -12,7 +12,7 @@ minVal = -maxVal;
 
 Kp = .1;
 Ki = .9;
-amp = .2;
+amp = 2.0;
 thetaInit = 0;
 
 expDomain = 3.3;
