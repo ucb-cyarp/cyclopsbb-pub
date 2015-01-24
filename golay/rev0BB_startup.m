@@ -127,6 +127,8 @@ guardInt = 4;
 wordLen  = 8;
 guardTol = 5;
 
+invertedTol = 8;
+
 %expectedWidth = 1;
 expectedWidth = 4;
 %expectedPer = 128;
