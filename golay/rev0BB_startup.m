@@ -10,12 +10,13 @@ clear; close all; clc;
 maxVal = 4;
 minVal = -maxVal;
 
-Kp = .1;
-Ki = .9;
+Kp = .01;
+Ki = .99;
 amp = 2.0;
 thetaInit = 0;
 
 expDomain = 3.3;
+expTol = .1;
 expResolution = 2^-7;
 
 %[a, b] = butter(8, .3);
