@@ -10,14 +10,16 @@ clear; close all; clc;
 maxVal = 4;
 minVal = -maxVal;
 
-Kp = .00001;
-Ki = .99999;
-amp = 6;
+loopNum =   [0.0025, 0.0025, 0.0025, 0.0025];
+loopDenom = [1, 0.99];
+amp = 4;
+
 thetaInit = 0;
 
 expDomain = 3.3;
 expTol = .1;
 expResolution = 2^-7;
+trigger = 60;
 
 %[a, b] = butter(8, .3);
 
