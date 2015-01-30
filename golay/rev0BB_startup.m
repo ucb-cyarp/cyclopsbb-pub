@@ -10,9 +10,9 @@ clear; close all; clc;
 maxVal = 4;
 minVal = -maxVal;
 
-Kp = .01;
-Ki = .99;
-amp = 2.0;
+Kp = .00001;
+Ki = .99999;
+amp = 6;
 thetaInit = 0;
 
 expDomain = 3.3;
