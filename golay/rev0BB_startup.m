@@ -7,6 +7,8 @@ clear; close all; clc;
 
 %% Sim Params
 
+eccTrellis = poly2trellis(7, [133 171 165]);
+
 maxVal = 4;
 minVal = -maxVal;
 
@@ -112,12 +114,19 @@ for ind = 1:(1024/8)
     testTextTrunkBin=cat(1, testTextTrunkBin, [str2num(newStr(:))]);
 end
 
+testTextTrunkCoded = convolutionVect( testTextTrunkBin(1:floor(1024/24)), eccTrellis );
+
 xCTRL_PRE_adj = (xCTRL_PRE + 1)./2;
 testMsg = cat(1, xCTRL_PRE_adj, guard, startWord, testTextTrunkBin, after);
 
 simX.time = [];
 simX.signals.values = testMsg;
 simX.signals.dimensions = 1;
+
+dataDelay = length(cat(1, xCTRL_PRE_adj, guard, startWord)) + 3;%delay in computing
+idealX.time = [];
+idealX.signals.values = cat(1, testTextTrunkBin, after);
+idealX.signals.dimensions = 1;
 
 rSC_STF   = cat(2, Ga_128(mod(nSC_STFRep, 128)+1).*exp(j*pi*nSC_STFRep/2), -Ga_128(mod(nSC_STFNeg, 128)+1).*exp(j*pi*nSC_STFNeg/2)); %+1 is for matlab
 rSC_STF = transpose(rSC_STF);
