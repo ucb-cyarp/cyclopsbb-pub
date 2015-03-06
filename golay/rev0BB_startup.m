@@ -99,6 +99,7 @@ xSC_PRE   = transpose(xSC_PRE);
 xCTRL_PRE = transpose(xCTRL_PRE);
 
 cef_note  = cat(2, Gu_512_note, Gv_512_note, Gv_128_note);
+cef_note  = int16(cef_note);
 
 testText = 'We the People of the United States, in Order to form a more perfect Union, establish Justice, insure domestic Tranquility, provide for the common defence, promote the general Welfare, and secure the Blessings of Liberty to ourselves and our Posterity, do ordain and establish this Constitution for the United States of America.';
 testTextTrunk = testText(1:(1024/8));
@@ -133,18 +134,18 @@ rSC_STF = transpose(rSC_STF);
 rSC_STF_I = real(xSC_STF);
 rSC_STF_Q = imag(xSC_STF);
 
-tol = 15;
-cbTol = 5;
-guardInt = 4;
-wordLen  = 8;
-guardTol = 5;
+tol = int16(15);
+cbTol = int16(5);
+guardInt = int16(4);
+wordLen  = int16(8);
+guardTol = int16(5);
 
-invertedTol = 8;
+invertedTol = int16(8);
 
 %expectedWidth = 1;
-expectedWidth = 4;
+expectedWidth = int16(4);
 %expectedPer = 128;
-expectedPer = 128*expectedWidth;
+expectedPer = int16(128*expectedWidth);
 
 outBuffer = zeros(1024,1);
 
