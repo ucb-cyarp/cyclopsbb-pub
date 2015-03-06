@@ -98,8 +98,12 @@ xCTRL_CEF = transpose(xCTRL_CEF);
 xSC_PRE   = transpose(xSC_PRE);
 xCTRL_PRE = transpose(xCTRL_PRE);
 
+%Note that CEF note is duplicated in the state machine function because
+%(for whatever reason) an array can not be passed as a parameter for
+%stateflow HDL coder
 cef_note  = cat(2, Gu_512_note, Gv_512_note, Gv_128_note);
 cef_note  = int16(cef_note);
+cef_note_len = uint16(length(cef_note));
 
 testText = 'We the People of the United States, in Order to form a more perfect Union, establish Justice, insure domestic Tranquility, provide for the common defence, promote the general Welfare, and secure the Blessings of Liberty to ourselves and our Posterity, do ordain and establish this Constitution for the United States of America.';
 testTextTrunk = testText(1:(1024/8));
