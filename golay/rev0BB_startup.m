@@ -6,6 +6,11 @@
 clear; close all; clc;
 
 %% Sim Params
+overSampleFreq = 300; %300 MHz
+overSample = 4;
+baseFreq = overSampleFreq/overSample; %300 MHz
+basePer = 1/baseFreq;
+overSamplePer = 1/overSampleFreq;
 
 eccTrellis = poly2trellis(7, [133 171 165]);
 
