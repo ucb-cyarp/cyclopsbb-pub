@@ -133,7 +133,7 @@ simX.time = [];
 simX.signals.values = testMsg;
 simX.signals.dimensions = 1;
 
-dataDelay = length(cat(1, xCTRL_PRE_adj, guard, startWord)) + 3;%delay in computing
+dataDelay = length(cat(1, xCTRL_PRE_adj, guard, startWord)) + 1;%delay in computing
 idealX.time = [];
 idealX.signals.values = cat(1, testTextTrunkBin, after);
 idealX.signals.dimensions = 1;
