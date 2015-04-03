@@ -110,8 +110,11 @@ cef_note  = cat(2, Gu_512_note, Gv_512_note, Gv_128_note);
 cef_note  = int16(cef_note);
 cef_note_len = uint16(length(cef_note));
 
-testText = 'We the People of the United States, in Order to form a more perfect Union, establish Justice, insure domestic Tranquility, provide for the common defence, promote the general Welfare, and secure the Blessings of Liberty to ourselves and our Posterity, do ordain and establish this Constitution for the United States of America.';
-testTextTrunk = testText(1:(1024/8));
+lineWidth = 60;
+dataLen = 4096;
+testText='That''s one small step for man, one giant leap for mankind. Yes, the surface is fine and powdery. I can kick it up loosely with my toe. It does adhere in fine layers like powdered charcoal to the sole and sides of my boots. I only go in a small fraction of an inch, maybe an eighth of an inch, but I can see the footprints of my boots and the treads in the fine, sandy particles. Neil, this is Houston. We''re copying. There seems to be no difficulty in moving around, as we suspected. It''s even perhaps easier than the simulations at one-sixth g that we performed in the various simulations on the ground. It''s virtually no trouble to walk around. The descent engine did not leave a crater of any size. It has about 1 foot clearance on the ground. We''re essentially on a very level place here. I can see some evidence of rays emanating from the descent engine, but a very insignificant amount.';
+%source https://www.hq.nasa.gov/alsj/a11/Apollo11VoiceTranscript-Geology.pdf
+testTextTrunk = testText(1:(dataLen/8));
 testTextTrunkDouble = double(testTextTrunk);
 startWord = ones(8, 1);
 guard = zeros(4, 1); 
@@ -119,12 +122,12 @@ after = zeros(100, 1);
 
 
 testTextTrunkBin = [];
-for ind = 1:(1024/8)
+for ind = 1:(dataLen/8)
     newStr = dec2bin(testText(ind), 8);
     testTextTrunkBin=cat(1, testTextTrunkBin, [str2num(newStr(:))]);
 end
 
-testTextTrunkCoded = convolutionVect( testTextTrunkBin(1:floor(1024/24)), eccTrellis );
+%testTextTrunkCoded = convolutionVect( testTextTrunkBin(1:floor(dataLen/24)), eccTrellis );
 
 xCTRL_PRE_adj = (xCTRL_PRE + 1)./2;
 testMsg = cat(1, xCTRL_PRE_adj, guard, startWord, testTextTrunkBin, after);
@@ -139,12 +142,12 @@ idealX.signals.values = cat(1, testTextTrunkBin, after);
 idealX.signals.dimensions = 1;
 
 rSC_STF   = cat(2, Ga_128(mod(nSC_STFRep, 128)+1).*exp(j*pi*nSC_STFRep/2), -Ga_128(mod(nSC_STFNeg, 128)+1).*exp(j*pi*nSC_STFNeg/2)); %+1 is for matlab
-rSC_STF = transpose(rSC_STF);
+rSC_STF   = transpose(rSC_STF);
 rSC_STF_I = real(xSC_STF);
 rSC_STF_Q = imag(xSC_STF);
 
-tol = int16(15);
-cbTol = int16(5);
+tol      = int16(15);
+cbTol    = int16(5);
 guardInt = int16(4);
 wordLen  = int16(8);
 guardTol = int16(5);
