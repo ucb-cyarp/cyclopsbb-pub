@@ -6,7 +6,7 @@
 clear; close all; clc;
 
 %% Sim Params
-overSampleFreq = 300; %300 MHz
+overSampleFreq = 150; %300 MHz
 overSample = 4;
 baseFreq = overSampleFreq/overSample; %300 MHz
 basePer = 1/baseFreq;
@@ -79,6 +79,10 @@ Gv_128_note = Gv_512_note(1);
 
 %% Timing Parms
 Tc = 1; % This is a fake Ts (not the one used in 802.11ad)
+
+%% Pipeline Parms
+DivPipe = 3;
+DivPipeMatch = DivPipe + 5;
 
 %% Golay Waveform
 nSC_STFRep = 0:1:(16*128-1);
