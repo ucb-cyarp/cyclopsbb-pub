@@ -6,7 +6,7 @@
 clear; close all; clc;
 
 %% Sim Params
-overSampleFreq = 150; %300 MHz
+overSampleFreq = 125; %300 MHz would be optimal, now targeting 125 MHz
 overSample = 4;
 baseFreq = overSampleFreq/overSample; %300 MHz
 basePer = 1/baseFreq;
