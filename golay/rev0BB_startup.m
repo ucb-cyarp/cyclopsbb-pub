@@ -4,6 +4,7 @@
 
 %% Init
 clear; close all; clc;
+disp('Setting Model Parameters ...')
 
 %% Sim Params
 overSampleFreq = 125; %300 MHz would be optimal, now targeting 125 MHz
@@ -32,6 +33,11 @@ trigger = 60;
 
 atanDomain = 6;
 atanResolution = 2^-7;
+
+%% Imperfections
+freqOffsetFactor = 0.001;
+%awgnEbN0 = 9;
+awgnEbN0 = 27;
 
 %% Golay Sequence
 Ga_128 = [+1, +1, -1, -1, -1, -1, -1, -1, -1, +1, -1, +1, +1, -1, -1, +1, +1, +1, -1, -1, +1, +1, +1, +1, -1, +1, -1, +1, -1, +1, +1, -1, -1, -1, +1, +1, +1, +1, +1, +1, +1, -1, +1, -1, -1, +1, +1, -1, +1, +1, -1, -1, +1, +1, +1, +1, -1, +1, -1, +1, -1, +1, +1, -1, +1, +1, -1, -1, -1, -1, -1, -1, -1, +1, -1, +1, +1, -1, -1, +1, +1, +1, -1, -1, +1, +1, +1, +1, -1, +1, -1, +1, -1, +1, +1, -1, +1, +1, -1, -1, -1, -1, -1, -1, -1, +1, -1, +1, +1, -1, -1, +1, -1, -1, +1, +1, -1, -1, -1, -1, +1, -1, +1, -1, +1, -1, -1, +1];
@@ -166,4 +172,6 @@ expectedPer = int16(128*expectedWidth);
 outBuffer = zeros(1024,1);
 
 %% Start Simulink
+disp('Opening Simulink ...')
 open_system('rev0BB')
+disp('Ready to Simulate')
