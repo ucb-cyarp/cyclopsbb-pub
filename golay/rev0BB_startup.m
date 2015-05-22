@@ -87,8 +87,8 @@ Gv_128_note = Gv_512_note(1);
 Tc = 1; % This is a fake Ts (not the one used in 802.11ad)
 
 %% Pipeline Parms
-DivPipe = 9;
-DivPipeMatch = DivPipe + 5;
+DivPipe = 3;
+DivPipeMatch = DivPipe*4 + 8;
 
 %% Golay Waveform
 nSC_STFRep = 0:1:(16*128-1);
