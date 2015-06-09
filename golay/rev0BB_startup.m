@@ -172,6 +172,6 @@ expectedPer = int16(128*expectedWidth);
 outBuffer = zeros(1024,1);
 
 %% Start Simulink
-disp('Opening Simulink ...')
-open_system('rev0BB')
-disp('Ready to Simulate')
+%disp('Opening Simulink ...')
+%open_system('rev0BB')
+%disp('Ready to Simulate')
