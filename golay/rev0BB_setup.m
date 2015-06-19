@@ -10,9 +10,10 @@ eccTrellis = poly2trellis(7, [133 171 165]);
 maxVal = 4;
 minVal = -maxVal;
 
-loopNum =   [0.0008, 0.0008, 0.0008, 0.0008, 0.0008, 0.0008, 0.0008, 0.0008, 0.0008, 0.0008];
 loopDenom = [1, 0.99, 0, 0, 0, 0, 0, 0, 0, 0];
-amp = 10;
+%loopNum =   0.008.*ones(size(loopDenom));
+loopNum =   0.007.*ones(size(loopDenom));
+amp = 4;
 
 averaging_samples = 40;
 averaging_num = (1/averaging_samples).*ones(1, averaging_samples);
