@@ -9,5 +9,5 @@ rev0BB_setup;
 
 %% Start Simulink
 disp('Opening Simulink ...')
-open_system('rev0BB')8
+open_system('rev0BB')
 disp('Ready to Simulate')

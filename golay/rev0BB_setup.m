@@ -10,10 +10,16 @@ eccTrellis = poly2trellis(7, [133 171 165]);
 maxVal = 4;
 minVal = -maxVal;
 
-loopDenom = [1, 0.99, 0, 0, 0, 0, 0, 0, 0, 0];
+
+%loopDenom = [1, 0.99, 0, 0, 0, 0, 0, 0, 0, 0];
 %loopNum =   0.008.*ones(size(loopDenom));
-loopNum =   0.006*ones(size(loopDenom));
-amp = 3;
+%loopNum =   0.006*ones(size(loopDenom));
+loopSamples = 2;
+%loopNum = firpm(smooth_samples-1,[0 .01 .04 .5]*2,[1 1 0 0]);
+%loopDenom = zeros(1, smooth_samples);
+%loopDenom(1) = 1;
+[loopNum, loopDenom] = butter(loopSamples, 0.4, 'low');
+amp = .125;
 
 averaging_samples = 32;
 averaging_num = (1/averaging_samples).*ones(1, averaging_samples);
@@ -21,7 +27,7 @@ averaging_denom = zeros(1, averaging_samples);
 averaging_denom(1) = 1;
 
 smooth_samples = 64;
-%[smooth_num, smooth_denom] = butter(32, 0.001, 'low');
+%[smooth_num, smooth_denom] = butter(smooth_samples, 0.001, 'low');
 smooth_num = firpm(smooth_samples-1,[0 .01 .04 .5]*2,[1 1 0 0]);
 %smooth_num = (0.001).*(1/smooth_samples).*ones(1, smooth_samples);
 smooth_denom = zeros(1, smooth_samples);
