@@ -12,37 +12,27 @@ minVal = -maxVal;
 
 %Carrier Recovery
 
-cr_smooth_samples = 2;
+cr_smooth_samples = 16;
+cr_smooth_num = (0.01/cr_smooth_samples).*ones(1, cr_smooth_samples);
 %cr_smooth_num = firpm(cr_smooth_samples-1,[0 .01 .04 .5]*2,[1 1 0 0]);
-%cr_smooth_denom = zeros(1, cr_smooth_samples);
-%cr_smooth_denom(1) = 1;
-[cr_smooth_num, cr_smooth_denom] = butter(cr_smooth_samples, 0.4, 'low');
-cr_smooth_amp = .0625;
-
-%integrator to push into final alignment
-cr_i_samples = 16;
-%[cr_i_num, cr_i_denom] = butter(cr_i_samples, 0.2, 'low');
-%1st order integrator
-cr_i_denom = zeros(1, cr_i_samples);
-cr_i_denom(1) = 1;
-cr_i_num = (1/cr_i_samples).*ones(1, cr_i_samples);
-%cr_i_denom = [1, 0];
-%cr_i_num = [1, 0];
-cr_i_amp = .045;
-%cr_i_amp = 0;
+cr_smooth_denom = zeros(1, cr_smooth_samples);
+cr_smooth_denom(1) = 1;
+cr_smooth_denom(2) = -0.9;
+%[cr_smooth_num, cr_smooth_denom] = butter(cr_smooth_samples, 0.30, 'low');
+cr_smooth_amp = .5;
 
 %Timing Recovery
-averaging_samples = 32;
+averaging_samples = 16;
 averaging_num = (1/averaging_samples).*ones(1, averaging_samples);
 averaging_denom = zeros(1, averaging_samples);
 averaging_denom(1) = 1;
 
-smooth_samples = 64;
-%[smooth_num, smooth_denom] = butter(smooth_samples, 0.001, 'low');
-smooth_num = firpm(smooth_samples-1,[0 .01 .04 .5]*2,[1 1 0 0]);
+smooth_samples = 4;
+[smooth_num, smooth_denom] = butter(smooth_samples, 0.1, 'low');
+%smooth_num = firpm(smooth_samples-1,[0 .01 .04 .5]*2,[1 1 0 0]);
 %smooth_num = (0.001).*(1/smooth_samples).*ones(1, smooth_samples);
-smooth_denom = zeros(1, smooth_samples);
-smooth_denom(1) = 1;
+%smooth_denom = zeros(1, smooth_samples);
+%smooth_denom(1) = 1;
 %smooth_denom(2) = -0.999;
 
 smooth_scale = .025;
@@ -68,7 +58,8 @@ rcRxFilt = [0.0136862302916632 -1.07255950749522e-17 -0.0189771276893529 -0.0291
 
 %% Imperfections
 freqOffsetFactor = 0.001;
-%awgnEbN0 = 9;
+%freqOffsetFactor = 0.004;
+%awgnEbN0 = 15; %very bad
 %awgnEbN0 = 30;
 awgnEbN0 = 1000000;
 
