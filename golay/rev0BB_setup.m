@@ -12,14 +12,27 @@ minVal = -maxVal;
 
 %Carrier Recovery
 
-cr_smooth_samples = 16;
-cr_smooth_num = (0.01/cr_smooth_samples).*ones(1, cr_smooth_samples);
+cr_bound_thresh = 2^-8;
+
+cr_smooth_samples = 8;
+cr_smooth_num = (0.005/cr_smooth_samples).*ones(1, cr_smooth_samples);
 %cr_smooth_num = firpm(cr_smooth_samples-1,[0 .01 .04 .5]*2,[1 1 0 0]);
 cr_smooth_denom = zeros(1, cr_smooth_samples);
 cr_smooth_denom(1) = 1;
-cr_smooth_denom(2) = -0.9;
+cr_smooth_denom(2) = -0.95;
 %[cr_smooth_num, cr_smooth_denom] = butter(cr_smooth_samples, 0.30, 'low');
-cr_smooth_amp = .5;
+cr_smooth_amp = .40;
+
+%cr_int_samples = 32;
+%cr_int_num = (1).*ones(1, cr_int_samples);
+%cr_int_denom = zeros(1, cr_int_samples);
+%cr_int_denom(1) = 1;
+cr_int_num = [1 0];
+cr_int_denom = [1 -0.99];
+cr_int_amp = .005;
+
+cr_pre_amp = 2;
+
 
 %Timing Recovery
 averaging_samples = 16;
@@ -44,13 +57,13 @@ thetaInit = 0;
 
 expDomain = 3.3;
 expTol = .1;
-expResolution = 2^-7;
+expResolution = 2^-8;
 trigger = 60;
 
 %[a, b] = butter(8, .3);
 
 atanDomain = 6;
-atanResolution = 2^-7;
+atanResolution = 2^-8;
 
 %Recieve Matching Filter Coefs (could not implement recieve match filter
 %since no decemation was used)
