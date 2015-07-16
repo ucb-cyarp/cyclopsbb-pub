@@ -19,30 +19,29 @@ regular_pipeline = 1;
 cr_bound_thresh = 2^-8;
 
 cr_smooth_samples = 4;
-cr_smooth_num = (0.010/cr_smooth_samples).*ones(1, cr_smooth_samples);
+cr_smooth_num = (1/cr_smooth_samples).*ones(1, cr_smooth_samples);
 %cr_smooth_num = firpm(cr_smooth_samples-1,[0 .01 .04 .5]*2,[1 1 0 0]);
-cr_smooth_denom = zeros(1, cr_smooth_samples);
-cr_smooth_denom(1) = 1;
-cr_smooth_denom(2) = -0.90;
+%cr_smooth_denom = zeros(1, cr_smooth_samples);
+%cr_smooth_denom(1) = 1;
+%cr_smooth_denom(2) = -0.90;
+
+cr_smooth_second_num = [1, 0];
+cr_smooth_second_denom = [1, -0.30];
+
+cr_int_preamp = 2^-8;
+cr_int_intr = -0.999999;
+cr_int_amp = 2^-5;
+
 %[cr_smooth_num, cr_smooth_denom] = butter(cr_smooth_samples, 0.30, 'low');
-cr_smooth_amp = .10;
+cr_smooth_amp = 2^-5;
 %cr_smooth_amp = 0;
 
-%cr_int_samples = 32;
-%cr_int_num = (1).*ones(1, cr_int_samples);
-%cr_int_denom = zeros(1, cr_int_samples);
-%cr_int_denom(1) = 1;
-cr_int_num = [1 0];
-cr_int_denom = [1 -0.9995];
-cr_int_amp = .0010;
-%cr_int_amp = 0;
-
-cr_pre_amp = 2;
+cr_pre_amp = 1;
 
 
 %Timing Recovery
-frac_lut_domain = 1;
-frac_lut_res = 2&-14;
+frac_lut_domain = 2.5;
+frac_lut_res = 2&-29;
 
 averaging_samples = 40;
 averaging_num = (1/averaging_samples).*ones(1, averaging_samples);
@@ -57,6 +56,9 @@ smooth_denom = zeros(1, smooth_samples);
 smooth_denom(1) = 1;
 smooth_denom(2) = -0.95;
 
+smooth_second_num = [1, 0];
+smooth_second_denom = [1, -0.95];
+
 smooth_scale = 0.0003;
 smooth_pre_scale = 1;
 %smooth_num = [-0.000291723590836063 -0.00189040309614012 -0.00292818756339082 -0.00465671740235307 -0.00627225726025284 -0.00748117979971559 -0.00784951042322378 -0.00706790676162783 -0.00504024683234228 -0.00197291259925477 0.00161229674999934 0.00495396936361733 0.00721256543859064 0.00768858301637501 0.00604275550354361 0.00245513351781428 -0.00233533446972779 -0.0071456688820574 -0.0106052499779213 -0.0115138806128092 -0.00920500804274433 -0.00382440805589127 0.00358205511814609 0.0112116568949578 0.0168877131886811 0.0186025199453639 0.0151051821901078 0.00638111222231867 -0.0061224001760283 -0.0196057813722362 -0.030387605228581 -0.0346529496038089 -0.0293287477668018 -0.0128886191262846 0.0141156057755088 0.0489367760994866 0.0869929664510594 0.122651800554721 0.150283146189454 0.165358043121494 0.165358043121494 0.150283146189454 0.122651800554721 0.0869929664510594 0.0489367760994866 0.0141156057755088 -0.0128886191262846 -0.0293287477668018 -0.0346529496038089 -0.030387605228581 -0.0196057813722362 -0.0061224001760283 0.00638111222231867 0.0151051821901078 0.0186025199453639 0.0168877131886811 0.0112116568949578 0.00358205511814609 -0.00382440805589127 -0.00920500804274433 -0.0115138806128092 -0.0106052499779213 -0.0071456688820574 -0.00233533446972779 0.00245513351781428 0.00604275550354361 0.00768858301637501 0.00721256543859064 0.00495396936361733 0.00161229674999934 -0.00197291259925477 -0.00504024683234228 -0.00706790676162783 -0.00784951042322378 -0.00748117979971559 -0.00627225726025284 -0.00465671740235307 -0.00292818756339082 -0.00189040309614012 -0.000291723590836063];
@@ -67,13 +69,13 @@ thetaInit = 0;
 
 expDomain = 3.3;
 expTol = .1;
-expResolution = 2^-8;
+expResolution = 2^-7;
 trigger = 60;
 
 %[a, b] = butter(8, .3);
 
-atanDomain = 6;
-atanResolution = 2^-8;
+atanDomain = 2.5;
+atanResolution = 2^-4;
 
 %Recieve Matching Filter Coefs (could not implement recieve match filter
 %since no decemation was used)
