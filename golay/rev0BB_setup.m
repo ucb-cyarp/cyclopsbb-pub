@@ -38,10 +38,12 @@ cr_smooth_amp = 2^-5;
 
 cr_pre_amp = 1;
 
-
+frac_lut_res_cr = 2^-5;
 %Timing Recovery
-frac_lut_domain = 2.5;
-frac_lut_res = 2&-29;
+frac_lut_domain = 7; % no longer used
+
+frac_lut_res = 2^-5;
+
 
 averaging_samples = 40;
 averaging_num = (1/averaging_samples).*ones(1, averaging_samples);
