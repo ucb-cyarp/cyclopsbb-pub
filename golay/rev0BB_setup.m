@@ -30,10 +30,10 @@ cr_smooth_second_denom = [1, -0.30];
 
 cr_int_preamp = 2^-8;
 cr_int_intr = -0.999999;
-cr_int_amp = 2^-5;
+cr_int_amp = 2^-4;
 
 %[cr_smooth_num, cr_smooth_denom] = butter(cr_smooth_samples, 0.30, 'low');
-cr_smooth_amp = 2^-5;
+cr_smooth_amp = 2^-4;
 %cr_smooth_amp = 0;
 
 cr_pre_amp = 1;
@@ -42,7 +42,7 @@ frac_lut_res_cr = 2^-5;
 %Timing Recovery
 frac_lut_domain = 7; % no longer used
 
-frac_lut_res = 2^-5;
+frac_lut_res = 2^-6;
 
 
 averaging_samples = 40;
