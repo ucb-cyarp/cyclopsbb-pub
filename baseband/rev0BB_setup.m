@@ -71,7 +71,7 @@ thetaInit = 0;
 
 expDomain = 3.3;
 expTol = .1;
-expResolution = 2^-7;
+expResolution = 2^-6;
 trigger = 60;
 
 %[a, b] = butter(8, .3);
