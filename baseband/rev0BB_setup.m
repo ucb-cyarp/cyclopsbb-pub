@@ -173,7 +173,7 @@ cef_note  = int16(cef_note);
 cef_note_len = uint16(length(cef_note));
 
 startWord = ones(8, 1);
-guard = zeros(4, 1); 
+guard = zeros(8, 1); 
 after = zeros(100, 1);
 xCTRL_PRE_adj = (xCTRL_PRE + 1)./2;
 
