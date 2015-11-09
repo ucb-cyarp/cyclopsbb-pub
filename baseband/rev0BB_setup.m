@@ -29,16 +29,16 @@ cr_smooth_second_num = [1, 0];
 cr_smooth_second_denom = [1, -0.30];
 
 cr_int_preamp = 2^-8;
-cr_int_intr = -0.999999;
-cr_int_amp = 2^-5+2^-7;
+cr_int_intr = -0.9999999;
+cr_int_amp = 2^-7+2^-8;
 
 %[cr_smooth_num, cr_smooth_denom] = butter(cr_smooth_samples, 0.30, 'low');
-cr_smooth_amp = 2^-5;
+cr_smooth_amp = 2^-4;
 %cr_smooth_amp = 0;
 
 cr_pre_amp = 1;
 
-frac_lut_res_cr = 2^-5;
+frac_lut_res_cr = 2^-4;
 %Timing Recovery
 frac_lut_domain = 5;
 
@@ -71,13 +71,13 @@ thetaInit = 0;
 
 expDomain = 3.3;
 expTol = .1;
-expResolution = 2^-6;
+expResolution = 2^-4;
 trigger = 60;
 
 %[a, b] = butter(8, .3);
 
 atanDomain = 2.5;
-atanResolution = 2^-4;
+atanResolution = 2^-3;
 
 %Recieve Matching Filter Coefs (could not implement recieve match filter
 %since no decemation was used)
