@@ -9,6 +9,9 @@ else
 	textTrunk = [str, char(32.*ones(1, idivide(len,uint32(8)) - length(str)))];
 end
 
+disp(textTrunk);
+disp(length(textTrunk));
+
 textTrunkBin = [];
 for ind = 1:length(textTrunk)
     newStr = dec2bin(textTrunk(ind), 8);
