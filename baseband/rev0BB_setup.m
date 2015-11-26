@@ -45,7 +45,7 @@ frac_lut_domain = 5;
 frac_lut_res = 2^-5;
 
 
-averaging_samples = 40;
+averaging_samples = 20;
 averaging_num = (1/averaging_samples).*ones(1, averaging_samples);
 averaging_denom = zeros(1, averaging_samples);
 averaging_denom(1) = 1;
