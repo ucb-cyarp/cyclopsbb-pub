@@ -174,7 +174,7 @@ plot(atan(imag(fftS)./real(fftS)));
 ylabel('Phase')
 
 %% Test filtered summation of a and b correlations
-h = [0.25, 0.25, 0.25, 0, 0, 0, 0, 0];
+h = [0.25, -0.25, 0.25, 0, 0, 0, 0, 0];
 ffth = fft(h, 1000);
 figure
 subplot(2, 1, 1)
