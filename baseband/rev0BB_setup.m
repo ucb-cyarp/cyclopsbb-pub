@@ -89,6 +89,9 @@ trigger = 60;
 atanDomain = 3;
 atanResolution = 2^-5;
 
+lnDomain = 4;
+lnResolution = 2^-5;
+
 %Recieve Matching Filter Coefs (could not implement recieve match filter
 %since no decemation was used)
 
@@ -96,9 +99,9 @@ atanResolution = 2^-5;
 %% Imperfections
 freqOffsetFactor = 0.001;
 %freqOffsetFactor = 0.004;
-%awgnEbN0 = 15; %very bad
+awgnEbN0 = 15; %very bad
 %awgnEbN0 = 30;
-awgnEbN0 = 1000000;
+%awgnEbN0 = 1000000;
 
 %% Golay Sequence
 Ga_128 = [+1, +1, -1, -1, -1, -1, -1, -1, -1, +1, -1, +1, +1, -1, -1, +1, +1, +1, -1, -1, +1, +1, +1, +1, -1, +1, -1, +1, -1, +1, +1, -1, -1, -1, +1, +1, +1, +1, +1, +1, +1, -1, +1, -1, -1, +1, +1, -1, +1, +1, -1, -1, +1, +1, +1, +1, -1, +1, -1, +1, -1, +1, +1, -1, +1, +1, -1, -1, -1, -1, -1, -1, -1, +1, -1, +1, +1, -1, -1, +1, +1, +1, -1, -1, +1, +1, +1, +1, -1, +1, -1, +1, -1, +1, +1, -1, +1, +1, -1, -1, -1, -1, -1, -1, -1, +1, -1, +1, +1, -1, -1, +1, -1, -1, +1, +1, -1, -1, -1, -1, +1, -1, +1, -1, +1, -1, -1, +1];
