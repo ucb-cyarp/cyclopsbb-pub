@@ -1,9 +1,11 @@
 %% Sim Params
 overSampleFreq = 250; %300 MHz would be optimal, now targeting 250 MHz
 overSample = 4;
+slowSample = 3;
 baseFreq = overSampleFreq/overSample; %300 MHz
 basePer = 1/baseFreq;
 overSamplePer = 1/overSampleFreq;
+slowPer = overSamplePer*slowSample;
 
 eccTrellis = poly2trellis(7, [133 171 165]);
 
@@ -48,31 +50,40 @@ frac_lut_res_cr = 2^-4;
 
 
 %Timing Recovery
-frac_lut_domain = 5;
+frac_lut_domain = 4;
 
-frac_lut_res = 2^-6;
+frac_lut_res = 2^-10;
 
+range_max = 2^(18-13-1)-1;
+range_min = -2^(18-13-1);
+frac_lut_table_breaks = -frac_lut_domain:frac_lut_res:(frac_lut_domain-1);
+frac_lut_table_data = 1./frac_lut_table_breaks;
+
+for ind = 1:length(frac_lut_table_data)
+   if frac_lut_table_data(ind) > range_max
+       frac_lut_table_data(ind) = range_max;
+   elseif frac_lut_table_data(ind) < range_min
+       frac_lut_table_data(ind) = range_min;
+   end
+end
+   
 timing_loop_prescale = 0.5;
 
 
-averaging_samples = 20;
+averaging_samples = 256;
 averaging_num = (1/averaging_samples).*ones(1, averaging_samples);
 averaging_denom = zeros(1, averaging_samples);
 averaging_denom(1) = 1;
 
-smooth_samples = 8;
+smooth_samples = 128;
 %[smooth_num, smooth_denom] = butter(smooth_samples, 0.35, 'low');
 %smooth_num = firpm(smooth_samples-1,[0 .01 .04 .5]*2,[1 1 0 0]);
-smooth_num = (0.7).*(1/smooth_samples).*ones(1, smooth_samples);
+smooth_num = (1/smooth_samples).*ones(1, smooth_samples);
 smooth_denom = zeros(1, smooth_samples);
-smooth_denom(1) = 1;
-smooth_denom(2) = -0.90;
-
-smooth_second_num = [1, 0];
-smooth_second_denom = [1, -0.90];
 
 smooth_scale = 0.00075;
-smooth_pre_scale = 1;
+smooth_pre_scale = 0.5;
+smooth_intg = 0.90;
 %smooth_num = [-0.000291723590836063 -0.00189040309614012 -0.00292818756339082 -0.00465671740235307 -0.00627225726025284 -0.00748117979971559 -0.00784951042322378 -0.00706790676162783 -0.00504024683234228 -0.00197291259925477 0.00161229674999934 0.00495396936361733 0.00721256543859064 0.00768858301637501 0.00604275550354361 0.00245513351781428 -0.00233533446972779 -0.0071456688820574 -0.0106052499779213 -0.0115138806128092 -0.00920500804274433 -0.00382440805589127 0.00358205511814609 0.0112116568949578 0.0168877131886811 0.0186025199453639 0.0151051821901078 0.00638111222231867 -0.0061224001760283 -0.0196057813722362 -0.030387605228581 -0.0346529496038089 -0.0293287477668018 -0.0128886191262846 0.0141156057755088 0.0489367760994866 0.0869929664510594 0.122651800554721 0.150283146189454 0.165358043121494 0.165358043121494 0.150283146189454 0.122651800554721 0.0869929664510594 0.0489367760994866 0.0141156057755088 -0.0128886191262846 -0.0293287477668018 -0.0346529496038089 -0.030387605228581 -0.0196057813722362 -0.0061224001760283 0.00638111222231867 0.0151051821901078 0.0186025199453639 0.0168877131886811 0.0112116568949578 0.00358205511814609 -0.00382440805589127 -0.00920500804274433 -0.0115138806128092 -0.0106052499779213 -0.0071456688820574 -0.00233533446972779 0.00245513351781428 0.00604275550354361 0.00768858301637501 0.00721256543859064 0.00495396936361733 0.00161229674999934 -0.00197291259925477 -0.00504024683234228 -0.00706790676162783 -0.00784951042322378 -0.00748117979971559 -0.00627225726025284 -0.00465671740235307 -0.00292818756339082 -0.00189040309614012 -0.000291723590836063];
 %smooth_denom = zeros(size(smooth_num));
 %smooth_denom(1) = 1;
@@ -81,26 +92,40 @@ thetaInit = 0;
 
 expDomain = 3.3;
 expTol = .1;
-expResolution = 2^-3;
+expResolution = 2^-5;
 trigger = 60;
 
 %[a, b] = butter(8, .3);
 
-atanDomain = 3;
-atanResolution = 2^-5;
+atanDomain = 5;
+atanResolution = 2^-9;
 
-lnDomain = 4;
-lnResolution = 2^-5;
+atanDomainTiming = 6;
+atanResolutionTiming = 2^-9;
 
 %Recieve Matching Filter Coefs (could not implement recieve match filter
 %since no decemation was used)
+
+%AGC config
+agc_detector_taps = 256;
+agc_detector_coef = ones(1,agc_detector_taps)./agc_detector_taps;
+
+lnDomain = 16;
+lnResolution = 2^-9;
+
+agcExpDomain = 8;
+agcExpResolution = 2^-9;
+
+agcDesired = 0;
+agcStep = 2^-10;
 
 
 %% Imperfections
 freqOffsetFactor = 0.001;
 %freqOffsetFactor = 0.004;
-awgnEbN0 = 15; %very bad
-%awgnEbN0 = 30;
+%awgnEbN0 = 10; %very bad
+%awgnEbN0 = 15; %very bad
+awgnEbN0 = 30;
 %awgnEbN0 = 1000000;
 
 %% Golay Sequence
