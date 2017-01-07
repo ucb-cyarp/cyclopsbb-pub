@@ -100,7 +100,7 @@ trigger = 60;
 atanDomain = 5;
 atanResolution = 2^-9;
 
-atanDomainTiming = 20;
+atanDomainTiming = 16;
 atanResolutionTiming = 2^-7;
 
 %Recieve Matching Filter Coefs (could not implement recieve match filter
