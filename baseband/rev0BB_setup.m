@@ -101,7 +101,7 @@ atanDomain = 5;
 atanResolution = 2^-9;
 
 atanDomainTiming = 16;
-atanResolutionTiming = 2^-7;
+atanResolutionTiming = 2^-5;
 
 %Recieve Matching Filter Coefs (could not implement recieve match filter
 %since no decemation was used)
