@@ -126,9 +126,9 @@ agcSaturation = 4;
 freqOffsetFactor = 0.001;
 %freqOffsetFactor = 0.004;
 %awgnEbN0 = 10; %very bad
-awgnEbN0 = 15; %very bad
+%awgnEbN0 = 15; %very bad
 %awgnEbN0 = 20;
-%awgnEbN0 = 30;
+awgnEbN0 = 30;
 %awgnEbN0 = 60;
 %awgnEbN0 = 1000000;
 
@@ -213,8 +213,6 @@ cef_note  = cat(2, Gu_512_note, Gv_512_note, Gv_128_note);
 cef_note  = int16(cef_note);
 cef_note_len = uint16(length(cef_note));
 
-startWord = ones(8, 1);
-guard = zeros(8, 1); 
 after = zeros(100, 1);
 xCTRL_PRE_adj = (xCTRL_PRE + 1)./2;
 
@@ -222,7 +220,7 @@ lineWidth = 60;
 dataLen = 4096;
 testText='That''s one small step for man, one giant leap for mankind. Yes, the surface is fine and powdery. I can kick it up loosely with my toe. It does adhere in fine layers like powdered charcoal to the sole and sides of my boots. I only go in a small fraction of an inch, maybe an eighth of an inch, but I can see the footprints of my boots and the treads in the fine, sandy particles. Neil, this is Houston. We''re copying. There seems to be no difficulty in moving around, as we suspected. It''s even perhaps easier than the simulations at one-sixth g that we performed in the various simulations on the ground. It''s virtually no trouble to walk around. The descent engine did not leave a crater of any size. It has about 1 foot clearance on the ground. We''re essentially on a very level place here. I can see some evidence of rays emanating from the descent engine, but a very insignificant amount.';
 %source https://www.hq.nasa.gov/alsj/a11/Apollo11VoiceTranscript-Geology.pdf
-[testMsg, testTextTrunk, testTextTrunkBin] =generate_frame(testText, dataLen, xCTRL_PRE_adj, startWord, guard, after);
+[testMsg, testTextTrunk, testTextTrunkBin] =generate_frame(testText, dataLen, xCTRL_PRE_adj, after);
 
 %pad some 0's to the front (simulate what occurs in the FPGA given the
 %modulator)
@@ -236,7 +234,7 @@ simX.time = [];
 simX.signals.values = testMsgFPGA;
 simX.signals.dimensions = 1;
 
-dataDelay = length(cat(1, xCTRL_PRE_adj, guard, startWord)) + 1 + 187+360+1;%delay in computing
+dataDelay = length(cat(1, xCTRL_PRE_adj)) + 1 + 187+360+1;%delay in computing
 idealX.time = [];
 idealX.signals.values = cat(1, testTextTrunkBin, after);
 idealX.signals.dimensions = 1;
