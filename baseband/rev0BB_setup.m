@@ -119,14 +119,17 @@ agcExpResolution = 2^-9;
 agcDesired = 0;
 agcStep = 2^-10;
 
+agcSaturation = 4;
+
 
 %% Imperfections
 freqOffsetFactor = 0.001;
 %freqOffsetFactor = 0.004;
 %awgnEbN0 = 10; %very bad
 %awgnEbN0 = 15; %very bad
-%awgnEbN0 = 30;
-awgnEbN0 = 1000000;
+awgnEbN0 = 30;
+%awgnEbN0 = 60;
+%awgnEbN0 = 1000000;
 
 %% Golay Sequence
 Ga_128 = [+1, +1, -1, -1, -1, -1, -1, -1, -1, +1, -1, +1, +1, -1, -1, +1, +1, +1, -1, -1, +1, +1, +1, +1, -1, +1, -1, +1, -1, +1, +1, -1, -1, -1, +1, +1, +1, +1, +1, +1, +1, -1, +1, -1, -1, +1, +1, -1, +1, +1, -1, -1, +1, +1, +1, +1, -1, +1, -1, +1, -1, +1, +1, -1, +1, +1, -1, -1, -1, -1, -1, -1, -1, +1, -1, +1, +1, -1, -1, +1, +1, +1, -1, -1, +1, +1, +1, +1, -1, +1, -1, +1, -1, +1, +1, -1, +1, +1, -1, -1, -1, -1, -1, -1, -1, +1, -1, +1, +1, -1, -1, +1, -1, -1, +1, +1, -1, -1, -1, -1, +1, -1, +1, -1, +1, -1, -1, +1];
@@ -222,7 +225,10 @@ testText='That''s one small step for man, one giant leap for mankind. Yes, the s
 
 %pad some 0's to the front (simulate what occurs in the FPGA given the
 %modulator)
-mod_imperfection = zeros(500, 1);
+
+pad_first = 2000;
+
+mod_imperfection = zeros(pad_first, 1);
 testMsgFPGA = cat(1, mod_imperfection, testMsg);
 
 simX.time = [];
