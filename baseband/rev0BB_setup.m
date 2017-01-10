@@ -93,7 +93,7 @@ thetaInit = 0;
 expDomain = 3.3;
 expTol = .1;
 expResolution = 2^-5;
-trigger = 60;
+trigger = 90;
 
 %[a, b] = butter(8, .3);
 
@@ -126,8 +126,9 @@ agcSaturation = 4;
 freqOffsetFactor = 0.001;
 %freqOffsetFactor = 0.004;
 %awgnEbN0 = 10; %very bad
-%awgnEbN0 = 15; %very bad
-awgnEbN0 = 30;
+awgnEbN0 = 15; %very bad
+%awgnEbN0 = 20;
+%awgnEbN0 = 30;
 %awgnEbN0 = 60;
 %awgnEbN0 = 1000000;
 
