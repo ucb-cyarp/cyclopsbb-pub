@@ -128,8 +128,8 @@ freqOffsetFactor = 0.001;
 %awgnEbN0 = 10; %very bad
 %awgnEbN0 = 15; %very bad
 %awgnEbN0 = 20;
-awgnEbN0 = 30;
-%awgnEbN0 = 60;
+%awgnEbN0 = 30;
+awgnEbN0 = 60;
 %awgnEbN0 = 1000000;
 
 %% Golay Sequence
@@ -245,7 +245,7 @@ rSC_STF_I = real(xSC_STF);
 rSC_STF_Q = imag(xSC_STF);
 
 tol      = int16(15);
-cbTol    = int16(5);
+cbTol    = int16(10);
 guardInt = int16(4);
 wordLen  = int16(8);
 guardTol = int16(5);
