@@ -75,7 +75,7 @@ averaging_num = (1/averaging_samples).*ones(1, averaging_samples);
 averaging_denom = zeros(1, averaging_samples);
 averaging_denom(1) = 1;
 
-smooth_samples = 128;
+smooth_samples = 64;
 %[smooth_num, smooth_denom] = butter(smooth_samples, 0.35, 'low');
 %smooth_num = firpm(smooth_samples-1,[0 .01 .04 .5]*2,[1 1 0 0]);
 smooth_num = (1/smooth_samples).*ones(1, smooth_samples);
@@ -129,7 +129,8 @@ freqOffsetFactor = 0.001;
 %awgnEbN0 = 15; %very bad
 %awgnEbN0 = 20;
 %awgnEbN0 = 30;
-awgnEbN0 = 60;
+awgnEbN0 = 45;
+%awgnEbN0 = 60;
 %awgnEbN0 = 1000000;
 
 %% Golay Sequence
