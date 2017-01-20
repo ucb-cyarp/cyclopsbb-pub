@@ -13,8 +13,8 @@ open_system('rev0BB');
 %rev0BB_setup;
 
 %% Init Model
-trials = 30;
-dBSnrRange = -3:.5:6;
+trials = 200;
+dBSnrRange = 4:.5:6;
 indRange = 1:1:length(dBSnrRange);
 
 rev0BB_setup;
@@ -75,23 +75,13 @@ for dBSnrInd = indRange
 end
 
 figure;
-semilogy(dBSnrRange, idealBer);
+semilogy(dBSnrRange, idealBer, 'b-');
 hold all;
-semilogy(dBSnrRange, sim_result);
+semilogy(dBSnrRange, sim_result, 'r*-');
 xlabel('Eb/N0 (dB)')
 ylabel('BER')
-legend('Ideal', 'Simulation');
-title('Simulation vs. Ideal Accounting for Oversampling')
-grid on;
-
-figure;
-semilogy(dBSnrRange, idealBer, 'bo');
-hold all;
-semilogy(dBSnrRange, sim_result, 'r*');
-xlabel('Eb/N0 (dB)')
-ylabel('BER')
-legend('Ideal', 'Simulation');
-title('Simulation vs. Ideal Accounting for Oversampling')
+legend('Theoretical', 'Simulation');
+title('Baseband Simulation vs. Theoretical (Coherent BPSK over AWGN)')
 grid on;
 
 %close_system('rev0BB');
