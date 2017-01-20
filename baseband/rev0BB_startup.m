@@ -21,7 +21,7 @@ createTestVectors;
 %freqOffsetFactor = 0.001;
 freqOffsetFactor = 0;
 %freqOffsetFactor = 0.004;
-awgnSNR = 15;
+awgnSNR = 5.5;
 awgnSeed = 67;
 
 %txTimingOffset = 0.00005;

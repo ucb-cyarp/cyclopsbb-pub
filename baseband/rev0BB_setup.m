@@ -120,10 +120,10 @@ agc_detector_taps = 256;
 agc_detector_coef = ones(1,agc_detector_taps)./agc_detector_taps;
 
 lnDomain = 16;
-lnResolution = 2^-9;
+lnResolution = 2^-3;
 
 agcExpDomain = 8;
-agcExpResolution = 2^-9;
+agcExpResolution = 2^-5;
 
 agcDesired = 0;
 agcStep = 2^-11;

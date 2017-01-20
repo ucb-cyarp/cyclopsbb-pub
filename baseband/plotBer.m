@@ -14,7 +14,7 @@ open_system('rev0BB');
 
 %% Init Model
 trials = 30;
-dBSnrRange = 5.5:.5:5.5;
+dBSnrRange = -3:.5:6;
 indRange = 1:1:length(dBSnrRange);
 
 rev0BB_setup;
@@ -29,7 +29,7 @@ for dBSnrInd = indRange
     awgnSNR = dBSnrRange(dBSnrInd);
     trial_result = zeros(1, length(indRange));
     
-    for trial = 1:1:1
+    for trial = 1:1:trials
         seed = abs(dBSnrRange(dBSnrInd)*1000+trial);
         awgnSeed = abs(dBSnrRange(dBSnrInd)*1000+trial+10000000);
         [testMsg, testTextTrunkBin] = generate_random_frame(seed, dataLen, xCTRL_PRE_adj, after);
@@ -51,7 +51,7 @@ for dBSnrInd = indRange
         idealX.signals.values = cat(1, testTextTrunkBin, after);
         idealX.signals.dimensions = 1;
         
-        simulink_out = sim('rev0BB', 'SimulationMode', 'normal');
+        simulink_out = sim('rev0BB', 'SimulationMode', 'rapid');
         data_recieved = simulink_out.get('data_recieved');
         assignin('base','data_recieved',data_recieved);
         
