@@ -52,7 +52,7 @@ for dBSnrInd = indRange
         idealX.signals.values = cat(1, testTextTrunkBin, after);
         idealX.signals.dimensions = 1;
         
-        simulink_out = sim('rev0BB', 'SimulationMode', 'rapid');
+        simulink_out = sim('rev0BB', 'SimulationMode', 'accelerator');
         data_recieved = simulink_out.get('data_recieved');
         assignin('base','data_recieved',data_recieved);
         
