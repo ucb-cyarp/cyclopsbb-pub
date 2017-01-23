@@ -13,14 +13,14 @@ open_system('rev0BB');
 %rev0BB_setup;
 
 %% Init Model
-trials = 1000;
-dBSnrRange = -2:.5:8;
+trials = 200;
+dBSnrRange = -2:.5:5;
 indRange = 1:1:length(dBSnrRange);
 
 rev0BB_setup;
 
-freqOffsetFactor = 0;
-txTimingOffset = 0;
+freqOffsetFactor = 0.0001;
+txTimingOffset = -0.00005;
 
 iOffset = 0.01;
 qOffset = 0.01;
