@@ -13,8 +13,8 @@ open_system('rev0BB');
 %rev0BB_setup;
 
 %% Init Model
-trials = 200;
-dBSnrRange = 4:.5:6;
+trials = 1000;
+dBSnrRange = -2:.5:8;
 indRange = 1:1:length(dBSnrRange);
 
 rev0BB_setup;
@@ -73,6 +73,8 @@ for dBSnrInd = indRange
     
     idealBer(dBSnrInd) = berawgn(dBSnrRange(dBSnrInd) + 10*log10(overSample), 'psk', 2, 'nondiff');
 end
+
+%% Plot
 
 figure;
 semilogy(dBSnrRange, idealBer, 'b-');

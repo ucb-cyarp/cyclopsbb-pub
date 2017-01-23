@@ -89,7 +89,7 @@ smooth_samples = 64;
 smooth_num = (1/smooth_samples).*ones(1, smooth_samples);
 smooth_denom = zeros(1, smooth_samples);
 
-smooth_scale = 0.007;
+smooth_scale = 0.01;
 smooth_live_scale = 40;
 smooth_pre_scale = 0.007;
 smooth_intg = 0.98;
