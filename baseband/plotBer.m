@@ -19,8 +19,8 @@ indRange = 1:1:length(dBSnrRange);
 
 rev0BB_setup;
 
-freqOffsetFactor = 0.0001;
-txTimingOffset = -0.00005;
+freqOffsetFactor = 0.001;
+txTimingOffset = 0.0001;
 
 iOffset = 0.01;
 qOffset = 0.01;
@@ -33,6 +33,10 @@ for dBSnrInd = indRange
         seed = abs(dBSnrRange(dBSnrInd)*1000+trial);
         awgnSeed = abs(dBSnrRange(dBSnrInd)*1000+trial+10000000);
         [testMsg, testTextTrunkBin] = generate_random_frame(seed, dataLen, xCTRL_PRE_adj, after);
+        
+        rng(awgnSeed+100);
+        txTimingPhase = rand(1);
+        rxPhaseOffset = rand(1)*360;
         
         pad_first = 2000;
 

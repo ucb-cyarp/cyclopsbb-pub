@@ -26,7 +26,13 @@ awgnSNR = 5.5;
 awgnSeed = 67;
 
 %txTimingOffset = 0.0002;
+
 txTimingOffset = 0.0001;
+
+rng(awgnSeed);
+txTimingPhase = rand(1);
+rxPhaseOffset = rand(1)*360;
+
 %txTimingOffset = 0;
 
 iOffset = 0.01;
