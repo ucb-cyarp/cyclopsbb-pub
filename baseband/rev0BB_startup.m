@@ -18,14 +18,15 @@ seed = 67;
 createTestVectors;
 
 %% Imperfections
-%freqOffsetFactor = 0.001;
-freqOffsetFactor = 0.0001;
+freqOffsetFactor = 0.001;
+%freqOffsetFactor = 0.0001;
 %freqOffsetFactor = 0;
 %freqOffsetFactor = 0.004;
 awgnSNR = 5.5;
 awgnSeed = 67;
 
-txTimingOffset = -0.00005;
+%txTimingOffset = 0.0002;
+txTimingOffset = 0.0001;
 %txTimingOffset = 0;
 
 iOffset = 0.01;
