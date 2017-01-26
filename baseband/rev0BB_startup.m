@@ -23,17 +23,16 @@ freqOffsetFactor = 0.001;
 %freqOffsetFactor = 0;
 %freqOffsetFactor = 0.004;
 awgnSNR = 5.5;
+%awgnSNR = 100;
 awgnSeed = 67;
 
 %txTimingOffset = 0.0002;
-
 txTimingOffset = 0.0001;
+%txTimingOffset = 0;
 
 rng(awgnSeed);
 txTimingPhase = rand(1);
 rxPhaseOffset = rand(1)*360;
-
-%txTimingOffset = 0;
 
 iOffset = 0.01;
 qOffset = 0.01;
