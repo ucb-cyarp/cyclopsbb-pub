@@ -235,7 +235,7 @@ rSC_STF   = transpose(rSC_STF);
 rSC_STF_I = real(xSC_STF);
 rSC_STF_Q = imag(xSC_STF);
 
-cbTol    = int16(15);
+cbTol    = int16(20);
 guardInt = int16(4);
 wordLen  = int16(8);
 guardTol = int16(5);
