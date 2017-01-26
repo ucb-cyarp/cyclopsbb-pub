@@ -24,6 +24,8 @@ freqOffsetFactor = 0.001;
 %freqOffsetFactor = 0.004;
 awgnSNR = 5.5;
 %awgnSNR = 100;
+%awgnSNR = 0;
+
 awgnSeed = 67;
 
 %txTimingOffset = 0.0002;
