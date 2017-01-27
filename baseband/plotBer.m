@@ -81,13 +81,13 @@ end
 %% Plot
 
 figure;
-semilogy(dBSnrRange, idealBer, 'b-');
+semilogy(dBSnrRange + 10*log10(overSample), idealBer, 'b-');
 hold all;
-semilogy(dBSnrRange, sim_result, 'r*-');
+semilogy(dBSnrRange + 10*log10(overSample), sim_result, 'r*-');
 xlabel('Eb/N0 (dB)')
 ylabel('BER')
 legend('Theoretical', 'Simulation');
-title('Baseband Simulation vs. Theoretical (Coherent BPSK over AWGN)')
+title('Baseband Simulation vs. Theoretical (Uncoded Coherent BPSK over AWGN)')
 grid on;
 
 %close_system('rev0BB');

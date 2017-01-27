@@ -1,7 +1,7 @@
 %pad some 0's to the front (simulate what occurs in the FPGA given the
 %modulator)
 
-pad_first = 2000;
+pad_first = 10000;
 
 mod_imperfection = zeros(pad_first, 1);
 testMsgFPGA = cat(1, mod_imperfection, testMsg);
