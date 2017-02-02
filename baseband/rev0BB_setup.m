@@ -45,55 +45,72 @@ cr_smooth_second_num = [1, 0];
 cr_smooth_second_denom = [1, -0.999];
 
 cr_int_preamp = 2^-9;
-cr_int_amp = 2^-6;
+cr_int_intr = 0.9999999;
+cr_int_amp = 2^-8;
 
 %[cr_smooth_num, cr_smooth_denom] = butter(cr_smooth_samples, 0.30, 'low');
-cr_smooth_amp = 2^-7+2^-8;
+cr_smooth_amp = 2^-8+2^-9;
 %cr_smooth_amp = 0;
 
 cr_pre_amp = 1;
 
 cr_saturation = 0.5;
 
+frac_lut_domain_cr = 64;
 frac_lut_res_cr = 2^-4;
+frac_lut_range_max_cr = 127;
+frac_lut_range_min_cr = -frac_lut_range_max_cr;
+frac_lut_table_breaks_cr = -frac_lut_domain_cr:frac_lut_res_cr:(frac_lut_domain_cr-1);
+frac_lut_table_data_cr = 1./frac_lut_table_breaks_cr;
+
+for ind = 1:length(frac_lut_table_data_cr)
+   if frac_lut_table_data_cr(ind) > frac_lut_range_max_cr
+       frac_lut_table_data_cr(ind) = frac_lut_range_max_cr;
+   elseif frac_lut_table_data_cr(ind) < frac_lut_range_min_cr
+       frac_lut_table_data_cr(ind) = frac_lut_range_min_cr;
+   end
+end
 
 
 %Timing Recovery
-frac_lut_domain = 16;
+frac_lut_domain = 512;
 
-frac_lut_res = 2^-7;
+%frac_lut_res = 2^-7;
+frac_lut_res = 2^-5;
 
-range_max = 10;
-range_min = -10;
+frac_lut_range_max = 512;
+frac_lut_range_min = -frac_lut_range_max;
 frac_lut_table_breaks = -frac_lut_domain:frac_lut_res:(frac_lut_domain-1);
 frac_lut_table_data = 1./frac_lut_table_breaks;
 
 for ind = 1:length(frac_lut_table_data)
-   if frac_lut_table_data(ind) > range_max
-       frac_lut_table_data(ind) = range_max;
-   elseif frac_lut_table_data(ind) < range_min
-       frac_lut_table_data(ind) = range_min;
+   if frac_lut_table_data(ind) > frac_lut_range_max
+       frac_lut_table_data(ind) = frac_lut_range_max;
+   elseif frac_lut_table_data(ind) < frac_lut_range_min
+       frac_lut_table_data(ind) = frac_lut_range_min;
    end
 end
    
 timing_loop_prescale = 0.5;
 
 
-averaging_samples = 256;
-averaging_num = (1/averaging_samples).*ones(1, averaging_samples);
+averaging_samples = 128;
+averaging_num = ones(1, averaging_samples);
 averaging_denom = zeros(1, averaging_samples);
 averaging_denom(1) = 1;
 
-smooth_samples = 512;
+smooth_samples = 128;
 %[smooth_num, smooth_denom] = butter(smooth_samples, 0.35, 'low');
 %smooth_num = firpm(smooth_samples-1,[0 .01 .04 .5]*2,[1 1 0 0]);
 smooth_num = (1/smooth_samples).*ones(1, smooth_samples);
 smooth_denom = zeros(1, smooth_samples);
 
-timing_i = 0.05;
-timing_p = 50;
+timing_i = 0.3;
+timing_p = 40;
 timing_d = 0;
 smooth_pre_scale = 0.0001;
+
+timing_decay=0.999;
 
 %for 256 smoothing
 %i=0.85, p=100, d=25 or 10
@@ -111,22 +128,22 @@ smooth_pre_scale = 0.0001;
 %smooth_denom = zeros(size(smooth_num));
 %smooth_denom(1) = 1;
 
-smooth_saturate = 10e-3;%/timing_i;
+smooth_saturate = 2.5e-3;%/timing_i;
 
 thetaInit = 0;
 
 expDomain = 3.3;
 expTol = .1;
 expResolution = 2^-5;
-trigger = 80;
+trigger = 70;
 
 %[a, b] = butter(8, .3);
 
 atanDomain = 5;
 atanResolution = 2^-9;
 
-atanDomainTiming = 32;
-atanResolutionTiming = 2^-5;
+atanDomainTiming = 512;
+atanResolutionTiming = 2^-6;
 
 %Recieve Matching Filter Coefs (could not implement recieve match filter
 %since no decemation was used)

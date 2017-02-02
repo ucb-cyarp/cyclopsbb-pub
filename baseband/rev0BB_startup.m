@@ -22,9 +22,14 @@ createTestVectors;
 %freqOffsetFactor = 0.0001;
 freqOffsetFactor = 0;
 %freqOffsetFactor = 0.004;
-awgnSNR = 5.5;
-%awgnSNR = 100;
+
+%awgnSNR = -6;
 %awgnSNR = 0;
+%awgnSNR = 5.5;
+%awgnSNR = 6;
+%awgnSNR = 12;
+%awgnSNR = 92;
+awgnSNR = 100;
 
 awgnSeed = 67;
 
