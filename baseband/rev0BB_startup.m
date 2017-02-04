@@ -19,23 +19,24 @@ createTestVectors;
 
 %% Imperfections
 %freqOffsetFactor = 0.001;
-%freqOffsetFactor = 0.0001;
-freqOffsetFactor = 0;
+freqOffsetFactor = 0.0001;
+%freqOffsetFactor = 0.0002;
+%freqOffsetFactor = 0;
 %freqOffsetFactor = 0.004;
 
 %awgnSNR = -6;
 %awgnSNR = 0;
 %awgnSNR = 5.5;
-%awgnSNR = 6;
+awgnSNR = 6;
 %awgnSNR = 12;
 %awgnSNR = 92;
-awgnSNR = 100;
+%awgnSNR = 100;
 
 awgnSeed = 67;
 
 %txTimingOffset = 0.0002;
-%txTimingOffset = 0.0001;
-txTimingOffset = 0;
+txTimingOffset = 0.0001;
+%txTimingOffset = 0;
 
 rng(awgnSeed);
 txTimingPhase = rand(1);

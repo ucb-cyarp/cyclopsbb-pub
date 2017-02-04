@@ -2,7 +2,7 @@ dataLen = 4096;
 lineWidth = 60;
 
 %% Sim Params
-overSampleFreq = 250; %300 MHz would be optimal, now targeting 250 MHz
+overSampleFreq = 250e6; %300 MHz would be optimal, now targeting 250 MHz
 overSample = 4;
 slowSample = 3;
 baseFreq = overSampleFreq/overSample; %300 MHz
@@ -73,7 +73,7 @@ end
 
 
 %Timing Recovery
-frac_lut_domain = 512;
+frac_lut_domain = 256;
 
 %frac_lut_res = 2^-7;
 frac_lut_res = 2^-5;
@@ -105,7 +105,7 @@ smooth_samples = 128;
 smooth_num = (1/smooth_samples).*ones(1, smooth_samples);
 smooth_denom = zeros(1, smooth_samples);
 
-timing_i = 0.3;
+timing_i = 0.25;
 timing_p = 40;
 timing_d = 0;
 smooth_pre_scale = 0.0001;
@@ -143,7 +143,7 @@ atanDomain = 5;
 atanResolution = 2^-9;
 
 atanDomainTiming = 512;
-atanResolutionTiming = 2^-6;
+atanResolutionTiming = 2^-5;
 
 %Recieve Matching Filter Coefs (could not implement recieve match filter
 %since no decemation was used)
