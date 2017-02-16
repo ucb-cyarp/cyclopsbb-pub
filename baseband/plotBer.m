@@ -3,31 +3,35 @@ clear; close all; clc;
 
 warning off;
 
+timestamp = datestr(now,'ddmmmyyyy-HH_MM_SSAM');
+
 addpath(pwd);
 currDir = pwd;
 addpath(currDir);
 tmpDir = tempname;
 mkdir(tmpDir);
 cd(tmpDir);
-open_system('rev0BB');
+open_system('gm_rev0BB');
 %rev0BB_setup;
 
 %% Init Model
-trials = 200;
+trials = 1000;
 dBSnrRange = -2:.5:5;
 indRange = 1:1:length(dBSnrRange);
 
 rev0BB_setup;
 
-freqOffsetFactor = 0.001;
-txTimingOffset = 0.0001;
+freqOffsetFactor = 0;
+txTimingOffset = 0;
 
 iOffset = 0.01;
 qOffset = 0.01;
 
+trial_bit_errors = zeros(trials, length(indRange));
+trial_failures = zeros(trials, length(indRange));
+
 for dBSnrInd = indRange
     awgnSNR = dBSnrRange(dBSnrInd);
-    trial_result = zeros(1, length(indRange));
     
     for trial = 1:1:trials
         seed = abs(dBSnrRange(dBSnrInd)*1000+trial);
@@ -61,36 +65,52 @@ for dBSnrInd = indRange
         
         if(length(testTextTrunkBin) ~= length(data_recieved))
             disp(['SNR: ', num2str(dBSnrRange(dBSnrInd)),' Trial: ', num2str(trial), ' Recieved Data Length Unexpected (', num2str(length(data_recieved)), '): Likely that no data was recieved']);
-            bitErrors = inf;
+            bitErrors = length(testTextTrunkBin);
+            failure = 1;
         else
             delta = abs(double(data_recieved) - testTextTrunkBin);
             bitErrors = sum(delta);
             ber = bitErrors/length(data_recieved);
+            failure = 0;
             disp(['SNR: ', num2str(dBSnrRange(dBSnrInd)),' Trial: ', num2str(trial), ' BER: ', num2str(ber), ', Errors: ', num2str(bitErrors), ', Length: ', num2str(length(data_recieved))]);
         end
         
-        trial_result(trial) = bitErrors;
+        trial_failures(trial, dBSnrInd) = failure;
+        trial_bit_errors(trial, dBSnrInd) = bitErrors;
     end
     
-
-    sim_result(dBSnrInd) = sum(trial_result)/(trials*length(testTextTrunkBin));
+    sim_failures (dBSnrInd) = sum(trial_failures(:,dBSnrInd));
+    sim_ber(dBSnrInd) = sum(trial_bit_errors(:,dBSnrInd))/(trials*length(testTextTrunkBin));
     
     idealBer(dBSnrInd) = berawgn(dBSnrRange(dBSnrInd) + 10*log10(overSample), 'psk', 2, 'nondiff');
 end
 
 %% Plot
 
-figure;
+fig1 = figure;
 semilogy(dBSnrRange + 10*log10(overSample), idealBer, 'b-');
 hold all;
-semilogy(dBSnrRange + 10*log10(overSample), sim_result, 'r*-');
+semilogy(dBSnrRange + 10*log10(overSample), sim_ber, 'r*-');
 xlabel('Eb/N0 (dB)')
 ylabel('BER')
 legend('Theoretical', 'Simulation');
 title('Baseband Simulation vs. Theoretical (Uncoded Coherent BPSK over AWGN)')
 grid on;
 
+fig2 = figure;
+bar(dBSnrRange + 10*log10(overSample), sim_failures);
+xlabel('Eb/N0 (dB)')
+ylabel('Number of Packet Decode Failures')
+title(['Number of Packet Decode Failures (No Valid Frame Detected) for ' num2str(trials), ' Trials'])
+grid on;
+
+
 %close_system('rev0BB');
 cd(currDir);
 rmdir(tmpDir,'s');
 rmpath(currDir);
+
+savefig(fig1, ['BERvsEbN0-fig1-',timestamp]);
+savefig(fig2, ['BERvsEbN0-fig2-',timestamp]);
+save(['BERvsEbN0-workspace-',timestamp]);
+
