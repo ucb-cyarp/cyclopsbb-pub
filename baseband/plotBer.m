@@ -21,7 +21,7 @@ indRange = 1:1:length(dBSnrRange);
 
 rev0BB_setup;
 
-freqOffsetFactor = 0;
+freqOffsetHz = 0;
 txTimingOffset = 0;
 
 iOffset = 0.01;

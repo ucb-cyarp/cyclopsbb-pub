@@ -4,7 +4,7 @@ lineWidth = 60;
 %% Sim Params
 overSampleFreq = 250e6; %300 MHz would be optimal, now targeting 250 MHz
 overSample = 4;
-slowSample = 3;
+slowSample = 2;
 baseFreq = overSampleFreq/overSample; %300 MHz
 basePer = 1/baseFreq;
 overSamplePer = 1/overSampleFreq;
@@ -45,11 +45,11 @@ cr_smooth_second_num = [1, 0];
 cr_smooth_second_denom = [1, -0.999];
 
 cr_int_preamp = 2^-9;
-cr_int_intr = 0.9999999;
-cr_int_amp = 2^-8;
+cr_int_intr = 0.999;
+cr_int_amp = 2^-4;
 
 %[cr_smooth_num, cr_smooth_denom] = butter(cr_smooth_samples, 0.30, 'low');
-cr_smooth_amp = 2^-8+2^-9;
+cr_smooth_amp = 2^-6;
 %cr_smooth_amp = 0;
 
 cr_pre_amp = 1;
