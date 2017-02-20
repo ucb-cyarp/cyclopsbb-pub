@@ -44,9 +44,9 @@ cr_smooth_num = (1/cr_smooth_samples).*ones(1, cr_smooth_samples);
 cr_smooth_second_num = [1, 0];
 cr_smooth_second_denom = [1, -0.999];
 
-cr_int_preamp = 2^-9;
+cr_int_preamp = 2^-10;
 cr_int_intr = 0.999;
-cr_int_amp = 2^-4;
+cr_int_amp = 2^-3;
 
 %[cr_smooth_num, cr_smooth_denom] = butter(cr_smooth_samples, 0.30, 'low');
 cr_smooth_amp = 2^-6;
@@ -105,8 +105,8 @@ smooth_samples = 128;
 smooth_num = (1/smooth_samples).*ones(1, smooth_samples);
 smooth_denom = zeros(1, smooth_samples);
 
-timing_i = 0.25;
-timing_p = 40;
+timing_i = 0.2;
+timing_p = 35;
 timing_d = 0;
 smooth_pre_scale = 0.0001;
 
@@ -149,7 +149,7 @@ atanResolutionTiming = 2^-5;
 %since no decemation was used)
 
 %AGC config
-agc_detector_taps = 256;
+agc_detector_taps = 128;
 agc_detector_coef = ones(1,agc_detector_taps)./agc_detector_taps;
 
 lnDomain = 16;
@@ -161,7 +161,10 @@ agcExpDomain = agcSaturation;
 agcExpResolution = 2^-7;
 
 agcDesired = 0;
-agcStep = 2^-11;
+%agcStep = 2^-10+2^-11;
+%agcStep = 2^-11;
+agcStep = 2^-12;
+%agcStep = 2^-13;
 
 %% Golay Sequence
 Ga_128 = [+1, +1, -1, -1, -1, -1, -1, -1, -1, +1, -1, +1, +1, -1, -1, +1, +1, +1, -1, -1, +1, +1, +1, +1, -1, +1, -1, +1, -1, +1, +1, -1, -1, -1, +1, +1, +1, +1, +1, +1, +1, -1, +1, -1, -1, +1, +1, -1, +1, +1, -1, -1, +1, +1, +1, +1, -1, +1, -1, +1, -1, +1, +1, -1, +1, +1, -1, -1, -1, -1, -1, -1, -1, +1, -1, +1, +1, -1, -1, +1, +1, +1, -1, -1, +1, +1, +1, +1, -1, +1, -1, +1, -1, +1, +1, -1, +1, +1, -1, -1, -1, -1, -1, -1, -1, +1, -1, +1, +1, -1, -1, +1, -1, -1, +1, +1, -1, -1, -1, -1, +1, -1, +1, -1, +1, -1, -1, +1];
@@ -252,7 +255,7 @@ rSC_STF   = transpose(rSC_STF);
 rSC_STF_I = real(xSC_STF);
 rSC_STF_Q = imag(xSC_STF);
 
-cbTol    = int16(20);
+cbTol    = int16(36);
 guardInt = int16(4);
 wordLen  = int16(8);
 guardTol = int16(5);
