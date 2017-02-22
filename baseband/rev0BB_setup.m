@@ -44,12 +44,12 @@ cr_smooth_num = (1/cr_smooth_samples).*ones(1, cr_smooth_samples);
 cr_smooth_second_num = [1, 0];
 cr_smooth_second_denom = [1, -0.999];
 
-cr_int_preamp = 2^-10;
+cr_int_preamp = 2^-8;
 cr_int_intr = 0.999;
-cr_int_amp = 2^-3;
+cr_int_amp = 2^-4;
 
 %[cr_smooth_num, cr_smooth_denom] = butter(cr_smooth_samples, 0.30, 'low');
-cr_smooth_amp = 2^-6;
+cr_smooth_amp = 2^-7;
 %cr_smooth_amp = 0;
 
 cr_pre_amp = 1;

@@ -49,7 +49,7 @@ rxPhaseOffset = rand(1)*360;
 iOffset = 0.001;
 qOffset = 0.001;
 
-lowfreq_osc_amp = .25;
+lowfreq_osc_amp = 0;
 lowfreq_osc_offset = .75;
 lowfreq_osc_freq = 2e5;
 
