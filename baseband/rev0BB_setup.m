@@ -9,6 +9,7 @@ baseFreq = overSampleFreq/overSample; %300 MHz
 basePer = 1/baseFreq;
 overSamplePer = 1/overSampleFreq;
 slowPer = overSamplePer*slowSample;
+fifo_slow_per = overSamplePer * overSample/slowSample;
 
 eccTrellis = poly2trellis(7, [133 171 165]);
 
@@ -21,14 +22,31 @@ minVal = -maxVal;
 rcTxFilt = [-0.00848977273295494 -0.00410375263794876 0.00610325957004339 0.0148423780873929 0.0136814876976658 -1.07218784092424e-17 -0.0189705516775549 -0.0291138954791167 -0.0188689803130457 0.0106324500165036 0.0424488636647747 0.0519808667473508 0.0232973509312447 -0.0360457753550969 -0.0923829913484155 -0.100017778681868 -0.0262777670691454 0.126160213742839 0.313609824035538 0.467827800726157 0.527417705721797 0.467827800726157 0.313609824035538 0.126160213742839 -0.0262777670691454 -0.100017778681868 -0.0923829913484155 -0.0360457753550969 0.0232973509312447 0.0519808667473508 0.0424488636647747 0.0106324500165036 -0.0188689803130457 -0.0291138954791167 -0.0189705516775549 -1.07218784092424e-17 0.0136814876976658 0.0148423780873929 0.00610325957004339 -0.00410375263794876 -0.00848977273295494];
 rcRxFilt = [-0.00848977273295494 -0.00410375263794876 0.00610325957004339 0.0148423780873929 0.0136814876976658 -1.07218784092424e-17 -0.0189705516775549 -0.0291138954791167 -0.0188689803130457 0.0106324500165036 0.0424488636647747 0.0519808667473508 0.0232973509312447 -0.0360457753550969 -0.0923829913484155 -0.100017778681868 -0.0262777670691454 0.126160213742839 0.313609824035538 0.467827800726157 0.527417705721797 0.467827800726157 0.313609824035538 0.126160213742839 -0.0262777670691454 -0.100017778681868 -0.0923829913484155 -0.0360457753550969 0.0232973509312447 0.0519808667473508 0.0424488636647747 0.0106324500165036 -0.0188689803130457 -0.0291138954791167 -0.0189705516775549 -1.07218784092424e-17 0.0136814876976658 0.0148423780873929 0.00610325957004339 -0.00410375263794876 -0.00848977273295494];
 
-
-
 %Xilinx Settings
 mult_pipeline = 3;
 regular_pipeline = 1;
 
 %Tx Interp filter
 tx_interp_filt = firpm(30, [0.0, 0.25, 0.3, 1], [1, 1, 0, 0]);
+
+% %DC Blocking filter:
+% fs = overSampleFreq; % Sampling frequency
+% f = [0 200e3];          % Cutoff frequencies
+% a = [0 1];           % Desired amplitudes
+% dev = [.001 .4]; %Passband needs to be exceptionally flat
+% 
+% %fs = overSampleFreq/overSample; % Sampling frequency
+% %f = [0 100e3];          % Cutoff frequencies
+% %a = [1 0];           % Desired amplitudes
+% %dev = [.05 .02]; %Passband needs to be exceptionally flat
+% 
+% dc_avg = 64;
+% dc_avg_filt = ones(1, dc_avg)./dc_avg;
+% 
+% [dc_n,fo,ao,w] = firpmord(f,a,dev,fs);
+% dc_n
+% dc_block = firpm(dc_n,fo,ao,w);
+% freqz(dc_block,1,1024,fs)
 
 %Carrier Recovery
 
@@ -44,17 +62,23 @@ cr_smooth_num = (1/cr_smooth_samples).*ones(1, cr_smooth_samples);
 cr_smooth_second_num = [1, 0];
 cr_smooth_second_denom = [1, -0.999];
 
-cr_int_preamp = 2^-8;
-cr_int_intr = 0.999;
-cr_int_amp = 2^-4;
+cr_i_preamp = 2^-8;
+cr_integrator1_decay = 0.999;
+cr_integrator2_decay = 0;
+
+cr_i = 2^-4;
+cr_p = 2^-7;
 
 %[cr_smooth_num, cr_smooth_denom] = butter(cr_smooth_samples, 0.30, 'low');
-cr_smooth_amp = 2^-7;
+
 %cr_smooth_amp = 0;
 
-cr_pre_amp = 1;
+cr_pre_scale = 1;
+cr_pre_stage2_scale = 1;
+cr_post_scale = 1;
 
-cr_saturation = 0.5;
+cr_integrator1_saturation = 0.5;
+cr_integrator2_saturation = 0.5;
 
 frac_lut_domain_cr = 64;
 frac_lut_res_cr = 2^-4;
@@ -90,8 +114,6 @@ for ind = 1:length(frac_lut_table_data)
        frac_lut_table_data(ind) = frac_lut_range_min;
    end
 end
-   
-timing_loop_prescale = 0.5;
 
 
 averaging_samples = 128;
@@ -99,18 +121,23 @@ averaging_num = ones(1, averaging_samples);
 averaging_denom = zeros(1, averaging_samples);
 averaging_denom(1) = 1;
 
-smooth_samples = 128;
+timing_smooth_samples = 128;
 %[smooth_num, smooth_denom] = butter(smooth_samples, 0.35, 'low');
 %smooth_num = firpm(smooth_samples-1,[0 .01 .04 .5]*2,[1 1 0 0]);
-smooth_num = (1/smooth_samples).*ones(1, smooth_samples);
-smooth_denom = zeros(1, smooth_samples);
+timing_smooth_num = (1/timing_smooth_samples).*ones(1, timing_smooth_samples);
+timing_smooth_denom = zeros(1, timing_smooth_samples);
 
 timing_i = 0.2;
 timing_p = 35;
 timing_d = 0;
-smooth_pre_scale = 0.0001;
 
-timing_decay=0.999;
+timing_pre_scale = 0.0001;
+timing_pre_stage2_scale = 1;
+
+timing_post_scale = 1;
+
+timing_integrator1_decay=0.999;
+timing_integrator2_decay=0;
 
 %for 256 smoothing
 %i=0.85, p=100, d=25 or 10
@@ -128,7 +155,8 @@ timing_decay=0.999;
 %smooth_denom = zeros(size(smooth_num));
 %smooth_denom(1) = 1;
 
-smooth_saturate = 2.5e-3;%/timing_i;
+timing_integrate1_saturate = 2.5e-3;
+timing_integrate2_saturate = 2.5e-3;
 
 thetaInit = 0;
 
@@ -160,7 +188,7 @@ agcSaturation = 4;
 agcExpDomain = agcSaturation;
 agcExpResolution = 2^-7;
 
-agcDesired = 0;
+agcDesired = 0.1;
 %agcStep = 2^-10+2^-11;
 %agcStep = 2^-11;
 agcStep = 2^-12;

@@ -2,7 +2,7 @@
 clear; close all; clc;
 
 %% Import File
-[after_cr_im,after_cr_re,selected_sample_i,selected_sample_q] = importChipscopeCSV('after_dc_offset_correction_lower_rx_gain_trial2.csv');
+[after_cr_im,after_cr_re,selected_sample_i,selected_sample_q] = importChipscopeCSV('dc_blockers_and_software_rx_dc_offset_correction.csv');
 
 %% Plot
 number_pts = 20;

@@ -1,5 +1,5 @@
 %% Plot the constallation
-function M = plotConst(data_i, data_q, number_pts, step, const_pts, window_x, window_y, graph_y_lim, fig_size, title_txt)
+function [M, midpt_i, midpt_q] = plotConst(data_i, data_q, number_pts, step, const_pts, window_x, window_y, graph_y_lim, fig_size, title_txt)
     %clear M mid_pt_hist slope_hist dist_hist;
 
     %number_pts = 50;
@@ -95,6 +95,9 @@ function M = plotConst(data_i, data_q, number_pts, step, const_pts, window_x, wi
     end
 
     close(f);
+    
+    midpt_i = mean(real(mid_pt_hist));
+    midpt_q = mean(imag(mid_pt_hist));
     %f = figure;
     %movie(f, M)
 end
