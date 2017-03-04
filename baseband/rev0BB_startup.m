@@ -19,7 +19,7 @@ createTestVectors;
 
 %% Imperfections
 %freqOffsetHz = 0;
-freqOffsetHz = -60000;
+freqOffsetHz = -100000;
 
 %qScale = 0.8631;
 qScale = 1;

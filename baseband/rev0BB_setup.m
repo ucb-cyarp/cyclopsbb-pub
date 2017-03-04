@@ -4,7 +4,7 @@ lineWidth = 60;
 %% Sim Params
 overSampleFreq = 250e6; %300 MHz would be optimal, now targeting 250 MHz
 overSample = 4;
-slowSample = 2;
+slowSample = 3;
 baseFreq = overSampleFreq/overSample; %300 MHz
 basePer = 1/baseFreq;
 overSamplePer = 1/overSampleFreq;
@@ -29,6 +29,7 @@ rcRxFilt = [-0.00848977273295494 -0.00410375263794876 0.00610325957004339 0.0148
 
 %Xilinx Settings
 mult_pipeline = 3;
+cr_mult_pipeline = 2;
 regular_pipeline = 1;
 
 %Tx Interp filter
@@ -57,7 +58,7 @@ tx_interp_filt = firpm(30, [0.0, 0.25, 0.3, 1], [1, 1, 0, 0]);
 
 cr_bound_thresh = 2^-8;
 
-cr_smooth_samples = 12;
+cr_smooth_samples = 4;
 cr_smooth_num = (1/cr_smooth_samples).*ones(1, cr_smooth_samples);
 %cr_smooth_num = firpm(cr_smooth_samples-1,[0 .01 .04 .5]*2,[1 1 0 0]);
 %cr_smooth_denom = zeros(1, cr_smooth_samples);
@@ -68,11 +69,11 @@ cr_smooth_second_num = [1, 0];
 cr_smooth_second_denom = [1, -0.999];
 
 cr_i_preamp = 2^-8;
-cr_integrator1_decay = 0.999;
+cr_integrator1_decay = 0.999999;
 cr_integrator2_decay = 0;
 
-cr_i = 2^-4;
-cr_p = 2^-7;
+cr_i = 0.020;
+cr_p = 0.0085;
 
 %[cr_smooth_num, cr_smooth_denom] = butter(cr_smooth_samples, 0.30, 'low');
 
@@ -175,7 +176,7 @@ trigger = 70;
 atanDomain = 5;
 atanResolution = 2^-9;
 
-atanDomainTiming = 512;
+atanDomainTiming = 256;
 atanResolutionTiming = 2^-5;
 
 %Recieve Matching Filter Coefs (could not implement recieve match filter

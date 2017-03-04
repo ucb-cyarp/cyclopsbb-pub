@@ -2,7 +2,7 @@
 clear; close all; clc;
 
 %% Import File
-[adc_pipeline_data_ch0,adc_pipeline_data_ch1,adc_piepline_valid] = importADCChipscopeCSV('dc_blockers_and_software_rx_dc_offset_correction_adc.csv');
+[adc_pipeline_data_ch0,adc_pipeline_data_ch1,adc_piepline_valid] = importADCChipscopeCSV_v2('after_cr_delay_reduced_adc.csv');
 
 %% Plot
 number_pts = 50;
