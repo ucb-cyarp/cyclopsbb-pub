@@ -29,7 +29,7 @@ rcRxFilt = [-0.00848977273295494 -0.00410375263794876 0.00610325957004339 0.0148
 
 %Xilinx Settings
 mult_pipeline = 3;
-cr_mult_pipeline = 2;
+cr_mult_pipeline = 1;
 regular_pipeline = 1;
 
 %Tx Interp filter
