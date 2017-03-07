@@ -52,6 +52,7 @@ function [M, midpt_i, midpt_q] = plotConst(data_i, data_q, number_pts, step, con
 
         mid_pt_hist(frame) = complex(mid_pt_i+mid_pt_q*j);
         slope_hist(frame) = (rightC_q - leftC_q)/(rightC_i - leftC_i);
+        slope_angle_hist(frame) = atan((rightC_q - leftC_q)/(rightC_i - leftC_i));
         dist_hist(frame) = sqrt((rightC_q - leftC_q)^2 + (rightC_i - leftC_i)^2);
 
         %plot axes
@@ -83,10 +84,11 @@ function [M, midpt_i, midpt_q] = plotConst(data_i, data_q, number_pts, step, con
         plot(imag(mid_pt_hist), 'b-');
         plot(slope_hist, 'm-');
         plot(dist_hist, 'g-');
+        plot(slope_angle_hist, 'r-');
         grid minor;
         xlim([1, length(data)/step]);
         ylim([graph_y_lim]);
-        leg=legend('Midpoint X', 'Midpoint Y', 'Slope', 'Distance');
+        leg=legend('Midpoint X', 'Midpoint Y', 'Slope', 'Distance', 'Angle');
         set(leg.BoxFace, 'ColorType','truecoloralpha', 'ColorData',uint8(255*[.8;.8;.8;.6]));
         hold off;
 

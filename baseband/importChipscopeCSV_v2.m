@@ -1,4 +1,4 @@
-function [after_cr_im,after_cr_re,selected_sample_i,selected_sample_q] = importChipscopeCSV_v2(filename, startRow, endRow)
+function [after_cr_im,after_cr_re,selected_sample_i,selected_sample_q, selected_sample_valid, strobe] = importChipscopeCSV_v2(filename, startRow, endRow)
 %IMPORTFILE Import numeric data from a text file as column vectors (If no startrow is given, it is assumed that data starts on row 2).
 %   [AFTER_CR_IM1,AFTER_CR_RE1,SELECTED_SAMPLE_I130,SELECTED_SAMPLE_Q130] =
 %   IMPORTFILE(FILENAME) Reads data from text file FILENAME for the default
@@ -27,8 +27,10 @@ end
 %	column6: text (%s)
 %   column13: text (%s)
 %	column14: text (%s)
+%   column27: text (%s)
+%	column29: text (%s)
 % For more information, see the TEXTSCAN documentation.
-formatSpec = '%*s%*s%*s%s%*s%s%*s%*s%*s%*s%*s%*s%s%s%*s%*s%*s%*s%*s%*s%*s%*s%*s%*s%*s%*s%*s%*s%*s%*s%*s%[^\n\r]';
+formatSpec = '%*s%*s%*s%s%*s%s%*s%*s%*s%*s%*s%*s%s%s%*s%*s%*s%*s%*s%*s%*s%*s%*s%*s%*s%*s%s%*s%s%*s%*s%[^\n\r]';
 
 %% Open the text file.
 fileID = fopen(filename,'r');
@@ -60,6 +62,8 @@ after_cr_im130_tmp = dataArray{:, 1};
 after_cr_re130_tmp = dataArray{:, 2};
 selected_sample_i130_tmp = dataArray{:, 3};
 selected_sample_q130_tmp = dataArray{:, 4};
+selected_sample_valid_tmp = dataArray{:, 5};
+strobe_tmp = dataArray{:, 6};
 
 hex_bits = 16;
 total_bits = 14;
@@ -78,6 +82,8 @@ for i = 1:length(after_cr_im130_tmp)
     after_cr_re(i) = bin2num(q_frac, num2bin(q_int, hex2dec(after_cr_re130_tmp(i))));
     selected_sample_i(i) = bin2num(q_frac, num2bin(q_int, hex2dec(selected_sample_i130_tmp(i))));
     selected_sample_q(i) = bin2num(q_frac, num2bin(q_int, hex2dec(selected_sample_q130_tmp(i))));
+    selected_sample_valid(i) = str2num(selected_sample_valid_tmp{i});
+    strobe(i) = str2num(strobe_tmp{i});
     disp(num2str(i))
 end
 

@@ -2,7 +2,12 @@
 clear; close all; clc;
 
 %% Import File
-[adc_pipeline_data_ch0,adc_pipeline_data_ch1,adc_piepline_valid] = importADCChipscopeCSV_v2('after_cr_delay_reduced_adc.csv');
+[adc_pipeline_data_ch0,adc_pipeline_data_ch1,adc_piepline_valid] = importADCChipscopeCSV_v2('bounce_off_cabnet_tx20dB-rx18_7dB_highFilt500MHz_adc.csv');
+
+zero_ind = find(~adc_piepline_valid);
+adc_piepline_valid(zero_ind) = [];
+adc_pipeline_data_ch0(zero_ind) = [];
+adc_pipeline_data_ch1(zero_ind) = [];
 
 %% Plot
 number_pts = 50;
@@ -10,7 +15,7 @@ step = 25;
 const_pts = complex([-1, 1]);
 window_x = [-.75, .75];
 window_y = [-.75, .75];
-graph_y_lim = [-10, 10];
+graph_y_lim = [-4, 4];
 fig_size = [560*2, 420*2];
 
 %Positioning from https://www.mathworks.com/matlabcentral/newsreader/view_thread/136464

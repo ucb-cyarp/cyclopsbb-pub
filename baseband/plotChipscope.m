@@ -2,7 +2,16 @@
 clear; close all; clc;
 
 %% Import File
-[after_cr_im,after_cr_re,selected_sample_i,selected_sample_q] = importChipscopeCSV_v2('after_cr_delay_reduced.csv');
+[after_cr_im,after_cr_re,selected_sample_i,selected_sample_q,selected_sample_valid,strobe] = importChipscopeCSV_v2('bounce_off_cabnet_tx20dB-rx18_7dB_highFilt500MHz.csv');
+zero_ind_ss = find(~selected_sample_valid);
+selected_sample_i(zero_ind_ss) = [];
+selected_sample_q(zero_ind_ss) = [];
+selected_sample_valid(zero_ind_ss) = [];
+zero_ind_cr = find(~strobe);
+after_cr_im(zero_ind_cr) = [];
+after_cr_re(zero_ind_cr) = [];
+
+
 
 %% Plot
 number_pts = 20;
