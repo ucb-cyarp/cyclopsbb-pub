@@ -73,7 +73,8 @@ cr_integrator1_decay = 0.999999;
 cr_integrator2_decay = 0;
 
 cr_i = 0.020;
-cr_p = 0.0085;
+cr_p = 0.0080;
+%cr_p = 0.0075;
 
 %[cr_smooth_num, cr_smooth_denom] = butter(cr_smooth_samples, 0.30, 'low');
 
@@ -169,7 +170,7 @@ thetaInit = 0;
 expDomain = 3.3;
 expTol = .1;
 expResolution = 2^-5;
-trigger = 70;
+trigger = (80/128)^2;
 
 %[a, b] = butter(8, .3);
 
@@ -282,7 +283,10 @@ cef_note  = int16(cef_note);
 cef_note_len = uint16(length(cef_note));
 
 after = zeros(100, 1);
-xCTRL_PRE_adj = (xCTRL_PRE + 1)./2;
+
+%Note that numtiply by -1 because BPSK modulation has '0' at 1+0j and
+%'1' at -1+0j
+xCTRL_PRE_adj = (xCTRL_PRE.*-1 + 1)./2;
 
 rSC_STF   = cat(2, Ga_128(mod(nSC_STFRep, 128)+1).*exp(j*pi*nSC_STFRep/2), -Ga_128(mod(nSC_STFNeg, 128)+1).*exp(j*pi*nSC_STFNeg/2)); %+1 is for matlab
 rSC_STF   = transpose(rSC_STF);

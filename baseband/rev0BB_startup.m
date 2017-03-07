@@ -76,9 +76,33 @@ post_cr_q_offset = 0;
 rx_offset_correction_i = 0;
 rx_offset_correction_q = 0;
 
+%rx_offset_correction_i = -0.39;
+%rx_offset_correction_q = -0.27;
+
 lowfreq_osc_amp = 0;
 lowfreq_osc_offset = .75;
 lowfreq_osc_freq = 2e5;
+
+%% Raw From ADC
+load adc_raw_data.mat
+
+raw_adc_ch0.time = [];
+raw_adc_ch0.signals.values = transpose(adc_pipeline_data_ch0);
+raw_adc_ch0.signals.dimensions = 1;
+
+raw_adc_ch1.time = [];
+raw_adc_ch1.signals.values = transpose(adc_pipeline_data_ch1);
+raw_adc_ch1.signals.dimensions = 1;
+
+load selected_samples_captured.mat
+
+ss_ch0.time = [];
+ss_ch0.signals.values = transpose(selected_sample_i);
+ss_ch0.signals.dimensions = 1;
+
+ss_ch1.time = [];
+ss_ch1.signals.values = transpose(selected_sample_q);
+ss_ch1.signals.dimensions = 1;
 
 
 %% Start Simulink
