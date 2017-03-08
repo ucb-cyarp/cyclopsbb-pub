@@ -2,7 +2,7 @@
 clear; close all; clc;
 
 %% Import File
-[adc_pipeline_data_ch0,adc_pipeline_data_ch1,adc_piepline_valid] = importADCChipscopeCSV_v2('bounce_off_cabnet_tx20dB-rx18_7dB_highFilt500MHz_adc.csv');
+[adc_pipeline_data_ch0,adc_pipeline_data_ch1,adc_piepline_valid] = importADCChipscopeCSV_v2('tx_rx_loopback_adc.csv');
 
 zero_ind = find(~adc_piepline_valid);
 adc_piepline_valid(zero_ind) = [];
@@ -26,6 +26,8 @@ ypos = ceil((screensize(4)-fig_size(1))/2);
 %% After CR
 title_txt = 'ADC Raw Samples';
 [M, midpt_i, midpt_q] = plotConst(adc_pipeline_data_ch0, adc_pipeline_data_ch1, number_pts, step, const_pts, window_x, window_y, graph_y_lim, fig_size, title_txt);
+
+%[M, midpt_i, midpt_q] = plotConst(real(rawTx_run), imag(rawTx_run), number_pts, step, const_pts, window_x, window_y, graph_y_lim, fig_size, title_txt);
 
 midpt_i
 midpt_q

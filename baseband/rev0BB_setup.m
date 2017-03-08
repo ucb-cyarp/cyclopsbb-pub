@@ -73,7 +73,9 @@ cr_integrator1_decay = 0.999999;
 cr_integrator2_decay = 0;
 
 cr_i = 0.020;
-cr_p = 0.0080;
+%cr_i = 0;
+cr_p = 0.01;
+%cr_p = 0.0080;
 %cr_p = 0.0075;
 
 %[cr_smooth_num, cr_smooth_denom] = butter(cr_smooth_samples, 0.30, 'low');
