@@ -18,6 +18,9 @@ seed = 67;
 createTestVectors;
 
 %% Imperfections
+
+dc_block_passband = 0.1; %MHz
+
 %freqOffsetHz = 0;
 freqOffsetHz = -100000;
 
@@ -31,10 +34,10 @@ qScale = 1;
 %awgnSNR = 5.5;
 %awgnSNR = 6;
 %awgnSNR = 8;
-%awgnSNR = 12;
+awgnSNR = 12;
 %awgnSNR = 24;
 %awgnSNR = 92;
-awgnSNR = 100;
+%awgnSNR = 100;
 
 %awgnSeed = 67;
 awgnSeed = 245;
@@ -48,10 +51,13 @@ rng(awgnSeed);
 txTimingPhase = rand(1);
 rxPhaseOffset = rand(1)*360;
 
-tx_rx_gain = 0.5882;
+%tx_rx_gain = 0.5882;
+tx_rx_gain = 1;
 
-tx_impare_i_scale = 0.2822;
-tx_impare_q_scale = 0.2822;
+tx_impare_i_scale = 1;
+tx_impare_q_scale = 1;
+%tx_impare_i_scale = 0.2822;
+%tx_impare_q_scale = 0.2822;
 %tx_impare_i_offset = 0.0084*tx_rx_gain;
 %tx_impare_q_offset = 0.1851*tx_rx_gain;
 tx_impare_i_offset = 0;
@@ -79,9 +85,15 @@ rx_offset_correction_q = 0;
 %rx_offset_correction_i = -0.39;
 %rx_offset_correction_q = -0.27;
 
-lowfreq_osc_amp = 0;
-lowfreq_osc_offset = .75;
-lowfreq_osc_freq = 2e5;
+agc_on = true;
+freeze_on_stf_done  = true;
+freeze_on_cef_done  = true;
+freeze_on_valid     = true;
+
+freeze_en_agc       = true;
+freeze_en_tr_phase  = true;
+freeze_en_tr_freq   = false;
+freeze_en_cr        = false;
 
 %% Raw From ADC
 load adc_raw_data.mat

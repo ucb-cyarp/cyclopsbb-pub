@@ -68,13 +68,13 @@ cr_smooth_num = (1/cr_smooth_samples).*ones(1, cr_smooth_samples);
 cr_smooth_second_num = [1, 0];
 cr_smooth_second_denom = [1, -0.999];
 
-cr_i_preamp = 2^-8;
-cr_integrator1_decay = 0.999999;
+cr_i_preamp = 2^-7+2^-8;
+cr_integrator1_decay = 1;
 cr_integrator2_decay = 0;
 
-cr_i = 0.020;
+cr_i = 0.015;
 %cr_i = 0;
-cr_p = 0.01;
+cr_p = 0.015;
 %cr_p = 0.0080;
 %cr_p = 0.0075;
 
@@ -86,8 +86,13 @@ cr_pre_scale = 1;
 cr_pre_stage2_scale = 1;
 cr_post_scale = 1;
 
-cr_integrator1_saturation = 0.5;
-cr_integrator2_saturation = 0.5;
+cr_integrator1_saturation = 0.6;
+cr_integrator2_saturation = 0.6;
+
+cr_int1_sat_up  =  cr_integrator1_saturation;
+cr_int1_sat_low = -cr_integrator1_saturation;
+cr_int2_sat_up  =  cr_integrator2_saturation;
+cr_int2_sat_low = -cr_integrator2_saturation;
 
 frac_lut_domain_cr = 64;
 frac_lut_res_cr = 2^-4;
@@ -136,8 +141,8 @@ timing_smooth_samples = 128;
 timing_smooth_num = (1/timing_smooth_samples).*ones(1, timing_smooth_samples);
 timing_smooth_denom = zeros(1, timing_smooth_samples);
 
-timing_i = 0.2;
-timing_p = 35;
+timing_i = 0.35;
+timing_p = 40;
 timing_d = 0;
 
 timing_pre_scale = 0.0001;
@@ -167,6 +172,11 @@ timing_integrator2_decay=0;
 timing_integrate1_saturate = 2.5e-3;
 timing_integrate2_saturate = 2.5e-3;
 
+tr_int1_sat_up  =  timing_integrate1_saturate;
+tr_int1_sat_low = -timing_integrate1_saturate;
+tr_int2_sat_up  =  timing_integrate2_saturate;
+tr_int2_sat_low = -timing_integrate2_saturate;
+
 thetaInit = 0;
 
 expDomain = 3.3;
@@ -193,6 +203,9 @@ lnDomain = 16;
 lnResolution = 2^-7;
 
 agcSaturation = 4;
+
+agc_sat_up  =  agcSaturation;
+agc_sat_low = -agcSaturation;
 
 agcExpDomain = agcSaturation;
 agcExpResolution = 2^-7;
