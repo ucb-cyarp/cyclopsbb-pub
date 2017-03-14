@@ -91,9 +91,12 @@ freeze_on_cef_done  = true;
 freeze_on_valid     = true;
 
 freeze_en_agc       = true;
-freeze_en_tr_phase  = true;
-freeze_en_tr_freq   = false;
-freeze_en_cr        = false;
+freeze_en_tr_phase  = false;
+freeze_en_tr_int1   = true;
+freeze_en_tr_int2   = false;
+freeze_en_cr_int2   = false;
+freeze_en_cr_phase  = false;
+freeze_en_cr_int1   = true;
 
 %% Raw From ADC
 load adc_raw_data.mat
