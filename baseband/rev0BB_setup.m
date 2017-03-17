@@ -35,6 +35,14 @@ regular_pipeline = 1;
 %Tx Interp filter
 tx_interp_filt = firpm(30, [0.0, 0.25, 0.3, 1], [1, 1, 0, 0]);
 
+% DMM Averaging
+dmm_samples = 32;
+dmm_coefs = ones(1,dmm_samples)./dmm_samples;
+
+% Sin Source
+sin_source_amp = 1;
+sin_source_freq = 250e6/4;
+
 % %DC Blocking filter:
 % fs = overSampleFreq; % Sampling frequency
 % f = [0 200e3];          % Cutoff frequencies
@@ -74,7 +82,7 @@ cr_integrator2_decay = 0;
 
 cr_i = 0.020;
 %cr_i = 0;
-cr_p = 0.025;
+cr_p = 0.030;
 %cr_p = 0.0080;
 %cr_p = 0.0075;
 

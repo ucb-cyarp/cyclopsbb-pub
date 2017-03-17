@@ -98,6 +98,12 @@ freeze_en_cr_int2   = false;
 freeze_en_cr_phase  = false;
 freeze_en_cr_int1   = true;
 
+
+cal_sig_i_mult = 1;
+cal_sig_q_mult = 0;
+cal_sig_i_offset = .5;
+cal_sig_q_offset = .25;
+
 %% Raw From ADC
 load adc_raw_data.mat
 
