@@ -2,7 +2,7 @@
 clear; close all; clc;
 
 %% Import File
-[after_cr_im,after_cr_re,selected_sample_i,selected_sample_q,selected_sample_valid,strobe] = importChipscopeCSV_v2('tx_rx_loopback.csv');
+[after_cr_im,after_cr_re,selected_sample_i,selected_sample_q,selected_sample_valid,strobe] = importChipscopeCSV_v4('agc_frozen_less_agressive_cr_carrier_locked.csv');
 zero_ind_ss = find(~selected_sample_valid);
 selected_sample_i(zero_ind_ss) = [];
 selected_sample_q(zero_ind_ss) = [];

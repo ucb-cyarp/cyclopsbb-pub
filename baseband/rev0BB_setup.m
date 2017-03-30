@@ -29,6 +29,7 @@ rcRxFilt = [-0.00848977273295494 -0.00410375263794876 0.00610325957004339 0.0148
 
 %Xilinx Settings
 mult_pipeline = 3;
+wide_mult_pipeline = 4;
 cr_mult_pipeline = 1;
 regular_pipeline = 1;
 
@@ -36,12 +37,12 @@ regular_pipeline = 1;
 tx_interp_filt = firpm(30, [0.0, 0.25, 0.3, 1], [1, 1, 0, 0]);
 
 % DMM Averaging
-dmm_samples = 32;
+dmm_samples = 16;
 dmm_coefs = ones(1,dmm_samples)./dmm_samples;
 
 % Sin Source
 sin_source_amp = 1;
-sin_source_freq = 250e6/4;
+sin_source_freq = 250e6/16;
 
 % %DC Blocking filter:
 % fs = overSampleFreq; % Sampling frequency
@@ -76,13 +77,13 @@ cr_smooth_num = (1/cr_smooth_samples).*ones(1, cr_smooth_samples);
 cr_smooth_second_num = [1, 0];
 cr_smooth_second_denom = [1, -0.999];
 
-cr_i_preamp = 2^-8;
+cr_i_preamp = 2^-9;
 cr_integrator1_decay = 1;
 cr_integrator2_decay = 0;
 
 cr_i = 0.020;
 %cr_i = 0;
-cr_p = 0.030;
+cr_p = 0.015;
 %cr_p = 0.0080;
 %cr_p = 0.0075;
 
@@ -90,17 +91,15 @@ cr_p = 0.030;
 
 %cr_smooth_amp = 0;
 
-cr_pre_scale = 1;
 cr_pre_stage2_scale = 1;
-cr_post_scale = 1;
 
 cr_integrator1_saturation = 0.6;
-cr_integrator2_saturation = 0.6;
+cr_saturation2 = 0.6;
 
 cr_int1_sat_up  =  cr_integrator1_saturation;
 cr_int1_sat_low = -cr_integrator1_saturation;
-cr_int2_sat_up  =  cr_integrator2_saturation;
-cr_int2_sat_low = -cr_integrator2_saturation;
+cr_sat2_up  =  cr_saturation2;
+cr_sat2_low = -cr_saturation2;
 
 frac_lut_domain_cr = 64;
 frac_lut_res_cr = 2^-4;
@@ -143,20 +142,17 @@ averaging_num = ones(1, averaging_samples);
 averaging_denom = zeros(1, averaging_samples);
 averaging_denom(1) = 1;
 
-timing_smooth_samples = 128;
+timing_smooth_samples = 16;
 %[smooth_num, smooth_denom] = butter(smooth_samples, 0.35, 'low');
 %smooth_num = firpm(smooth_samples-1,[0 .01 .04 .5]*2,[1 1 0 0]);
 timing_smooth_num = (1/timing_smooth_samples).*ones(1, timing_smooth_samples);
 timing_smooth_denom = zeros(1, timing_smooth_samples);
 
-timing_i = 0.35;
-timing_p = 40;
+timing_i = 0.25;
+timing_p = 45*0.0001;
 timing_d = 0;
 
 timing_pre_scale = 0.0001;
-timing_pre_stage2_scale = 1;
-
-timing_post_scale = 1;
 
 timing_integrator1_decay=0.999;
 timing_integrator2_decay=0;
@@ -178,12 +174,12 @@ timing_integrator2_decay=0;
 %smooth_denom(1) = 1;
 
 timing_integrate1_saturate = 2.5e-3;
-timing_integrate2_saturate = 2.5e-3;
+timing_saturate2 = 5e-3;
 
 tr_int1_sat_up  =  timing_integrate1_saturate;
 tr_int1_sat_low = -timing_integrate1_saturate;
-tr_int2_sat_up  =  timing_integrate2_saturate;
-tr_int2_sat_low = -timing_integrate2_saturate;
+tr_sat2_up  =  timing_saturate2;
+tr_sat2_low = -timing_saturate2;
 
 thetaInit = 0;
 
@@ -204,7 +200,7 @@ atanResolutionTiming = 2^-5;
 %since no decemation was used)
 
 %AGC config
-agc_detector_taps = 128;
+agc_detector_taps = 16;
 agc_detector_coef = ones(1,agc_detector_taps)./agc_detector_taps;
 
 lnDomain = 16;

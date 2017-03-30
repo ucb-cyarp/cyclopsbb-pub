@@ -2,7 +2,7 @@
 clear; close all; clc;
 
 %% Import File
-[adc_pipeline_data_ch0,adc_pipeline_data_ch1,adc_piepline_valid] = importADCChipscopeCSV_v2('tx_rx_loopback_adc.csv');
+[adc_pipeline_data_ch0,adc_pipeline_data_ch1,adc_piepline_valid] = importADCChipscopeCSV_v4('extra6db_on_dac_adc.csv');
 
 zero_ind = find(~adc_piepline_valid);
 adc_piepline_valid(zero_ind) = [];
