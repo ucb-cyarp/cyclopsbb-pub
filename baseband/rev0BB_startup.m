@@ -20,10 +20,11 @@ createTestVectors;
 
 %% Imperfections
 
-dc_block_passband = 0.1; %MHz
+%dc_block_passband = 0.1; %MHz
+dc_block_passband = 0; %MHz
 
-%freqOffsetHz = 0;
-freqOffsetHz = 100000;
+freqOffsetHz = 0;
+%freqOffsetHz = 100000;
 
 %qScale = 0.8631;
 qScale = 1;
@@ -35,7 +36,7 @@ qScale = 1;
 %awgnSNR = 5.5;
 %awgnSNR = 6;
 %awgnSNR = 8;
-awgnSNR = 12;
+awgnSNR = 10;
 %awgnSNR = 24;
 %awgnSNR = 92;
 %awgnSNR = 100;
@@ -80,8 +81,11 @@ post_cr_q_offset = 0;
 %rx_offset_correction_i = -rx_impare_i_offset;
 %rx_offset_correction_q = -rx_impare_q_offset;
 
-rx_offset_correction_i = -0.3801;
-rx_offset_correction_q = -0.2840;
+%rx_offset_correction_i = -0.3801;
+%rx_offset_correction_q = -0.2840;
+
+rx_offset_correction_i = 0;
+rx_offset_correction_q = 0;
 
 %rx_offset_correction_i = -0.39;
 %rx_offset_correction_q = -0.27;
