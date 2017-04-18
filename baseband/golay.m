@@ -103,11 +103,11 @@ disp(mat2str(c(2,:)));
 
 %% Test Correlation
 
-input = xSC_PRE;
+input = xCTRL_PRE;
 input = transpose(input);
 %input = genA;
-input = cat(2, zeros(1, 1000), input);
-input = cat(2, input, zeros(1, 1000));
+%input = cat(2, zeros(1, 1000), input);
+input = cat(2, input, zeros(1, 128));
 
 D = D_128;
 W = W_128;
@@ -119,13 +119,13 @@ subplot(2, 1, 1);
 plot(c(1, :));
 a1 = gca;
 title('Ca');
-xlabel('Sample');
+xlabel('Symbol');
 ylabel('Correlator Output');
 subplot(2, 1, 2);
 plot(c(2, :));
 a2 = gca;
 title('Cb');
-xlabel('Sample');
+xlabel('Symbol');
 ylabel('Correlator Output');
 
 %match axes
@@ -139,8 +139,9 @@ figure
 plot(c(1, :));
 hold all;
 plot(c(2, :));
-title('Correlators Superimposed');
-xlabel('Sample');
+xlim([1, 7680])
+title('Preamble Correlation');
+xlabel('Symbol');
 ylabel('Correlator Output');
 legend('Ca', 'Cb');
 
@@ -155,11 +156,58 @@ S = Ca+Cb;
 figure
 subplot(3, 1, 1);
 plot(Ca);
+xlim([0,256])
+title('Ca');
+xlabel('Symbol');
+ylabel('Correlator Output');
+subplot(3, 1, 2);
+plot(Cb);
+xlim([0,256])
+title('Cb');
+xlabel('Symbol');
+ylabel('Correlator Output');
+subplot(3, 1, 3);
+plot(S);
+xlim([0,256])
+title('Ca+Cb');
+xlabel('Symbol');
+ylabel('Correlator Output');
+
+fftS = fft(S);
+figure
+subplot(2, 1, 1)
+plot(abs(fftS))
+title('Frequency Response of Perfect Channel (From Ca+Cb)')
+ylabel('Magnitude')
+subplot(2, 1, 2)
+plot(atan(imag(fftS)./real(fftS)));
+ylabel('Phase')
+
+%% Test summation of a and b correlations
+seq = cat(2, Gb_128, Ga_128, Gb_128, Ga_128);
+%h = [1, -0.5+.25j, 0.5, 0, 0, 0, 0, .25];
+h=[1];
+sig = conv(seq, h);
+
+Ca = golayCorrelate(sig, W_128, D_128);
+Ca = Ca(1, :);
+Cb = golayCorrelate(sig, W_128, D_128);
+Cb = Cb(2, :);
+
+
+
+fa = conv(cat(2, Ga_128, zeros(1, 128)), h);
+
+S = Ca(129+64:256+64)+Cb(257+64:384+64);
+
+figure
+subplot(3, 1, 1);
+plot(Ca(129+64:256+64));
 title('Ca');
 xlabel('Sample');
 ylabel('Correlator Output');
 subplot(3, 1, 2);
-plot(Cb);
+plot(Cb(257+64:384+64));
 title('Cb');
 xlabel('Sample');
 ylabel('Correlator Output');
@@ -247,38 +295,3 @@ subplot(2, 1, 2)
 plot(abs(fftS))
 title('Calulated Freq Response')
 ylabel('Magnitude')
-
-%% Test summation of Gu a and b correlations
-Ca = golayCorrelate(cat(2, Gu_a_512, zeros(1, 128)), W_128, D_128);
-Ca = Ca(1, :);
-Cb = golayCorrelate(cat(2, Gu_b_512, zeros(1, 128)), W_128, D_128);
-Cb = Cb(2, :);
-
-S = Ca+Cb;
-
-figure
-subplot(3, 1, 1);
-plot(Ca);
-title('Ca');
-xlabel('Sample');
-ylabel('Correlator Output');
-subplot(3, 1, 2);
-plot(Cb);
-title('Cb');
-xlabel('Sample');
-ylabel('Correlator Output');
-subplot(3, 1, 3);
-plot(S);
-title('Ca+Cb');
-xlabel('Sample');
-ylabel('Correlator Output');
-
-fftS = fft(S);
-figure
-subplot(2, 1, 1)
-plot(abs(fftS))
-title('Frequency Response of Perfect Channel (From Ca+Cb)')
-ylabel('Magnitude')
-subplot(2, 1, 2)
-plot(atan(imag(fftS)./real(fftS)));
-ylabel('Phase')

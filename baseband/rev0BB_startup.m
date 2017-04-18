@@ -23,8 +23,9 @@ createTestVectors;
 %dc_block_passband = 0.1; %MHz
 dc_block_passband = 0; %MHz
 
-freqOffsetHz = 0;
-%freqOffsetHz = 100000;
+%freqOffsetHz = 0;
+freqOffsetHz = 100000;
+disp(['CarrierFreqOffsetHz = ', num2str(freqOffsetHz)])
 
 %qScale = 0.8631;
 qScale = 1;
@@ -38,16 +39,22 @@ qScale = 1;
 %awgnSNR = 8;
 awgnSNR = 10;
 %awgnSNR = 24;
+%awgnSNR = 50;
 %awgnSNR = 92;
 %awgnSNR = 100;
 
-%awgnSeed = 67;
-awgnSeed = 245;
+disp(['awgnSNRdB = ', num2str(awgnSNR)])
+
+awgnSeed = 67;
+%awgnSeed = 245;
 
 
 %txTimingOffset = 0.0002;
-%txTimingOffset = -0.0001;
-txTimingOffset = 0;
+txTimingOffset = -0.0001;
+%txTimingOffset = 0;
+
+SymbolFreqOffsetHz = 1/((1+txTimingOffset)*overSamplePer) - 1/overSamplePer;
+disp(['SymbolFreqOffsetHz = ', num2str(SymbolFreqOffsetHz)])
 
 rng(awgnSeed);
 txTimingPhase = rand(1);
@@ -95,7 +102,7 @@ freeze_on_stf_done  = true;
 freeze_on_cef_done  = true;
 freeze_on_valid     = true;
 
-freeze_en_agc       = true;
+freeze_en_agc       = false;
 freeze_en_tr_phase  = false;
 freeze_en_tr_int1   = false;
 freeze_en_tr_int2   = false;
@@ -133,6 +140,7 @@ ss_ch1.signals.dimensions = 1;
 
 %% Start Simulink
 disp('Opening Simulink ...')
-open_system('rev0BB')
+%open_system('rev0BB')
+open_system('gm_rev0BB')
 %load_system('rev0BB')
 disp('Ready to Simulate')

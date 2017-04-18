@@ -3,6 +3,8 @@ clear; close all; clc;
 
 warning off;
 
+rev0BB_startup;
+
 timestamp = datestr(now,'ddmmmyyyy-HH_MM_SSAM');
 
 addpath(pwd);
@@ -11,18 +13,20 @@ addpath(currDir);
 tmpDir = tempname;
 mkdir(tmpDir);
 cd(tmpDir);
-open_system('gm_rev0BB');
+load_system('gm_rev0BB');
 %rev0BB_setup;
 
 %% Init Model
 trials = 1000;
-dBSnrRange = -2:.5:5;
+dBSnrRange = -4:1:5;
 indRange = 1:1:length(dBSnrRange);
 
 rev0BB_setup;
 
-freqOffsetHz = 0;
-txTimingOffset = 0;
+%freqOffsetHz = 0;
+%txTimingOffset = 0;
+freqOffsetHz = 100000;
+txTimingOffset = -0.0001;
 
 iOffset = 0.01;
 qOffset = 0.01;
@@ -59,7 +63,7 @@ for dBSnrInd = indRange
         idealX.signals.values = cat(1, testTextTrunkBin, after);
         idealX.signals.dimensions = 1;
         
-        simulink_out = sim('rev0BB', 'SimulationMode', 'rapid');
+        simulink_out = sim('gm_rev0BB', 'SimulationMode', 'rapid');
         data_recieved = simulink_out.get('data_recieved');
         assignin('base','data_recieved',data_recieved);
         
@@ -105,10 +109,13 @@ title(['Number of Packet Decode Failures (No Valid Frame Detected) for ' num2str
 grid on;
 
 
+%% Cleanup
 %close_system('rev0BB');
 cd(currDir);
-rmdir(tmpDir,'s');
+%rmdir(tmpDir,'s');
 rmpath(currDir);
+
+%% Save
 
 savefig(fig1, ['BERvsEbN0-fig1-',timestamp]);
 savefig(fig2, ['BERvsEbN0-fig2-',timestamp]);
