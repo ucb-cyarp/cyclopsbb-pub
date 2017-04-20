@@ -140,7 +140,7 @@ ss_ch1.signals.dimensions = 1;
 
 %% Start Simulink
 disp('Opening Simulink ...')
-%open_system('rev0BB')
-open_system('gm_rev0BB')
+open_system('rev0BB')
+%open_system('gm_rev0BB')
 %load_system('rev0BB')
 disp('Ready to Simulate')
