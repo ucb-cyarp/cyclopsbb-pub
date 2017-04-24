@@ -14,7 +14,18 @@ rev0BB_setup;
 %or
 %seed = 67;
 seed = 579;
-[testMsg, testTextTrunkBin] = generate_random_frame(seed, dataLen, xCTRL_PRE_adj, after);
+
+%Modulation
+%0 = Zeros (ie. transmit nothing)
+%1 = BPSK
+%2 = QPSK
+%3 = 16QAM
+payload_modulation = 3;
+
+header = [0; 0; 1; 1]; % 4 bit (4 symbols in BPSK) field specifying modulation type
+payload = generate_random_payload(seed, dataLen, 2^(payload_modulation-1));
+
+testMsg = cat(1, xCTRL_PRE_adj, header, payload);
 
 createTestVectors;
 
@@ -37,7 +48,8 @@ qScale = 1;
 %awgnSNR = 5.5;
 %awgnSNR = 6;
 %awgnSNR = 8;
-awgnSNR = 10;
+%awgnSNR = 10;
+awgnSNR = 16;
 %awgnSNR = 24;
 %awgnSNR = 50;
 %awgnSNR = 92;
@@ -45,8 +57,8 @@ awgnSNR = 10;
 
 disp(['awgnSNRdB = ', num2str(awgnSNR)])
 
-awgnSeed = 67;
-%awgnSeed = 245;
+%awgnSeed = 67;
+awgnSeed = 245;
 
 
 %txTimingOffset = 0.0002;
@@ -102,7 +114,7 @@ freeze_on_stf_done  = true;
 freeze_on_cef_done  = true;
 freeze_on_valid     = true;
 
-freeze_en_agc       = false;
+freeze_en_agc       = true;
 freeze_en_tr_phase  = false;
 freeze_en_tr_int1   = false;
 freeze_en_tr_int2   = false;

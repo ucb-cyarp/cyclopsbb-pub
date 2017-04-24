@@ -11,11 +11,16 @@ assignin('base','data_recieved',data_recieved);
 disp(' ')
 
 %% BER Comparison
-if(length(testTextTrunkBin) ~= length(data_recieved))
+if(length(payload) ~= length(data_recieved))
     disp(['Recieved Data Length Unexpected (', num2str(length(data_recieved)), '): Likely that no data was recieved']);
 else
-    delta = abs(double(data_recieved) - testTextTrunkBin);
-    bitErrors = sum(delta);
-    ber = bitErrors/length(data_recieved);
-    disp(['BER: ', num2str(ber), ', Errors: ', num2str(bitErrors), ', Length: ', num2str(length(data_recieved))]);
+    %only for BPSK where each symbol is a bit
+    %delta = abs(double(data_recieved) - payload);
+    %bitErrors = sum(delta);
+    %ber = bitErrors/length(data_recieved);
+    
+    %general, where symbols may contain multiple bits
+    [bitErrors,ber] = biterr(double(data_recieved),payload);
+    
+    disp(['BER: ', num2str(ber), ', Errors: ', num2str(bitErrors), ', Symbol Count: ', num2str(length(data_recieved)), ', Bits: ', num2str(dataLen)]);
 end

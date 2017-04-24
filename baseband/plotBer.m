@@ -13,12 +13,12 @@ addpath(currDir);
 tmpDir = tempname;
 mkdir(tmpDir);
 cd(tmpDir);
-load_system('gm_rev0BB');
+load_system('rev0BB');
 %rev0BB_setup;
 
 %% Init Model
-trials = 1000;
-dBSnrRange = -4:1:5;
+trials = 100;
+dBSnrRange = -2:1:4;
 indRange = 1:1:length(dBSnrRange);
 
 rev0BB_setup;
@@ -40,43 +40,44 @@ for dBSnrInd = indRange
     for trial = 1:1:trials
         seed = abs(dBSnrRange(dBSnrInd)*1000+trial);
         awgnSeed = abs(dBSnrRange(dBSnrInd)*1000+trial+10000000);
-        [testMsg, testTextTrunkBin] = generate_random_frame(seed, dataLen, xCTRL_PRE_adj, after);
+        
+        %Modulation
+        %0 = Zeros (ie. transmit nothing)
+        %1 = BPSK
+        %2 = QPSK
+        %3 = 16QAM
+        payload_modulation = 1;
+        header = [0; 0; 0; 1]; % 4 bit (4 symbols in BPSK) field specifying modulation type
+        payload = generate_random_payload(seed, dataLen, 2^(payload_modulation-1));
+
+        testMsg = cat(1, xCTRL_PRE_adj, header, payload);
+
+        createTestVectors;
         
         rng(awgnSeed+100);
         txTimingPhase = rand(1);
         rxPhaseOffset = rand(1)*360;
         
-        pad_first = 2000;
+        %pad_first = 2000;
 
-        mod_imperfection = zeros(pad_first, 1);
-        testMsgFPGA = cat(1, mod_imperfection, testMsg);
+        %mod_imperfection = zeros(pad_first, 1);
+        %testMsgFPGA = cat(1, mod_imperfection, testMsg);
         
-        simX = struct();
-        simX.time = [];
-        simX.signals.values = testMsgFPGA;
-        simX.signals.dimensions = 1;
-
-        dataDelay = length(cat(1, xCTRL_PRE_adj)) + 1 + 187+360+1;%delay in computing
-        
-        idealX = struct();
-        idealX.time = [];
-        idealX.signals.values = cat(1, testTextTrunkBin, after);
-        idealX.signals.dimensions = 1;
-        
-        simulink_out = sim('gm_rev0BB', 'SimulationMode', 'rapid');
+        simulink_out = sim('rev0BB', 'SimulationMode', 'rapid');
         data_recieved = simulink_out.get('data_recieved');
         assignin('base','data_recieved',data_recieved);
         
-        if(length(testTextTrunkBin) ~= length(data_recieved))
-            disp(['SNR: ', num2str(dBSnrRange(dBSnrInd)),' Trial: ', num2str(trial), ' Recieved Data Length Unexpected (', num2str(length(data_recieved)), '): Likely that no data was recieved']);
-            bitErrors = length(testTextTrunkBin);
+        if(length(payload) ~= length(data_recieved))
+            disp(['SNR: ', num2str(dBSnrRange(dBSnrInd)),' Trial: ', num2str(trial), ' Recieved Data Length (Symbols) Unexpected (', num2str(length(data_recieved)), '): Likely that no data was recieved']);
+            bitErrors = dataLen;
             failure = 1;
         else
-            delta = abs(double(data_recieved) - testTextTrunkBin);
-            bitErrors = sum(delta);
-            ber = bitErrors/length(data_recieved);
+            %delta = abs(double(data_recieved) - testTextTrunkBin);
+            %bitErrors = sum(delta);
+            %ber = bitErrors/length(data_recieved);
+            [bitErrors,ber] = biterr(double(data_recieved),payload);
             failure = 0;
-            disp(['SNR: ', num2str(dBSnrRange(dBSnrInd)),' Trial: ', num2str(trial), ' BER: ', num2str(ber), ', Errors: ', num2str(bitErrors), ', Length: ', num2str(length(data_recieved))]);
+            disp(['SNR: ', num2str(dBSnrRange(dBSnrInd)),' Trial: ', num2str(trial), ' BER: ', num2str(ber), ', Errors: ', num2str(bitErrors), ', Symbols: ', num2str(length(data_recieved)), ', Bits: ', num2str(dataLen)]);
         end
         
         trial_failures(trial, dBSnrInd) = failure;
@@ -84,7 +85,7 @@ for dBSnrInd = indRange
     end
     
     sim_failures (dBSnrInd) = sum(trial_failures(:,dBSnrInd));
-    sim_ber(dBSnrInd) = sum(trial_bit_errors(:,dBSnrInd))/(trials*length(testTextTrunkBin));
+    sim_ber(dBSnrInd) = sum(trial_bit_errors(:,dBSnrInd))/(trials*dataLen);
     
     idealBer(dBSnrInd) = berawgn(dBSnrRange(dBSnrInd) + 10*log10(overSample), 'psk', 2, 'nondiff');
 end
@@ -98,7 +99,7 @@ semilogy(dBSnrRange + 10*log10(overSample), sim_ber, 'r*-');
 xlabel('Eb/N0 (dB)')
 ylabel('BER')
 legend('Theoretical', 'Simulation');
-title('Baseband Simulation vs. Theoretical (Uncoded Coherent BPSK over AWGN)')
+title('Baseband Simulation vs. Theoretical (Uncoded Coherent 16 QAM over AWGN)')
 grid on;
 
 fig2 = figure;

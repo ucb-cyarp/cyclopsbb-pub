@@ -1,4 +1,5 @@
-dataLen = 4096;
+dataLen = 4096*4;
+headerLen = 4;
 lineWidth = 60;
 
 %% Sim Params
@@ -64,6 +65,8 @@ sin_source_freq = 250e6/16;
 % freqz(dc_block,1,1024,fs)
 
 %Carrier Recovery
+
+cr_freeze_buffer = 10; %number of buffer symbols for freeze
 
 cr_bound_thresh = 2^-8;
 
@@ -293,6 +296,8 @@ xSC_CEF   = transpose(xSC_CEF);
 xCTRL_CEF = transpose(xCTRL_CEF);
 xSC_PRE   = transpose(xSC_PRE);
 xCTRL_PRE = transpose(xCTRL_PRE);
+
+cef_length = length(xCTRL_CEF);
 
 %Note that CEF note is duplicated in the state machine function because
 %(for whatever reason) an array can not be passed as a parameter for
