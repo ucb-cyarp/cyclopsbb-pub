@@ -9,3 +9,5 @@ for i = 0:1:(length(pre)-1)
 end
 
 disp(mat2str(dec2hex(packed,8)));
+disp(mat2str(packed));
+disp(mat2str(typecast( uint32( hex2dec(dec2hex(packed,8)) ), 'int32')));

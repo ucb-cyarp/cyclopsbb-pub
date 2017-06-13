@@ -1,4 +1,8 @@
-dataLen = 4096;
+%dataLen = 4096; %orig design
+header_len = 32;
+mtu_eth = 1500;
+dataLen = mtu_eth*8 + header_len;
+
 lineWidth = 60;
 
 %% Sim Params
