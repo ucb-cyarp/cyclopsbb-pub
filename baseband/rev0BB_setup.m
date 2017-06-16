@@ -1,7 +1,7 @@
 %dataLen = 4096; %orig design
-header_len = 32;
-mtu_eth = 1500;
-dataLen = mtu_eth*8 + header_len;
+header_len = 4;
+mtu_eth = 1500+26+2;%+2 is so that the result fits evenly in 32 bit words
+dataLen = (mtu_eth + header_len)*8;
 
 lineWidth = 60;
 
