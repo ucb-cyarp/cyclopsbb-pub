@@ -14,7 +14,7 @@ disp(['Payload+Header Length (bits) = ', num2str(dataLen)])
 
 %simple_ascii_message;
 %or
-%seed = 67;
+%seed = 67;?
 seed = 579;
 [testMsg, testTextTrunkBin] = generate_random_frame(seed, dataLen, xCTRL_PRE_adj, after);
 
@@ -35,11 +35,11 @@ qScale = 1;
 %awgnSNR = -6;
 %awgnSNR = -3;
 %awgnSNR = 0;
-%awgnSNR = 2;
+awgnSNR = 2;
 %awgnSNR = 5.5;
 %awgnSNR = 6;
 %awgnSNR = 8;
-awgnSNR = 10;
+%awgnSNR = 10;
 %awgnSNR = 24;
 %awgnSNR = 50;
 %awgnSNR = 92;
