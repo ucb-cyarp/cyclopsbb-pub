@@ -6,7 +6,7 @@ dataLen = (mtu_eth + header_len)*8;
 lineWidth = 60;
 
 %% Sim Params
-overSampleFreq = 250e6; %300 MHz would be optimal, now targeting 250 MHz
+overSampleFreq = 60e6; %300 MHz would be optimal, now targeting 250 MHz
 overSample = 4;
 slowSample = 3;
 baseFreq = overSampleFreq/overSample; %300 MHz
@@ -14,6 +14,9 @@ basePer = 1/baseFreq;
 overSamplePer = 1/overSampleFreq;
 slowPer = overSamplePer*slowSample;
 fifo_slow_per = overSamplePer * overSample/slowSample;
+
+maxDopplerHz = .1;
+channelMdl = stdchan(overSamplePer, maxDopplerHz, 'cost207RAx4');
 
 eccTrellis = poly2trellis(7, [133 171 165]);
 

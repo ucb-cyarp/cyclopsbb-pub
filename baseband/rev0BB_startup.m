@@ -26,7 +26,8 @@ createTestVectors;
 dc_block_passband = 0; %MHz
 
 %freqOffsetHz = 0;
-freqOffsetHz = 100000;
+freqOffsetHz = 1000;
+%freqOffsetHz = 100000;
 disp(['CarrierFreqOffsetHz = ', num2str(freqOffsetHz)])
 
 %qScale = 0.8631;
@@ -35,7 +36,7 @@ qScale = 1;
 %awgnSNR = -6;
 %awgnSNR = -3;
 %awgnSNR = 0;
-awgnSNR = 2;
+%awgnSNR = 2;
 %awgnSNR = 5.5;
 %awgnSNR = 6;
 %awgnSNR = 8;
@@ -43,7 +44,7 @@ awgnSNR = 2;
 %awgnSNR = 24;
 %awgnSNR = 50;
 %awgnSNR = 92;
-%awgnSNR = 100;
+awgnSNR = 100;
 
 disp(['awgnSNRdB = ', num2str(awgnSNR)])
 
