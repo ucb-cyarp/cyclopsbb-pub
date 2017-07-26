@@ -16,7 +16,7 @@ slowPer = overSamplePer*slowSample;
 fifo_slow_per = overSamplePer * overSample/slowSample;
 
 maxDopplerHz = .1;
-channelMdl = stdchan(overSamplePer, maxDopplerHz, 'cost207RAx4');
+channelMdl = stdchan(overSamplePer, maxDopplerHz, 'cost207RAx6');
 
 eccTrellis = poly2trellis(7, [133 171 165]);
 
@@ -196,7 +196,8 @@ thetaInit = 0;
 expDomain = 3.3;
 expTol = .1;
 expResolution = 2^-5;
-trigger = (80/128)^2;
+%trigger = (80/128)^2;
+trigger = 0.50;
 
 %[a, b] = butter(8, .3);
 
@@ -322,7 +323,8 @@ rSC_STF   = transpose(rSC_STF);
 rSC_STF_I = real(xSC_STF);
 rSC_STF_Q = imag(xSC_STF);
 
-cbTol    = int16(36);
+%cbTol    = int16(36);
+cbTol    = int16(48-4);
 guardInt = int16(4);
 wordLen  = int16(8);
 guardTol = int16(5);
@@ -333,6 +335,6 @@ expectedWidth = int16(1);
 %expectedWidth = int16(4);
 %expectedPer = 128;
 expectedPer = int16(128*expectedWidth);
-tol         = int16(15+expectedPer*3); %allow for a momentary loss (ie. due to adaptive filtering)
+tol         = int16(15+expectedPer*4); %allow for a momentary loss (ie. due to adaptive filtering)
 
 outBuffer = zeros(1024,1);
