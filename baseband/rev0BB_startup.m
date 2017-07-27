@@ -16,11 +16,13 @@ disp(['Payload+Header Length (bits) = ', num2str(dataLen)])
 %or
 %seed = 67;?
 seed = 579;
-[testMsg, testTextTrunkBin] = generate_random_frame(seed, dataLen, xCTRL_PRE_adj, after);
+[testMsg, testTextTrunkBin] = generate_random_frame(seed, dataLen, x_PRE_adj, after);
 
 createTestVectors;
 
 %% Imperfections
+maxDopplerHz = .1;
+channelMdl = stdchan(overSamplePer, maxDopplerHz, 'cost207RAx4');
 
 %dc_block_passband = 0.1; %MHz
 dc_block_passband = 0; %MHz

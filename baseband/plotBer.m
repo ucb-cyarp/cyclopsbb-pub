@@ -40,7 +40,7 @@ for dBSnrInd = indRange
     for trial = 1:1:trials
         seed = abs(dBSnrRange(dBSnrInd)*1000+trial);
         awgnSeed = abs(dBSnrRange(dBSnrInd)*1000+trial+10000000);
-        [testMsg, testTextTrunkBin] = generate_random_frame(seed, dataLen, xCTRL_PRE_adj, after);
+        [testMsg, testTextTrunkBin] = generate_random_frame(seed, dataLen, x_PRE_adj, after);
         
         rng(awgnSeed+100);
         txTimingPhase = rand(1);

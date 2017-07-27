@@ -15,9 +15,6 @@ overSamplePer = 1/overSampleFreq;
 slowPer = overSamplePer*slowSample;
 fifo_slow_per = overSamplePer * overSample/slowSample;
 
-maxDopplerHz = .1;
-channelMdl = stdchan(overSamplePer, maxDopplerHz, 'cost207RAx6');
-
 eccTrellis = poly2trellis(7, [133 171 165]);
 
 maxVal = 4;
@@ -231,6 +228,8 @@ agcDesired = 0;
 agcStep = 2^-12;
 %agcStep = 2^-13;
 
+agcSettleThresh = 0.75;
+
 %% Golay Sequence
 Ga_128 = [+1, +1, -1, -1, -1, -1, -1, -1, -1, +1, -1, +1, +1, -1, -1, +1, +1, +1, -1, -1, +1, +1, +1, +1, -1, +1, -1, +1, -1, +1, +1, -1, -1, -1, +1, +1, +1, +1, +1, +1, +1, -1, +1, -1, -1, +1, +1, -1, +1, +1, -1, -1, +1, +1, +1, +1, -1, +1, -1, +1, -1, +1, +1, -1, +1, +1, -1, -1, -1, -1, -1, -1, -1, +1, -1, +1, +1, -1, -1, +1, +1, +1, -1, -1, +1, +1, +1, +1, -1, +1, -1, +1, -1, +1, +1, -1, +1, +1, -1, -1, -1, -1, -1, -1, -1, +1, -1, +1, +1, -1, -1, +1, -1, -1, +1, +1, -1, -1, -1, -1, +1, -1, +1, -1, +1, -1, -1, +1];
 Gb_128 = [-1, -1, +1, +1, +1, +1, +1, +1, +1, -1, +1, -1, -1, +1, +1, -1, -1, -1, +1, +1, -1, -1, -1, -1, +1, -1, +1, -1, +1, -1, -1, +1, +1, +1, -1, -1, -1, -1, -1, -1, -1, +1, -1, +1, +1, -1, -1, +1, -1, -1, +1, +1, -1, -1, -1, -1, +1, -1, +1, -1, +1, -1, -1, +1, +1, +1, -1, -1, -1, -1, -1, -1, -1, +1, -1, +1, +1, -1, -1, +1, +1, +1, -1, -1, +1, +1, +1, +1, -1, +1, -1, +1, -1, +1, +1, -1, +1, +1, -1, -1, -1, -1, -1, -1, -1, +1, -1, +1, +1, -1, -1, +1, -1, -1, +1, +1, -1, -1, -1, -1, +1, -1, +1, -1, +1, -1, -1, +1];
@@ -290,20 +289,36 @@ nCTRL_STFRep = 0:1:(48*128-1);
 nCTRL_STFNeg = (48*128):1:(49*128-1);
 nCTRL_STFFin = (49*128):1:(50*128-1);
 
+nSpectrum_STFRep = 0:1:(33*128-1);
+nSpectrum_STFNeg = (33*128):1:(34*128-1);
+nSpectrum_STFFin = (34*128):1:(35*128-1);
+
 %Complex Baseband Preamble Signal
 xSC_STF   = cat(2, Ga_128(mod(nSC_STFRep, 128)+1), -Ga_128(mod(nSC_STFNeg, 128)+1)); %+1 is for matlab
 xCTRL_STF = cat(2, Gb_128(mod(nCTRL_STFRep, 128)+1), -Gb_128(mod(nCTRL_STFNeg, 128)+1), -Ga_128(mod(nCTRL_STFFin, 128)+1)); %+1 is for matlab
 xSC_CEF   = cat(2, Gu_512, Gv_512, Gv_128);
 xCTRL_CEF = xSC_CEF;
+xSpectrum_STF = cat(2, Gb_128(mod(nSpectrum_STFRep, 128)+1), -Gb_128(mod(nSpectrum_STFNeg, 128)+1), -Ga_128(mod(nSpectrum_STFFin, 128)+1)); %+1 is for matlab
+xSpectrum_CEF = cat(2, Gu_512, Gv_512, Gu_512, Gv_512, Gu_512, Gv_512, Gv_128);
+
 xSC_PRE   = cat(2, xSC_STF, xSC_CEF);
 xCTRL_PRE = cat(2, xCTRL_STF, xCTRL_CEF);
+xSpectrum_PRE = cat(2, xSpectrum_STF, xSpectrum_CEF);
 
 xSC_STF   = transpose(xSC_STF);
 xCTRL_STF = transpose(xCTRL_STF);
 xSC_CEF   = transpose(xSC_CEF);
 xCTRL_CEF = transpose(xCTRL_CEF);
+xSpectrum_STF = transpose(xSpectrum_STF);
+xSpectrum_CEF = transpose(xSpectrum_CEF);
 xSC_PRE   = transpose(xSC_PRE);
 xCTRL_PRE = transpose(xCTRL_PRE);
+xSpectrum_PRE = transpose(xSpectrum_PRE);
+
+% select preamble
+x_STF = xSpectrum_STF;
+x_CEF = xSpectrum_CEF;
+x_PRE = xSpectrum_PRE;
 
 %Note that CEF note is duplicated in the state machine function because
 %(for whatever reason) an array can not be passed as a parameter for
@@ -316,7 +331,7 @@ after = zeros(100, 1);
 
 %Note that numtiply by -1 because BPSK modulation has '0' at 1+0j and
 %'1' at -1+0j
-xCTRL_PRE_adj = (xCTRL_PRE.*-1 + 1)./2;
+x_PRE_adj = (x_PRE.*-1 + 1)./2;
 
 rSC_STF   = cat(2, Ga_128(mod(nSC_STFRep, 128)+1).*exp(j*pi*nSC_STFRep/2), -Ga_128(mod(nSC_STFNeg, 128)+1).*exp(j*pi*nSC_STFNeg/2)); %+1 is for matlab
 rSC_STF   = transpose(rSC_STF);
@@ -337,4 +352,13 @@ expectedWidth = int16(1);
 expectedPer = int16(128*expectedWidth);
 tol         = int16(15+expectedPer*4); %allow for a momentary loss (ie. due to adaptive filtering)
 
+stfLen = length(x_STF);
+stfLenTol = 50;
+cefLen = length(x_CEF);
+preLen = length(x_PRE);
+
 outBuffer = zeros(1024,1);
+
+lmsEqDepth = 32;
+lmsStep = 0.005;
+lmsLeak = 1;

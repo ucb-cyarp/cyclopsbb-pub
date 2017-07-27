@@ -10,7 +10,7 @@ simX.time = [];
 simX.signals.values = testMsgFPGA;
 simX.signals.dimensions = 1;
 
-dataDelay = length(cat(1, xCTRL_PRE_adj)) + 1 + 187+360+1;%delay in computing
+dataDelay = length(cat(1, x_PRE_adj)) + 1 + 187+360+1;%delay in computing
 idealX.time = [];
 idealX.signals.values = cat(1, testTextTrunkBin, after);
 idealX.signals.dimensions = 1;
