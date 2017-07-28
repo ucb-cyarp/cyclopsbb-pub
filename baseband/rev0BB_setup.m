@@ -194,7 +194,7 @@ expDomain = 3.3;
 expTol = .1;
 expResolution = 2^-5;
 %trigger = (80/128)^2;
-trigger = 0.50;
+trigger = 0.20;
 
 %[a, b] = butter(8, .3);
 
@@ -299,7 +299,7 @@ xCTRL_STF = cat(2, Gb_128(mod(nCTRL_STFRep, 128)+1), -Gb_128(mod(nCTRL_STFNeg, 1
 xSC_CEF   = cat(2, Gu_512, Gv_512, Gv_128);
 xCTRL_CEF = xSC_CEF;
 xSpectrum_STF = cat(2, Gb_128(mod(nSpectrum_STFRep, 128)+1), -Gb_128(mod(nSpectrum_STFNeg, 128)+1), -Ga_128(mod(nSpectrum_STFFin, 128)+1)); %+1 is for matlab
-xSpectrum_CEF = cat(2, Gu_512, Gv_512, Gu_512, Gv_512, Gu_512, Gv_512, Gv_128);
+xSpectrum_CEF = cat(2, Gu_512, Gv_512, Gu_512, Gv_512, Gu_512, Gv_512, Gu_512, Gv_512, Gv_128);
 
 xSC_PRE   = cat(2, xSC_STF, xSC_CEF);
 xCTRL_PRE = cat(2, xCTRL_STF, xCTRL_CEF);
@@ -357,8 +357,11 @@ stfLenTol = 50;
 cefLen = length(x_CEF);
 preLen = length(x_PRE);
 
+cefEarlyWarning = 256;
+
 outBuffer = zeros(1024,1);
 
-lmsEqDepth = 32;
-lmsStep = 0.005;
+lmsEqDepth = 256;
+%lmsStep = 0.4; %NLMS
+lmsStep = 0.004; %LMS
 lmsLeak = 1;
