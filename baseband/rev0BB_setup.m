@@ -361,7 +361,6 @@ cefEarlyWarning = 256;
 
 outBuffer = zeros(1024,1);
 
-lmsEqDepth = 256;
+lmsEqDepth = 16;
 %lmsStep = 0.4; %NLMS
-lmsStep = 0.004; %LMS
-lmsLeak = 1;
+lmsStep = 0.001; %LMS
