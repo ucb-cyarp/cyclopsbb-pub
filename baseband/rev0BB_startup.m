@@ -30,11 +30,12 @@ disp(['Average Path Gain (dB): ' mat2str(channelMdl.AvgPathGaindB)]);
 %dc_block_passband = 0.1; %MHz
 dc_block_passband = 0; %MHz
 
-%freqOffsetHz = 0;
+freqOffsetHz = 0;
 %freqOffsetHz = 1000;
 %freqOffsetHz = 2000;
-freqOffsetHz = -5000;
+%freqOffsetHz = -5000;
 %freqOffsetHz = 10000;
+%freqOffsetHz = 20000;
 %freqOffsetHz = 100000;
 disp(['CarrierFreqOffsetHz = ', num2str(freqOffsetHz)])
 
