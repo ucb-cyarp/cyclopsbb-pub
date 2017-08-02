@@ -230,6 +230,27 @@ agcStep = 2^-12;
 
 agcSettleThresh = 0.75;
 
+coarseCFO_averaging_samples = 512;
+atanDomainCoarseCFO = 128;
+atanResolutionCoarseCFO = 2^-12;
+
+frac_lut_domain_coarse_cfo = 128;
+frac_lut_res_coarse_cfo = 2^-12;
+frac_lut_range_max_coarse_cfo = 127;
+frac_lut_range_min_coarse_cfo = -frac_lut_range_max_coarse_cfo;
+frac_lut_table_breaks_coarse_cfo = -frac_lut_domain_coarse_cfo:frac_lut_res_coarse_cfo:(frac_lut_domain_coarse_cfo-1);
+frac_lut_table_data_coarse_cfo = 1./frac_lut_table_breaks_coarse_cfo;
+
+for ind = 1:length(frac_lut_table_data_coarse_cfo)
+   if frac_lut_table_data_coarse_cfo(ind) > frac_lut_range_max_coarse_cfo
+       frac_lut_table_data_coarse_cfo(ind) = frac_lut_range_max_coarse_cfo;
+   elseif frac_lut_table_data_coarse_cfo(ind) < frac_lut_range_min_coarse_cfo
+       frac_lut_table_data_coarse_cfo(ind) = frac_lut_range_min_coarse_cfo;
+   end
+end
+
+coarseCFOFreqStep = 500;
+
 %% Golay Sequence
 Ga_128 = [+1, +1, -1, -1, -1, -1, -1, -1, -1, +1, -1, +1, +1, -1, -1, +1, +1, +1, -1, -1, +1, +1, +1, +1, -1, +1, -1, +1, -1, +1, +1, -1, -1, -1, +1, +1, +1, +1, +1, +1, +1, -1, +1, -1, -1, +1, +1, -1, +1, +1, -1, -1, +1, +1, +1, +1, -1, +1, -1, +1, -1, +1, +1, -1, +1, +1, -1, -1, -1, -1, -1, -1, -1, +1, -1, +1, +1, -1, -1, +1, +1, +1, -1, -1, +1, +1, +1, +1, -1, +1, -1, +1, -1, +1, +1, -1, +1, +1, -1, -1, -1, -1, -1, -1, -1, +1, -1, +1, +1, -1, -1, +1, -1, -1, +1, +1, -1, -1, -1, -1, +1, -1, +1, -1, +1, -1, -1, +1];
 Gb_128 = [-1, -1, +1, +1, +1, +1, +1, +1, +1, -1, +1, -1, -1, +1, +1, -1, -1, -1, +1, +1, -1, -1, -1, -1, +1, -1, +1, -1, +1, -1, -1, +1, +1, +1, -1, -1, -1, -1, -1, -1, -1, +1, -1, +1, +1, -1, -1, +1, -1, -1, +1, +1, -1, -1, -1, -1, +1, -1, +1, -1, +1, -1, -1, +1, +1, +1, -1, -1, -1, -1, -1, -1, -1, +1, -1, +1, +1, -1, -1, +1, +1, +1, -1, -1, +1, +1, +1, +1, -1, +1, -1, +1, -1, +1, +1, -1, +1, +1, -1, -1, -1, -1, -1, -1, -1, +1, -1, +1, +1, -1, -1, +1, -1, -1, +1, +1, -1, -1, -1, -1, +1, -1, +1, -1, +1, -1, -1, +1];
@@ -289,6 +310,7 @@ nCTRL_STFRep = 0:1:(48*128-1);
 nCTRL_STFNeg = (48*128):1:(49*128-1);
 nCTRL_STFFin = (49*128):1:(50*128-1);
 
+nSpectrum_STFRepCount = 33;
 nSpectrum_STFRep = 0:1:(33*128-1);
 nSpectrum_STFNeg = (33*128):1:(34*128-1);
 nSpectrum_STFFin = (34*128):1:(35*128-1);
@@ -317,6 +339,7 @@ xSpectrum_PRE = transpose(xSpectrum_PRE);
 
 % select preamble
 x_STF = xSpectrum_STF;
+x_STFRepCount = nSpectrum_STFRepCount;
 x_CEF = xSpectrum_CEF;
 x_PRE = xSpectrum_PRE;
 
@@ -361,6 +384,6 @@ cefEarlyWarning = 256;
 
 outBuffer = zeros(1024,1);
 
-lmsEqDepth = 256;
+lmsEqDepth = 32;
 %lmsStep = 0.4; %NLMS
-lmsStep = 0.002; %LMS
+lmsStep = 0.001; %LMS
