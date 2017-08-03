@@ -214,7 +214,7 @@ agc_detector_coef = ones(1,agc_detector_taps)./agc_detector_taps;
 lnDomain = 16;
 lnResolution = 2^-7;
 
-agcSaturation = 4;
+agcSaturation = 5;
 
 agc_sat_up  =  agcSaturation;
 agc_sat_low = -agcSaturation;
@@ -383,6 +383,8 @@ preLen = length(x_PRE);
 cefEarlyWarning = 256;
 
 outBuffer = zeros(1024,1);
+
+agcPwrAvgNum = 256;
 
 lmsEqDepth = 64;
 %lmsStep = 0.4; %NLMS
