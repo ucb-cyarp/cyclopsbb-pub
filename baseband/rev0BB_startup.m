@@ -24,8 +24,18 @@ createTestVectors;
 maxDopplerHz = .1;
 channelMdl = stdchan(overSamplePer, maxDopplerHz, 'cost207RAx4');
 
-disp(['Channel Delays (Symbols): ' mat2str(channelMdl.PathDelays/basePer)]);
-disp(['Average Path Gain (dB): ' mat2str(channelMdl.AvgPathGaindB)]);
+chanDelays = channelMdl.PathDelays/basePer;
+chanAvgPathGainsdB = channelMdl.AvgPathGaindB;
+chanPathGains = channelMdl.PathGains;
+
+disp(['Channel Delays (Symbols): ' mat2str(chanDelays)]);
+disp(['Average Path Gain (dB): ' mat2str(chanAvgPathGainsdB)]);
+
+chanFilt = zeros(1, max(chanDelays)+1);
+%set filt coefs
+for(ind = 1:length(chanDelays))
+    chanFilt(chanDelays(ind)+1) = chanPathGains(ind);
+end
 
 %dc_block_passband = 0.1; %MHz
 dc_block_passband = 0; %MHz
@@ -49,8 +59,8 @@ qScale = 1;
 %awgnSNR = 5.5;
 %awgnSNR = 6;
 %awgnSNR = 8;
-awgnSNR = 10;
-%awgnSNR = 24;
+%awgnSNR = 10;
+awgnSNR = 20;
 %awgnSNR = 50;
 %awgnSNR = 92;
 %awgnSNR = 100;
