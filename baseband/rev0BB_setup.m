@@ -387,3 +387,7 @@ outBuffer = zeros(1024,1);
 lmsEqDepth = 256;
 %lmsStep = 0.4; %NLMS
 lmsStep = 0.001; %LMS
+
+lmsDDDepth = 32;
+%lmsStep = 0.4; %NLMS
+lmsDDStep = 0.0001; %LMS
