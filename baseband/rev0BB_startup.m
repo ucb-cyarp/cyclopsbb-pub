@@ -31,19 +31,19 @@ chanPathGains = channelMdl.PathGains;
 disp(['Channel Delays (Symbols): ' mat2str(chanDelays)]);
 disp(['Average Path Gain (dB): ' mat2str(chanAvgPathGainsdB)]);
 
-chanFilt = zeros(1, max(chanDelays)+1);
+chanFilt = zeros(1, ceil(max(chanDelays))+1);
 %set filt coefs
 for(ind = 1:length(chanDelays))
-    chanFilt(chanDelays(ind)+1) = chanPathGains(ind);
+    chanFilt(ceil(chanDelays(ind))+1) = chanPathGains(ind);
 end
 
 %dc_block_passband = 0.1; %MHz
 dc_block_passband = 0; %MHz
 
-%freqOffsetHz = 0;
+freqOffsetHz = 0;
 %freqOffsetHz = 1000;
 %freqOffsetHz = 2000;
-freqOffsetHz = -5000;
+freqOffsetHz = 5000;
 %freqOffsetHz = 10000;
 %freqOffsetHz = 20000;
 %freqOffsetHz = 100000;

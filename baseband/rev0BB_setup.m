@@ -310,10 +310,10 @@ nCTRL_STFRep = 0:1:(48*128-1);
 nCTRL_STFNeg = (48*128):1:(49*128-1);
 nCTRL_STFFin = (49*128):1:(50*128-1);
 
-nSpectrum_STFRepCount = 33;
-nSpectrum_STFRep = 0:1:(33*128-1);
-nSpectrum_STFNeg = (33*128):1:(34*128-1);
-nSpectrum_STFFin = (34*128):1:(35*128-1);
+nSpectrum_STFRepCount = 29;
+nSpectrum_STFRep = 0:1:(nSpectrum_STFRepCount*128-1);
+nSpectrum_STFNeg = (nSpectrum_STFRepCount*128):1:((nSpectrum_STFRepCount+1)*128-1);
+nSpectrum_STFFin = ((nSpectrum_STFRepCount+1)*128):1:((nSpectrum_STFRepCount+2)*128-1);
 
 %Complex Baseband Preamble Signal
 xSC_STF   = cat(2, Ga_128(mod(nSC_STFRep, 128)+1), -Ga_128(mod(nSC_STFNeg, 128)+1)); %+1 is for matlab
@@ -321,7 +321,7 @@ xCTRL_STF = cat(2, Gb_128(mod(nCTRL_STFRep, 128)+1), -Gb_128(mod(nCTRL_STFNeg, 1
 xSC_CEF   = cat(2, Gu_512, Gv_512, Gv_128);
 xCTRL_CEF = xSC_CEF;
 xSpectrum_STF = cat(2, Gb_128(mod(nSpectrum_STFRep, 128)+1), -Gb_128(mod(nSpectrum_STFNeg, 128)+1), -Ga_128(mod(nSpectrum_STFFin, 128)+1)); %+1 is for matlab
-xSpectrum_CEF = cat(2, Gu_512, Gv_512, Gu_512, Gv_512, Gu_512, Gv_512, Gu_512, Gv_512, Gv_128);
+xSpectrum_CEF = cat(2, Gu_512, Gv_512, Gu_512, Gv_512, Gu_512, Gv_512, Gu_512, Gv_512, Gu_512, Gv_512, Gv_128);
 
 xSC_PRE   = cat(2, xSC_STF, xSC_CEF);
 xCTRL_PRE = cat(2, xCTRL_STF, xCTRL_CEF);
@@ -386,6 +386,7 @@ outBuffer = zeros(1024,1);
 
 agcPwrAvgNum = 256;
 
-lmsEqDepth = 64;
-%lmsStep = 0.4; %NLMS
-lmsStep = 0.002; %LMS
+lmsEqDepth = 256;
+lmsStep_init =  0.002; %LMS
+lmsStep_final = 0.00075;
+lmsStep_meta = (lmsStep_final - lmsStep_init)/cefLen;
