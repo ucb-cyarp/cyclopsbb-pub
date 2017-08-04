@@ -228,7 +228,7 @@ agcDesired = 0;
 agcStep = 2^-12;
 %agcStep = 2^-13;
 
-agcSettleThresh = 0.75;
+agcSettleThresh = 0.65;
 
 coarseCFO_averaging_samples = 512;
 atanDomainCoarseCFO = 128;
@@ -384,7 +384,7 @@ cefEarlyWarning = 256;
 
 outBuffer = zeros(1024,1);
 
-agcPwrAvgNum = 256;
+agcPwrAvgNum = 512;
 
 lmsEqDepth = 256;
 lmsStep_init =  0.002; %LMS
