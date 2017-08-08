@@ -40,7 +40,7 @@ end
 %dc_block_passband = 0.1; %MHz
 dc_block_passband = 0; %MHz
 
-freqOffsetHz = 0;
+%freqOffsetHz = 0;
 %freqOffsetHz = 1000;
 %freqOffsetHz = 2000;
 freqOffsetHz = 5000;
