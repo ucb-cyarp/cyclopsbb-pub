@@ -386,7 +386,7 @@ outBuffer = zeros(1024,1);
 
 agcPwrAvgNum = 512;
 
-lmsEqDepth = 256;
+lmsEqDepth = 78;
 lmsStep_init =  0.002; %LMS
 lmsStep_final = 0.00075;
 lmsStep_meta = (lmsStep_final - lmsStep_init)/cefLen;
