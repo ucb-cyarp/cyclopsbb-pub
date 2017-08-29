@@ -12,8 +12,8 @@ disp(export_fixed_point_c(rx_gain_i, 'RX_I_GAIN', format_str, true, 8, 4));
 disp(export_fixed_point_c(rx_gain_q, 'RX_Q_GAIN', format_str, true, 8, 4));
 disp(export_fixed_point_c(rx_offset_correction_i, 'RX_I_OFFSET', format_str, true, 14, 11));
 disp(export_fixed_point_c(rx_offset_correction_q, 'RX_Q_OFFSET', format_str, true, 14, 11));
-disp(export_fixed_point_c(agcDesired, 'RX_AGC_DESIRED', format_str, true, 32, 18));
-disp(export_fixed_point_c(agcStep, 'RX_AGC_STEP_SIZE', format_str, true, 32, 18));
+disp(export_fixed_point_c(agcDesired, 'RX_AGC_DESIRED', format_str, true, 38, 18));
+disp(export_fixed_point_c(agcStep, 'RX_AGC_STEP_SIZE', format_str, true, 38, 18));
 disp(export_fixed_point_c(timing_pre_scale, 'RX_TIMING_PRE_SCALE', format_str, true, 32, 22));
 disp(export_fixed_point_c(timing_p, 'RX_TIMING_P', format_str, true, 32, 22));
 disp(export_fixed_point_c(timing_i, 'RX_TIMING_I', format_str, true, 32, 22));
@@ -36,8 +36,8 @@ disp(export_fixed_point_c(cr_integrator1_decay, 'RX_CR_INTEGRATOR1_DECAY', forma
 %Extensions
 disp(export_fixed_point_c(agc_on, 'AGC_ON', format_str, true, 2, 0));
 disp(export_fixed_point_c(freeze_en_agc, 'AGC_FREEZE_EN', format_str, true, 2, 0));
-disp(export_fixed_point_c(agc_sat_up, 'AGC_SATURATE_UP', format_str, true, 32, 18));
-disp(export_fixed_point_c(agc_sat_low, 'AGC_SATURATE_LOW', format_str, true, 32, 18));
+disp(export_fixed_point_c(agc_sat_up, 'AGC_SATURATE_UP', format_str, true, 38, 18));
+disp(export_fixed_point_c(agc_sat_low, 'AGC_SATURATE_LOW', format_str, true, 38, 18));
 disp(export_fixed_point_c(freeze_en_tr_int1, 'TR_INT1_FREEZE_EN', format_str, true, 2, 0));
 disp(export_fixed_point_c(freeze_en_tr_int2, 'TR_INT2_FREEZE_EN', format_str, true, 2, 0));
 disp(export_fixed_point_c(freeze_en_tr_phase, 'TR_PHASE_FREEZE_EN', format_str, true, 2, 0));
@@ -59,6 +59,10 @@ disp(export_fixed_point_c(cal_sig_i_mult, 'CAL_I_MULT', format_str, true, 16, 14
 disp(export_fixed_point_c(cal_sig_q_mult, 'CAL_Q_MULT', format_str, true, 16, 14));
 disp(export_fixed_point_c(cal_sig_i_offset, 'CAL_I_OFFSET', format_str, true, 16, 14));
 disp(export_fixed_point_c(cal_sig_q_offset, 'CAL_Q_OFFSET', format_str, true, 16, 14));
+
+%eq
+disp(export_fixed_point_c(lmsStep_init, 'EQ_STEP', format_str, true, 36, 24));
+disp(export_fixed_point_c(lmsStep_meta, 'EQ_STEP_META', format_str, true, 36, 24));
 
 disp(' ');
 disp('#endif');
