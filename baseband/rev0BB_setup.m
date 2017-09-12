@@ -6,7 +6,8 @@ dataLen = (mtu_eth + header_len)*8;
 lineWidth = 60;
 
 %% Sim Params
-overSampleFreq = 60e6; %300 MHz would be optimal, now targeting 250 MHz
+num_channels = 4;
+overSampleFreq = 60e6/num_channels; %300 MHz would be optimal, now targeting 250 MHz
 overSample = 4;
 slowSample = 3;
 baseFreq = overSampleFreq/overSample; %300 MHz
@@ -390,7 +391,7 @@ outBuffer = zeros(1024,1);
 
 agcPwrAvgNum = 512;
 
-lmsEqDepth = 78;
+lmsEqDepth = ceil(78/num_channels);
 lmsStep_init =  0.002; %LMS
 lmsStep_final = 0.00075;
 lmsStep_meta = (lmsStep_final - lmsStep_init)/cefLen;
