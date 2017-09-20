@@ -7,7 +7,7 @@ load_system('c_slow_lib');
 %Check if this is one of the builtin Simulink subsystems that have no state
 %and should be ignored
 system_mask_type = get_param(system, 'MaskType');
-if(strcmp(system_mask_type, 'Compare To Zero')==1)
+if(strcmp(system_mask_type, 'Compare To Zero')==1 || strcmp(system_mask_type, 'Compare To Constant')==1)
     if(verbose)
         disp(['[C-Slow] Skipping Built-in Simulink Stateless Subsystem: ', system]);
     end
