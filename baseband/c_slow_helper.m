@@ -4,6 +4,18 @@ function c_slow_helper( system, share_fact, verbose, parent_enabled, parent_enab
 
 load_system('c_slow_lib');
 
+%Check if this is one of the builtin Simulink subsystems that have no state
+%and should be ignored
+system_mask_type = get_param(system, 'MaskType');
+if(strcmp(system_mask_type, 'Compare To Zero')==1)
+    if(verbose)
+        disp(['[C-Slow] Skipping Built-in Simulink Stateless Subsystem: ', system]);
+    end
+    %This is a built in simulink subsystem with no state.  No need to go
+    %further.
+    return;
+end
+
 %Check if system is an enabled subsystem system
 enable_block_list = find_system(system,  'FollowLinks', 'on', 'LoadFullyIfNeeded', 'on', 'LookUnderMasks', 'on', 'SearchDepth', 1, 'BlockType', 'EnablePort');
 enabled_subsystem = ~isempty(enable_block_list);
@@ -16,10 +28,9 @@ end
 subsystem_list = find_system(system, 'FollowLinks', 'on', 'LoadFullyIfNeeded', 'on', 'LookUnderMasks', 'on', 'SearchDepth', 1, 'BlockType', 'SubSystem');
 system_parent = get_param(system, 'Parent');
 
+new_enb_port_internal_output_handle = 0;% Will be set below
+
 if(enabled_subsystem || parent_enabled)
-    
-    new_enb_port_internal_outut_handle = 0;% Will be set below
-    
     if(enabled_subsystem)
         if(verbose)
             disp(['[C-Slow] Processing Enabled Subsystem: ', system]);
@@ -38,7 +49,7 @@ if(enabled_subsystem || parent_enabled)
         delete_block(enable_block);
         new_enb_port = add_block('simulink/Sources/In1', [system, '/en'], 'MakeNameUnique', 'on');
         new_enb_port_internal_handles = get_param(new_enb_port, 'PortHandles');
-        new_enb_port_internal_outut_handle = new_enb_port_internal_handles.Outport;
+        new_enb_port_internal_output_handle = new_enb_port_internal_handles.Outport;
         new_enb_port_num = str2double(get_param(new_enb_port, 'Port'));
         system_port_handles = get_param(system,'PortHandles');
         system_new_enb_port = system_port_handles.Inport(new_enb_port_num);
@@ -51,10 +62,10 @@ if(enabled_subsystem || parent_enabled)
             height = 30;
             and_pos(1) = system_pos(1)-width*2;
             and_pos(2) = system_pos(2)-height*2;
-            and_pos(3) = system_pos(2)-width;
+            and_pos(3) = system_pos(1)-width;
             and_pos(4) = system_pos(2)-height;
             
-            and_block = add_block('simulink/Logic and Bit Operations/Logical Operator', [system_parent, 'en_and'], 'MakeNameUnique', 'on', 'Operator', 'AND', 'Position', and_pos);
+            and_block = add_block('simulink/Logic and Bit Operations/Logical Operator', [system_parent, '/en_and'], 'MakeNameUnique', 'on', 'Operator', 'AND', 'Position', and_pos);
             and_block_port_handles = get_param(and_block, 'PortHandles');
             %Connect internal enable line
             add_line(system_parent, enable_src_port, and_block_port_handles.Inport(1), 'autorouting', 'on');
@@ -76,7 +87,7 @@ if(enabled_subsystem || parent_enabled)
         %Create new enable port
         new_enb_port = add_block('simulink/Sources/In1', [system, '/en'], 'MakeNameUnique', 'on');
         new_enb_port_internal_handles = get_param(new_enb_port, 'PortHandles');
-        new_enb_port_internal_outut_handle = new_enb_port_internal_handles.Outport;
+        new_enb_port_internal_output_handle = new_enb_port_internal_handles.Outport;
         new_enb_port_num = str2double(get_param(new_enb_port, 'Port'));
         system_port_handles = get_param(system,'PortHandles');
         system_new_enb_port = system_port_handles.Inport(new_enb_port_num);
@@ -135,7 +146,7 @@ if(enabled_subsystem || parent_enabled)
             shift_reg_ports = get_param(shift_reg_blk(1), 'PortHandles');
             %Wire to orig src
             add_line(system, delay_block_source_port, shift_reg_ports.Inport(1), 'autorouting', 'on'); %Port 1 is the data port
-            add_line(system, new_enb_port_internal_outut_handle, shift_reg_ports.Inport(2), 'autorouting', 'on'); %Port 2 is the enable port
+            add_line(system, new_enb_port_internal_output_handle, shift_reg_ports.Inport(2), 'autorouting', 'on'); %Port 2 is the enable port
             
             %Now, repeat for rest of delay
             for i = 2:1:delay_val
@@ -147,7 +158,7 @@ if(enabled_subsystem || parent_enabled)
                 %Wire to previous block
                 add_line(system, shift_reg_ports_prev.Outport, shift_reg_ports_current.Inport(1), 'autorouting', 'on'); %Port 1 is the data port
                 %Wire enable port
-                add_line(system, new_enb_port_internal_outut_handle, shift_reg_ports_current.Inport(2), 'autorouting', 'on'); %Port 2 is the enable port
+                add_line(system, new_enb_port_internal_output_handle, shift_reg_ports_current.Inport(2), 'autorouting', 'on'); %Port 2 is the enable port
             end
             
             %Set the source port (to be connected to the destinations) to
@@ -199,7 +210,7 @@ end
 
 for ind = 1:1:length(subsystem_list)
    subsystem=subsystem_list{ind};
-   c_slow(subsystem, share_fact, verbose, (enabled_subsystem || parent_enabled), new_enb_port_internal_outut_handle); 
+   c_slow_helper(subsystem, share_fact, verbose, (enabled_subsystem || parent_enabled), new_enb_port_internal_output_handle); 
 end
 
 end
