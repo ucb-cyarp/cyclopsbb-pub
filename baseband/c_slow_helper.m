@@ -1,5 +1,5 @@
-function c_slow( system, share_fact, verbose)
-%c_slow Applies c-slow based resource sharing to system.
+function c_slow_helper( system, share_fact, verbose, parent_enabled, parent_enable_src)
+%c_slow_helper Applies c-slow based resource sharing to system.
 %   Detailed explanation goes here
 
 load_system('c_slow_lib');
@@ -14,40 +14,77 @@ end
 
 %Get list of subsystems before c-slow shift register subststems are placed
 subsystem_list = find_system(system, 'FollowLinks', 'on', 'LoadFullyIfNeeded', 'on', 'LookUnderMasks', 'on', 'SearchDepth', 1, 'BlockType', 'SubSystem');
+system_parent = get_param(system, 'Parent');
 
-if(enabled_subsystem)
-    if(verbose)
-        disp(['[C-Slow] Processing Enabled Subsystem: ', system]);
+if(enabled_subsystem || parent_enabled)
+    
+    new_enb_port_internal_outut_handle = 0;% Will be set below
+    
+    if(enabled_subsystem)
+        if(verbose)
+            disp(['[C-Slow] Processing Enabled Subsystem: ', system]);
+        end
+    
+        %% Replace Enable Port/Line
+        %Advice from from https://www.mathworks.com/matlabcentral/answers/102262-how-can-i-obtain-the-port-types-of-destination-ports-connected-an-output-port-of-any-simulink-block
+        system_port_handles = get_param(system, 'PortHandles');
+        enable_port = system_port_handles.Enable;
+        enable_line = get_param(enable_port, 'Line');
+        enable_src_port = get_param(enable_line, 'SrcPortHandle');
+        enable_block = enable_block_list(1);
+
+        %remove enable line and block (will remove enable port)
+        delete_line(enable_line);
+        delete_block(enable_block);
+        new_enb_port = add_block('simulink/Sources/In1', [system, '/en'], 'MakeNameUnique', 'on');
+        new_enb_port_internal_handles = get_param(new_enb_port, 'PortHandles');
+        new_enb_port_internal_outut_handle = new_enb_port_internal_handles.Outport;
+        new_enb_port_num = str2double(get_param(new_enb_port, 'Port'));
+        system_port_handles = get_param(system,'PortHandles');
+        system_new_enb_port = system_port_handles.Inport(new_enb_port_num);
+        
+        if(parent_enabled)
+            %need to and the parent enable signal with the local enable
+            %signal
+            system_pos = get_param(system, 'Position');
+            width = 30;
+            height = 30;
+            and_pos(1) = system_pos(1)-width*2;
+            and_pos(2) = system_pos(2)-height*2;
+            and_pos(3) = system_pos(2)-width;
+            and_pos(4) = system_pos(2)-height;
+            
+            and_block = add_block('simulink/Logic and Bit Operations/Logical Operator', [system_parent, 'en_and'], 'MakeNameUnique', 'on', 'Operator', 'AND', 'Position', and_pos);
+            and_block_port_handles = get_param(and_block, 'PortHandles');
+            %Connect internal enable line
+            add_line(system_parent, enable_src_port, and_block_port_handles.Inport(1), 'autorouting', 'on');
+            %Connect external enable line
+            add_line(system_parent, parent_enable_src, and_block_port_handles.Inport(2), 'autorouting', 'on');
+            %Connect and-ed logic to enable port
+            add_line(system_parent, and_block_port_handles.Outport, system_new_enb_port, 'autorouting', 'on');
+        else
+            %simply re-connect enable line in parent system
+            add_line(system_parent, enable_src_port, system_new_enb_port, 'autorouting', 'on');
+        end
+    else
+        %Not an enabled subsystem but is within an enabled sybsystem.
+        %% Convert to pseudo-enabled subsystem
+        if(verbose)
+            disp(['[C-Slow] Processing Standard Subsystem Within Enabled System: ', system]);
+        end
+        
+        %Create new enable port
+        new_enb_port = add_block('simulink/Sources/In1', [system, '/en'], 'MakeNameUnique', 'on');
+        new_enb_port_internal_handles = get_param(new_enb_port, 'PortHandles');
+        new_enb_port_internal_outut_handle = new_enb_port_internal_handles.Outport;
+        new_enb_port_num = str2double(get_param(new_enb_port, 'Port'));
+        system_port_handles = get_param(system,'PortHandles');
+        system_new_enb_port = system_port_handles.Inport(new_enb_port_num);
+        
+        %Connect new port to enable line in parent system
+        add_line(system_parent, parent_enable_src, system_new_enb_port, 'autorouting', 'on');
+        
     end
-    
-    %% Replace Enable Port/Line
-    %subsystem_ports = get_param(system, 'PortConnectivity');
-    %enable_port_ind = find(strcmp({subsystem_ports.Type}, 'enable')==1);
-    %enable_port = subsystem_port(enable_port_ind);
-    %enable_src_block = enable_port.SrcBlock;
-    %enable_src_port = enable_port.SrcPort+1; % for some reason, port numbers start from 0
-    
-    %Rewriting to get source port handle using advice from https://www.mathworks.com/matlabcentral/answers/102262-how-can-i-obtain-the-port-types-of-destination-ports-connected-an-output-port-of-any-simulink-block
-    system_port_handles = get_param(system, 'PortHandles');
-    enable_port = system_port_handles.Enable;
-    enable_line = get_param(enable_port, 'Line');
-    enable_src_port = get_param(enable_line, 'SrcPortHandle');
-    enable_block = enable_block_list(1);
-    
-    %remove enable line and block (will remove enable port)
-    delete_line(enable_line);
-    delete_block(enable_block);
-    new_enb_port = add_block('simulink/Sources/In1', [system, '/en'], 'MakeNameUnique', 'on');
-    new_enb_port_internal_handles = get_param(new_enb_port, 'PortHandles');
-    new_enb_port_internal_outut_handle = new_enb_port_internal_handles.Outport;
-    new_enb_port_num = str2double(get_param(new_enb_port, 'Port'));
-    system_port_handles = get_param(system,'PortHandles');
-    system_new_enb_port = system_port_handles.Inport(new_enb_port_num);
-    
-    system_parent = get_param(system, 'Parent');
-    
-    %re-connect enable line in parent system
-    add_line(system_parent, enable_src_port, system_new_enb_port, 'autorouting', 'on');
     
     %% Break up delays and insert c-slow enabled shift reg
     delay_block_list = find_system(system, 'FollowLinks', 'on', 'LoadFullyIfNeeded', 'on', 'LookUnderMasks', 'on', 'SearchDepth', 1, 'BlockType', 'Delay');
@@ -162,7 +199,7 @@ end
 
 for ind = 1:1:length(subsystem_list)
    subsystem=subsystem_list{ind};
-   c_slow(subsystem, share_fact, verbose); 
+   c_slow(subsystem, share_fact, verbose, (enabled_subsystem || parent_enabled), new_enb_port_internal_outut_handle); 
 end
 
 end
