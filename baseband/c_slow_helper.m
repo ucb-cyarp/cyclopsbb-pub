@@ -38,7 +38,7 @@ else
 end
 
 %Check if this block uses a library link.  If so, disable it.
-lib_linked_system = ~(strcmp(get_param(system, 'StaticLinkStatus'), 'none')==1);
+lib_linked_system = ~(strcmp(get_param(system, 'StaticLinkStatus'), 'none')==1 || strcmp(get_param(system, 'StaticLinkStatus'), 'inactive')==1);
 if(lib_linked_system)
     if(verbose)
         disp(['[C-Slow] Disabling Library Linking for: ', system]);
