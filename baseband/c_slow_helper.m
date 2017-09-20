@@ -28,6 +28,9 @@ end
 %assemble a script to set them in the eval calls (used later)
 masked_system = (strcmp(get_param(system, 'Mask'), 'on')==1);
 if(masked_system)
+    if(verbose)
+        disp(['[C-Slow] Reading Mask Parameters for: ', system]);
+    end
     mask = Simulink.Mask.get(system);
     mask_workspace = mask.getWorkspaceVariables;
 else
@@ -37,6 +40,9 @@ end
 %Check if this block uses a library link.  If so, disable it.
 lib_linked_system = ~(strcmp(get_param(system, 'StaticLinkStatus'), 'none')==1);
 if(lib_linked_system)
+    if(verbose)
+        disp(['[C-Slow] Disabling Library Linking for: ', system]);
+    end
     set_param(system, 'LinkStatus', 'inactive');
 end
 
