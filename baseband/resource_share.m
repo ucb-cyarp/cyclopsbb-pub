@@ -22,5 +22,13 @@ disp(' ')
 disp('C-Slow Test: Nested_Enb')
 c_slow([newName, '/Nested_Enb'], share_factor, true);
 
+disp(' ')
+disp('C-Slow Test: Lib_Sub')
+c_slow([newName, '/Lib_Sub'], share_factor, true);
+
+disp(' ')
+disp('C-Slow Test: Lib_Enb')
+c_slow([newName, '/Lib_Enb'], share_factor, true);
+
 save_system(newName);
 open_system(newName);

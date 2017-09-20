@@ -24,6 +24,22 @@ if(length(enable_block_list) > 1)
     error(['[C-Slow] Error: ', system], ' has more than one enable block');
 end
 
+%Check if this block is masked.  If it is, get the workspace vars and
+%assemble a script to set them in the eval calls (used later)
+masked_system = (strcmp(get_param(system, 'Mask'), 'on')==1);
+if(masked_system)
+    mask = Simulink.Mask.get(system);
+    mask_workspace = mask.getWorkspaceVariables;
+else
+    mask_workspace = [];
+end
+
+%Check if this block uses a library link.  If so, disable it.
+lib_linked_system = ~(strcmp(get_param(system, 'StaticLinkStatus'), 'none')==1);
+if(lib_linked_system)
+    set_param(system, 'LinkStatus', 'inactive');
+end
+
 %Get list of subsystems before c-slow shift register subststems are placed
 subsystem_list = find_system(system, 'FollowLinks', 'on', 'LoadFullyIfNeeded', 'on', 'LookUnderMasks', 'on', 'SearchDepth', 1, 'BlockType', 'SubSystem');
 system_parent = get_param(system, 'Parent');
@@ -141,7 +157,7 @@ if(enabled_subsystem || parent_enabled)
         delay_pos = get_param(delay_block, 'Position');
         
         %Get delay value
-        delay_val = eval(get_param(delay_block, 'DelayLength'));
+        delay_val = eval_and_destroy(get_param(delay_block, 'DelayLength'), mask_workspace);
         
         delay_block_port_handles = get_param(delay_block, 'PortHandles');
         
@@ -219,7 +235,7 @@ else
         end
         
         %Get delay value
-        current_delay_val = eval(get_param(delay_block, 'DelayLength'));
+        current_delay_val = eval_and_destroy(get_param(delay_block, 'DelayLength'), mask_workspace);
         new_delay_val = current_delay_val*share_fact;
         set_param(delay_block, 'DelayLength', num2str(new_delay_val));
     end
