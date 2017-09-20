@@ -54,6 +54,19 @@ if(enabled_subsystem || parent_enabled)
         system_port_handles = get_param(system,'PortHandles');
         system_new_enb_port = system_port_handles.Inport(new_enb_port_num);
         
+        %Add Terminator block in case no state exists within the system or
+        %subsystems.  Will stop complaints of unconnected ports.
+        term_width = 30;
+        term_height = 30;
+        enable_port_pos = get_param(new_enb_port, 'Position');
+        term_pos(1) = enable_port_pos(3)+term_width;
+        term_pos(2) = enable_port_pos(2);
+        term_pos(3) = term_pos(1)+term_width;
+        term_pos(4) = term_pos(2)+term_height;
+        terminator = add_block('simulink/Commonly Used Blocks/Terminator', [system, '/en_terminate'], 'MakeNameUnique', 'on', 'Position', term_pos);
+        terminator_port_handles = get_param(terminator, 'PortHandles');
+        add_line(system, new_enb_port_internal_output_handle, terminator_port_handles.Inport(1), 'autorouting', 'on');
+        
         if(parent_enabled)
             %need to and the parent enable signal with the local enable
             %signal
@@ -94,6 +107,19 @@ if(enabled_subsystem || parent_enabled)
         
         %Connect new port to enable line in parent system
         add_line(system_parent, parent_enable_src, system_new_enb_port, 'autorouting', 'on');
+        
+        %Add Terminator block in case no state exists within the system or
+        %subsystems.  Will stop complaints of unconnected ports.
+        term_width = 30;
+        term_height = 30;
+        enable_port_pos = get_param(new_enb_port, 'Position');
+        term_pos(1) = enable_port_pos(3)+term_width;
+        term_pos(2) = enable_port_pos(2);
+        term_pos(3) = term_pos(1)+term_width;
+        term_pos(4) = term_pos(2)+term_height;
+        terminator = add_block('simulink/Commonly Used Blocks/Terminator', [system, '/en_terminate'], 'MakeNameUnique', 'on', 'Position', term_pos);
+        terminator_port_handles = get_param(terminator, 'PortHandles');
+        add_line(system, new_enb_port_internal_output_handle, terminator_port_handles.Inport(1), 'autorouting', 'on');
         
     end
     
