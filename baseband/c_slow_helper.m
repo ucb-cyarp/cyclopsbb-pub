@@ -4,16 +4,25 @@ function c_slow_helper( system, share_fact, verbose, parent_enabled, parent_enab
 
 load_system('c_slow_lib');
 
+%Check System type
+system_type = get_param(system, 'Type');
+
 %Check if this is one of the builtin Simulink subsystems that have no state
 %and should be ignored
-system_mask_type = get_param(system, 'MaskType');
-if(strcmp(system_mask_type, 'Compare To Zero')==1 || strcmp(system_mask_type, 'Compare To Constant')==1)
-    if(verbose)
-        disp(['[C-Slow] Skipping Built-in Simulink Stateless Subsystem: ', system]);
+if(~(strcmp(system_type, 'block_diagram')==1))
+    system_mask_type = get_param(system, 'MaskType');
+    if(strcmp(system_mask_type, 'Compare To Zero')==1 || strcmp(system_mask_type, 'Compare To Constant')==1)
+        if(verbose)
+            disp(['[C-Slow] Skipping Built-in Simulink Stateless Subsystem: ', system]);
+        end
+        %This is a built in simulink subsystem with no state.  No need to go
+        %further.
+        return;
     end
-    %This is a built in simulink subsystem with no state.  No need to go
-    %further.
-    return;
+else
+    if(verbose)
+        disp(['[C-Slow] System is block diagram (top level model): ', system]);
+    end
 end
 
 %Check if system is an enabled subsystem system
@@ -21,29 +30,37 @@ enable_block_list = find_system(system,  'FollowLinks', 'on', 'LoadFullyIfNeeded
 enabled_subsystem = ~isempty(enable_block_list);
 
 if(length(enable_block_list) > 1)
-    error(['[C-Slow] Error: ', system], ' has more than one enable block');
+    error(['[C-Slow] Error: ', system, ' has more than one enable block']);
+elseif((strcmp(system_type, 'block_diagram')==1) && length(enable_block_list) > 0)
+    error(['[C-Slow] Error: ', system, ' is a block diagram and cannot be enabled']);
 end
 
 %Check if this block is masked.  If it is, get the workspace vars and
 %assemble a script to set them in the eval calls (used later)
-masked_system = (strcmp(get_param(system, 'Mask'), 'on')==1);
-if(masked_system)
-    if(verbose)
-        disp(['[C-Slow] Reading Mask Parameters for: ', system]);
+if(~(strcmp(system_type, 'block_diagram')==1))
+    masked_system = (strcmp(get_param(system, 'Mask'), 'on')==1);
+    if(masked_system)
+        if(verbose)
+            disp(['[C-Slow] Reading Mask Parameters for: ', system]);
+        end
+        mask = Simulink.Mask.get(system);
+        mask_workspace = mask.getWorkspaceVariables;
+    else
+        mask_workspace = [];
     end
-    mask = Simulink.Mask.get(system);
-    mask_workspace = mask.getWorkspaceVariables;
 else
     mask_workspace = [];
 end
 
 %Check if this block uses a library link.  If so, disable it.
-lib_linked_system = ~(strcmp(get_param(system, 'StaticLinkStatus'), 'none')==1 || strcmp(get_param(system, 'StaticLinkStatus'), 'inactive')==1);
-if(lib_linked_system)
-    if(verbose)
-        disp(['[C-Slow] Disabling Library Linking for: ', system]);
+if(~(strcmp(system_type, 'block_diagram')==1))
+    lib_linked_system = ~(strcmp(get_param(system, 'StaticLinkStatus'), 'none')==1 || strcmp(get_param(system, 'StaticLinkStatus'), 'inactive')==1);
+    if(lib_linked_system)
+        if(verbose)
+            disp(['[C-Slow] Disabling Library Linking for: ', system]);
+        end
+        set_param(system, 'LinkStatus', 'inactive');
     end
-    set_param(system, 'LinkStatus', 'inactive');
 end
 
 %Get list of subsystems before c-slow shift register subststems are placed
