@@ -59,10 +59,10 @@ qScale = 1;
 %awgnSNR = 5.5;
 %awgnSNR = 6;
 %awgnSNR = 8;
-awgnSNR = 10;
+%awgnSNR = 10;
 %awgnSNR = 20;
 %awgnSNR = 50;
-%awgnSNR = 92;
+awgnSNR = 92;
 %awgnSNR = 100;
 
 disp(['awgnSNRdB = ', num2str(awgnSNR)])
@@ -124,7 +124,7 @@ freeze_on_stf_done  = true;
 freeze_on_cef_done  = true;
 freeze_on_valid     = true;
 
-freeze_en_agc       = false;
+freeze_en_agc       = true;
 freeze_en_tr_phase  = false;
 freeze_en_tr_int1   = false;
 freeze_en_tr_int2   = false;
