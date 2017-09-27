@@ -6,11 +6,19 @@ pad_first = 10000;
 mod_imperfection = zeros(pad_first, 1);
 testMsgFPGA = cat(1, mod_imperfection, testMsg);
 
+preambleMask = zeros(length(x_PRE_adj), 1);
+packetMask = ones(length(testTextTrunkRadix), 1);
+modulationMask = cat(1, mod_imperfection, preambleMask, packetMask);
+
 simX.time = [];
 simX.signals.values = testMsgFPGA;
 simX.signals.dimensions = 1;
 
+modX.time = [];
+modX.signals.values = modulationMask;
+modX.signals.dimensions = 1;
+
 dataDelay = length(cat(1, x_PRE_adj)) + 1 + 187+360+1;%delay in computing
 idealX.time = [];
-idealX.signals.values = cat(1, testTextTrunkBin, after);
+idealX.signals.values = cat(1, testTextTrunkRadix, after);
 idealX.signals.dimensions = 1;

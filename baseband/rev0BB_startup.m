@@ -16,7 +16,9 @@ disp(['Payload+Header Length (bits) = ', num2str(dataLen)])
 %or
 %seed = 67;?
 seed = 579;
-[testMsg, testTextTrunkBin] = generate_random_frame(seed, dataLen, x_PRE_adj, after);
+
+radix = 4; %QPSK
+[testMsg, testTextTrunkRadix] = generate_random_frame(seed, dataLen, x_PRE_adj, after, radix);
 
 createTestVectors;
 
@@ -139,25 +141,25 @@ cal_sig_i_offset = 0.0;
 cal_sig_q_offset = 0.0;
 
 %% Raw From ADC
-load adc_raw_data.mat
-
-raw_adc_ch0.time = [];
-raw_adc_ch0.signals.values = transpose(adc_pipeline_data_ch0);
-raw_adc_ch0.signals.dimensions = 1;
-
-raw_adc_ch1.time = [];
-raw_adc_ch1.signals.values = transpose(adc_pipeline_data_ch1);
-raw_adc_ch1.signals.dimensions = 1;
-
-load selected_samples_captured.mat
-
-ss_ch0.time = [];
-ss_ch0.signals.values = transpose(selected_sample_i);
-ss_ch0.signals.dimensions = 1;
-
-ss_ch1.time = [];
-ss_ch1.signals.values = transpose(selected_sample_q);
-ss_ch1.signals.dimensions = 1;
+% load adc_raw_data.mat
+% 
+% raw_adc_ch0.time = [];
+% raw_adc_ch0.signals.values = transpose(adc_pipeline_data_ch0);
+% raw_adc_ch0.signals.dimensions = 1;
+% 
+% raw_adc_ch1.time = [];
+% raw_adc_ch1.signals.values = transpose(adc_pipeline_data_ch1);
+% raw_adc_ch1.signals.dimensions = 1;
+% 
+% load selected_samples_captured.mat
+% 
+% ss_ch0.time = [];
+% ss_ch0.signals.values = transpose(selected_sample_i);
+% ss_ch0.signals.dimensions = 1;
+% 
+% ss_ch1.time = [];
+% ss_ch1.signals.values = transpose(selected_sample_q);
+% ss_ch1.signals.dimensions = 1;
 
 
 %% Start Simulink
