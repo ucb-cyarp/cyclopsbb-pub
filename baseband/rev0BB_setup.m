@@ -198,7 +198,7 @@ expDomain = 3.3;
 expTol = .1;
 expResolution = 2^-5;
 %trigger = (80/128)^2;
-trigger = 0.20;
+trigger = 0.30;
 
 %[a, b] = butter(8, .3);
 
@@ -394,3 +394,7 @@ lmsEqDepth = 78;
 lmsStep_init =  0.002; %LMS
 lmsStep_final = 0.00075;
 lmsStep_meta = (lmsStep_final - lmsStep_init)/cefLen;
+
+preambleSequentialDetect = 3;
+default_channel = 4;
+maxMsgSize = length(xSpectrum_PRE)+dataLen+300;
