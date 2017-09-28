@@ -39,8 +39,8 @@ rcRxFilt = [-0.00202106380626832 -0.00109034009985135 0.000973921614485769 0.002
 
 
 %Xilinx Settings
-mult_pipeline = 3;
-wide_mult_pipeline = 4;
+mult_pipeline = 1;
+wide_mult_pipeline = 1;
 cr_mult_pipeline = 1;
 regular_pipeline = 1;
 
@@ -160,7 +160,7 @@ timing_smooth_num = (1/timing_smooth_samples).*ones(1, timing_smooth_samples);
 timing_smooth_denom = zeros(1, timing_smooth_samples);
 
 timing_i = 0.25;
-timing_p = 45*0.0001;
+timing_p = 45*0.0005;
 timing_d = 0;
 
 timing_pre_scale = 0.0001;
@@ -216,20 +216,20 @@ agc_detector_taps = 16;
 agc_detector_coef = ones(1,agc_detector_taps)./agc_detector_taps;
 
 lnDomain = 16;
-lnResolution = 2^-7;
+lnResolution = 2^-5;
 
-agcSaturation = 5;
+agcSaturation = 10;
 
 agc_sat_up  =  agcSaturation;
 agc_sat_low = -agcSaturation;
 
 agcExpDomain = agcSaturation;
-agcExpResolution = 2^-7;
+agcExpResolution = 2^-5;
 
 agcDesired = 0;
 %agcStep = 2^-10+2^-11;
 %agcStep = 2^-11;
-agcStep = 2^-12;
+agcStep = 2^-9;
 %agcStep = 2^-13;
 
 agcSettleThresh = 0.65;
@@ -314,7 +314,7 @@ nCTRL_STFRep = 0:1:(48*128-1);
 nCTRL_STFNeg = (48*128):1:(49*128-1);
 nCTRL_STFFin = (49*128):1:(50*128-1);
 
-nSpectrum_STFRepCount = 29;
+nSpectrum_STFRepCount = 10;
 nSpectrum_STFRep = 0:1:(nSpectrum_STFRepCount*128-1);
 nSpectrum_STFNeg = (nSpectrum_STFRepCount*128):1:((nSpectrum_STFRepCount+1)*128-1);
 nSpectrum_STFFin = ((nSpectrum_STFRepCount+1)*128):1:((nSpectrum_STFRepCount+2)*128-1);
@@ -326,6 +326,8 @@ xSC_CEF   = cat(2, Gu_512, Gv_512, Gv_128);
 xCTRL_CEF = xSC_CEF;
 xSpectrum_STF = cat(2, Gb_128(mod(nSpectrum_STFRep, 128)+1), -Gb_128(mod(nSpectrum_STFNeg, 128)+1), -Ga_128(mod(nSpectrum_STFFin, 128)+1)); %+1 is for matlab
 xSpectrum_CEF = cat(2, Gu_512, Gv_512, Gu_512, Gv_512, Gu_512, Gv_512, Gu_512, Gv_512, Gu_512, Gv_512, Gv_128);
+%xSpectrum_CEF = cat(2, Gu_512, Gv_512, Gu_512, Gv_512, Gu_512);
+
 
 xSC_PRE   = cat(2, xSC_STF, xSC_CEF);
 xCTRL_PRE = cat(2, xCTRL_STF, xCTRL_CEF);

@@ -122,7 +122,7 @@ rx_offset_correction_q = 0;
 %rx_offset_correction_q = -0.27;
 
 agc_on = true;
-freeze_on_stf_done  = true;
+freeze_on_stf_done  = false;
 freeze_on_cef_done  = true;
 freeze_on_valid     = true;
 
