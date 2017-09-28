@@ -8,7 +8,7 @@ clear; close all; clc;
 disp('Setting Model Parameters ...')
 rev0BB_setup;
 
-disp(['Payload+Header Length (bits) = ', num2str(dataLen)])
+disp(['Payload+Header Length (Symbols) = ', num2str(dataLen)])
 
 %% Message
 
