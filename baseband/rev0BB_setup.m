@@ -6,7 +6,7 @@ dataLen = (mtu_eth + header_len)*8/2; %/2 for QPSK
 lineWidth = 60;
 
 %% Sim Params
-overSampleFreq = 60e6; %300 MHz would be optimal, now targeting 250 MHz
+overSampleFreq = 20e6; %300 MHz would be optimal, now targeting 250 MHz
 overSample = 4;
 slowSample = 3;
 baseFreq = overSampleFreq/overSample; %300 MHz
@@ -314,7 +314,7 @@ nCTRL_STFRep = 0:1:(48*128-1);
 nCTRL_STFNeg = (48*128):1:(49*128-1);
 nCTRL_STFFin = (49*128):1:(50*128-1);
 
-nSpectrum_STFRepCount = 10;
+nSpectrum_STFRepCount = 7;
 nSpectrum_STFRep = 0:1:(nSpectrum_STFRepCount*128-1);
 nSpectrum_STFNeg = (nSpectrum_STFRepCount*128):1:((nSpectrum_STFRepCount+1)*128-1);
 nSpectrum_STFFin = ((nSpectrum_STFRepCount+1)*128):1:((nSpectrum_STFRepCount+2)*128-1);
@@ -325,8 +325,8 @@ xCTRL_STF = cat(2, Gb_128(mod(nCTRL_STFRep, 128)+1), -Gb_128(mod(nCTRL_STFNeg, 1
 xSC_CEF   = cat(2, Gu_512, Gv_512, Gv_128);
 xCTRL_CEF = xSC_CEF;
 xSpectrum_STF = cat(2, Gb_128(mod(nSpectrum_STFRep, 128)+1), -Gb_128(mod(nSpectrum_STFNeg, 128)+1), -Ga_128(mod(nSpectrum_STFFin, 128)+1)); %+1 is for matlab
-xSpectrum_CEF = cat(2, Gu_512, Gv_512, Gu_512, Gv_512, Gu_512, Gv_512, Gu_512, Gv_512, Gu_512, Gv_512, Gv_128);
-%xSpectrum_CEF = cat(2, Gu_512, Gv_512, Gu_512, Gv_512, Gu_512);
+%xSpectrum_CEF = cat(2, Gu_512, Gv_512, Gu_512, Gv_512, Gu_512, Gv_512, Gu_512, Gv_512, Gu_512, Gv_512, Gv_128);
+xSpectrum_CEF = cat(2, Gu_512, Gv_512, Gv_512);
 
 
 xSC_PRE   = cat(2, xSC_STF, xSC_CEF);
@@ -392,11 +392,11 @@ outBuffer = zeros(1024,1);
 
 agcPwrAvgNum = 512;
 
-lmsEqDepth = 78;
-lmsStep_init =  0.002; %LMS
-lmsStep_final = 0.00075;
+lmsEqDepth = 76;
+lmsStep_init =  0.006; %LMS
+lmsStep_final = 0.001;
 lmsStep_meta = (lmsStep_final - lmsStep_init)/cefLen;
 
-preambleSequentialDetect = 3;
+preambleSequentialDetect = 2;
 default_channel = 4;
 maxMsgSize = length(xSpectrum_PRE)+dataLen+300;
