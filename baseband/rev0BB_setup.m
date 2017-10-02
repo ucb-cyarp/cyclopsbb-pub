@@ -285,6 +285,10 @@ Gv_512_note = [-2, 1, -2, -1];
 
 Gv_128_note = Gv_512_note(1);
 
+%Smaller Golay
+Gu_128_s = cat(2, -Gb_32, -Ga_32, Gb_32, -Ga_32);
+Gv_128_s = cat(2, -Gb_32, Ga_32, -Gb_32, -Ga_32);
+
 %From 802.11ad - Can Reconstruct Ga and Gb
 %A0 (n)= delta(n)
 %B0 (n)= delta(n)
@@ -319,6 +323,11 @@ nSpectrum_STFRep = 0:1:(nSpectrum_STFRepCount*128-1);
 nSpectrum_STFNeg = (nSpectrum_STFRepCount*128):1:((nSpectrum_STFRepCount+1)*128-1);
 nSpectrum_STFFin = ((nSpectrum_STFRepCount+1)*128):1:((nSpectrum_STFRepCount+2)*128-1);
 
+nSpectrum_STFRepCount_short = 24;
+nSpectrum_STFRep_short = 0:1:(nSpectrum_STFRepCount_short*32-1);
+nSpectrum_STFNeg_short = (nSpectrum_STFRepCount_short*32):1:((nSpectrum_STFRepCount_short+1)*32-1);
+nSpectrum_STFFin_short = ((nSpectrum_STFRepCount_short+1)*32):1:((nSpectrum_STFRepCount_short+2)*32-1);
+
 %Complex Baseband Preamble Signal
 xSC_STF   = cat(2, Ga_128(mod(nSC_STFRep, 128)+1), -Ga_128(mod(nSC_STFNeg, 128)+1)); %+1 is for matlab
 xCTRL_STF = cat(2, Gb_128(mod(nCTRL_STFRep, 128)+1), -Gb_128(mod(nCTRL_STFNeg, 128)+1), -Ga_128(mod(nCTRL_STFFin, 128)+1)); %+1 is for matlab
@@ -328,10 +337,15 @@ xSpectrum_STF = cat(2, Gb_128(mod(nSpectrum_STFRep, 128)+1), -Gb_128(mod(nSpectr
 %xSpectrum_CEF = cat(2, Gu_512, Gv_512, Gu_512, Gv_512, Gu_512, Gv_512, Gu_512, Gv_512, Gu_512, Gv_512, Gv_128);
 xSpectrum_CEF = cat(2, Gu_512, Gv_512, Gv_512);
 
+xSpectrum_STF_short = cat(2, Gb_32(mod(nSpectrum_STFRep_short, 32)+1), -Gb_32(mod(nSpectrum_STFNeg_short, 32)+1), -Ga_32(mod(nSpectrum_STFFin_short, 32)+1)); %+1 is for matlab
+xSpectrum_CEF_short = cat(2, Gu_128_s, Gv_128_s, Gu_128_s, Gv_128_s, Gu_128_s, Gv_128_s, Gu_128_s, Gv_128_s, Gu_128_s, Gv_128_s, Gu_128_s, Gv_128_s, Gu_128_s, Gv_128_s);
+%xSpectrum_CEF_short = cat(2, Gu_128_s, Gv_128_s, Gv_128_s);
+
 
 xSC_PRE   = cat(2, xSC_STF, xSC_CEF);
 xCTRL_PRE = cat(2, xCTRL_STF, xCTRL_CEF);
 xSpectrum_PRE = cat(2, xSpectrum_STF, xSpectrum_CEF);
+xSpectrum_PRE_short = cat(2, xSpectrum_STF_short, xSpectrum_CEF_short);
 
 xSC_STF   = transpose(xSC_STF);
 xCTRL_STF = transpose(xCTRL_STF);
@@ -342,12 +356,16 @@ xSpectrum_CEF = transpose(xSpectrum_CEF);
 xSC_PRE   = transpose(xSC_PRE);
 xCTRL_PRE = transpose(xCTRL_PRE);
 xSpectrum_PRE = transpose(xSpectrum_PRE);
+xSpectrum_STF_short = transpose(xSpectrum_STF_short);
+xSpectrum_CEF_short = transpose(xSpectrum_CEF_short);
+xSpectrum_PRE_short = transpose(xSpectrum_PRE_short);
 
 % select preamble
-x_STF = xSpectrum_STF;
-x_STFRepCount = nSpectrum_STFRepCount;
-x_CEF = xSpectrum_CEF;
-x_PRE = xSpectrum_PRE;
+x_STF = xSpectrum_STF_short;
+x_STFRepCount = nSpectrum_STFRepCount_short;
+x_CEF = xSpectrum_CEF_short;
+x_PRE = xSpectrum_PRE_short;
+golay_type = 32;
 
 %Note that CEF note is duplicated in the state machine function because
 %(for whatever reason) an array can not be passed as a parameter for

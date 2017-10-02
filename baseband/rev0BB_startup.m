@@ -24,14 +24,21 @@ createTestVectors;
 
 %% Imperfections
 maxDopplerHz = .1;
-channelMdl = stdchan(overSamplePer, maxDopplerHz, 'cost207RAx4');
-
+useFadingChannel = true;
+channelSpec = 'cost207RAx4';
+channelMdl = stdchan(overSamplePer, maxDopplerHz, channelSpec);
 chanDelays = channelMdl.PathDelays/basePer;
 chanAvgPathGainsdB = channelMdl.AvgPathGaindB;
 chanPathGains = channelMdl.PathGains;
 
-disp(['Channel Delays (Symbols): ' mat2str(chanDelays)]);
-disp(['Average Path Gain (dB): ' mat2str(chanAvgPathGainsdB)]);
+
+if(useFadingChannel == true)
+    disp(['Channel: ' channelSpec]);
+    disp(['Channel Delays (Symbols): ' mat2str(chanDelays)]);
+    disp(['Average Path Gain (dB): ' mat2str(chanAvgPathGainsdB)]);
+else
+    disp(['Channel: AWGN']);
+end
 
 chanFilt = zeros(1, ceil(max(chanDelays))+1);
 %set filt coefs
@@ -61,7 +68,8 @@ qScale = 1;
 %awgnSNR = 5.5;
 %awgnSNR = 6;
 %awgnSNR = 8;
-awgnSNR = 10;
+%awgnSNR = 10;
+awgnSNR = 15;
 %awgnSNR = 20;
 %awgnSNR = 50;
 %awgnSNR = 92;
