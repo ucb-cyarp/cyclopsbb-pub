@@ -8,7 +8,7 @@ clear; close all; clc;
 disp('Setting Model Parameters ...')
 rev0BB_setup;
 
-disp(['Payload+Header Length (Symbols) = ', num2str(dataLen)])
+disp(['Payload+Header Length (Symbols) = ', num2str(dataLenSymbols)])
 
 %% Message
 
@@ -17,8 +17,13 @@ disp(['Payload+Header Length (Symbols) = ', num2str(dataLen)])
 %seed = 67;?
 seed = 579;
 
-radix = 4; %QPSK
-[testMsg, testTextTrunkRadix] = generate_random_frame(seed, dataLen, x_PRE_adj, after, radix);
+%Example data for header
+type = 0;
+src = 1;
+dst = 2;
+len = frame_len_bytes-crc_len_bytes;
+
+[testMsg, testTextTrunkRadix] = generate_random_frame(seed, payload_len_symbols, x_PRE_adj, after, radix, type, src, dst, len, crc_poly, crc_init, crc_xor);
 
 createTestVectors;
 

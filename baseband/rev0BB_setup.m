@@ -1,9 +1,16 @@
-%dataLen = 4096; %orig design
-header_len = 4;
+%dataLenSymbols = 4096; %orig design
+header_len_bytes = 5; %This was a 32 bit CRC.  Will now be a 5 byte header of type, src, dst, len (2 bytes).  The 4 byte CRC will be appended to the end of the frame
+crc_len_bytes = 4;
 mtu_eth = 1500+26+2;%+2 is so that the result fits evenly in 32 bit words
-dataLen = (mtu_eth + header_len)*8/2; %/2 for QPSK
+payload_len_bytes = mtu_eth;
+frame_len_bytes = header_len_bytes + payload_len_bytes + crc_len_bytes;
+dataLenSymbols = frame_len_bytes*8/2; %/2 for QPSK
+payload_len_symbols = payload_len_bytes*8/2; %/2 for QPSK
 
 lineWidth = 60;
+
+radix = 4; %QPSK
+bitsPerSymbol = log2(radix);
 
 %% Sim Params
 overSampleFreq = 20e6; %300 MHz would be optimal, now targeting 250 MHz
@@ -417,4 +424,12 @@ lmsStep_meta = (lmsStep_final - lmsStep_init)/cefLen;
 
 preambleSequentialDetect = 2;
 default_channel = 4;
-maxMsgSize = length(xSpectrum_PRE)+dataLen+300;
+maxMsgSize = length(xSpectrum_PRE)+dataLenSymbols+300;
+
+% CRC Settings
+% Same poly as Ethernet (IEEE 802.3)
+% CRC-32 = 'z^32 + z^26 + z^23 + z^22 + z^16 + z^12 + z^11 + z^10 + z^8 + z^7 + z^5 + z^4 + z^2 + z + 1';
+%           32 31 30 29 28 27 26 25 24 23 22 21 20 19 18 17 16 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
+crc_poly = [ 1  0  0  0  0  0  1  0  0  1  1  0  0  0  0  0  1  0  0  0  1  1  1  0  1  1  0  1  1  0  0  1  1 ];
+crc_init =    [ 1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1 ];
+crc_xor  =    [ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 ];
