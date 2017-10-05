@@ -15,7 +15,7 @@ bitsPerSymbol = log2(radix);
 %% Sim Params
 overSampleFreq = 20e6; %300 MHz would be optimal, now targeting 250 MHz
 overSample = 4;
-slowSample = 3;
+slowSample = 2;
 baseFreq = overSampleFreq/overSample; %300 MHz
 basePer = 1/baseFreq;
 overSamplePer = 1/overSampleFreq;
@@ -335,6 +335,11 @@ nSpectrum_STFRep_short = 0:1:(nSpectrum_STFRepCount_short*32-1);
 nSpectrum_STFNeg_short = (nSpectrum_STFRepCount_short*32):1:((nSpectrum_STFRepCount_short+1)*32-1);
 nSpectrum_STFFin_short = ((nSpectrum_STFRepCount_short+1)*32):1:((nSpectrum_STFRepCount_short+2)*32-1);
 
+nSpectrumAck_STFRepCount_short = 10;
+nSpectrumAck_STFRep_short = 0:1:(nSpectrumAck_STFRepCount_short*32-1);
+nSpectrumAck_STFNeg_short = (nSpectrumAck_STFRepCount_short*32):1:((nSpectrumAck_STFRepCount_short+1)*32-1);
+nSpectrumAck_STFFin_short = ((nSpectrumAck_STFRepCount_short+1)*32):1:((nSpectrumAck_STFRepCount_short+2)*32-1);
+
 %Complex Baseband Preamble Signal
 xSC_STF   = cat(2, Ga_128(mod(nSC_STFRep, 128)+1), -Ga_128(mod(nSC_STFNeg, 128)+1)); %+1 is for matlab
 xCTRL_STF = cat(2, Gb_128(mod(nCTRL_STFRep, 128)+1), -Gb_128(mod(nCTRL_STFNeg, 128)+1), -Ga_128(mod(nCTRL_STFFin, 128)+1)); %+1 is for matlab
@@ -348,6 +353,8 @@ xSpectrum_STF_short = cat(2, Gb_32(mod(nSpectrum_STFRep_short, 32)+1), -Gb_32(mo
 xSpectrum_CEF_short = cat(2, Gu_128_s, Gv_128_s, Gu_128_s, Gv_128_s, Gu_128_s, Gv_128_s, Gu_128_s, Gv_128_s, Gu_128_s, Gv_128_s, Gu_128_s, Gv_128_s, Gu_128_s, Gv_128_s);
 %xSpectrum_CEF_short = cat(2, Gu_128_s, Gv_128_s, Gv_128_s);
 
+xSpectrumAck_STF_short = cat(2, Gb_32(mod(nSpectrumAck_STFRep_short, 32)+1), -Gb_32(mod(nSpectrumAck_STFNeg_short, 32)+1), -Ga_32(mod(nSpectrumAck_STFFin_short, 32)+1)); %+1 is for matlab
+xSpectrumAck_STF_short = cat(2, xSpectrumAck_STF_short, Ga_32);
 
 xSC_PRE   = cat(2, xSC_STF, xSC_CEF);
 xCTRL_PRE = cat(2, xCTRL_STF, xCTRL_CEF);
@@ -367,12 +374,24 @@ xSpectrum_STF_short = transpose(xSpectrum_STF_short);
 xSpectrum_CEF_short = transpose(xSpectrum_CEF_short);
 xSpectrum_PRE_short = transpose(xSpectrum_PRE_short);
 
+xSpectrumAck_STF_short = transpose(xSpectrumAck_STF_short);
+
 % select preamble
 x_STF = xSpectrum_STF_short;
 x_STFRepCount = nSpectrum_STFRepCount_short;
 x_CEF = xSpectrum_CEF_short;
 x_PRE = xSpectrum_PRE_short;
+
+x_ACK_STF = xSpectrumAck_STF_short;
+
+ack_stf_len_symbols = length(x_ACK_STF);
+dst_field_len = 8;
+flush_delay = regular_pipeline*2+mult_pipeline+4; %4 for a little additional slack
+
 golay_type = 32;
+
+%Pkt Types
+std_pkt_type = 0;
 
 %Note that CEF note is duplicated in the state machine function because
 %(for whatever reason) an array can not be passed as a parameter for
