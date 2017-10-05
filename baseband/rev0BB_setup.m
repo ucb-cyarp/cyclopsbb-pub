@@ -335,7 +335,7 @@ nSpectrum_STFRep_short = 0:1:(nSpectrum_STFRepCount_short*32-1);
 nSpectrum_STFNeg_short = (nSpectrum_STFRepCount_short*32):1:((nSpectrum_STFRepCount_short+1)*32-1);
 nSpectrum_STFFin_short = ((nSpectrum_STFRepCount_short+1)*32):1:((nSpectrum_STFRepCount_short+2)*32-1);
 
-nSpectrumAck_STFRepCount_short = 10;
+nSpectrumAck_STFRepCount_short = 13;
 nSpectrumAck_STFRep_short = 0:1:(nSpectrumAck_STFRepCount_short*32-1);
 nSpectrumAck_STFNeg_short = (nSpectrumAck_STFRepCount_short*32):1:((nSpectrumAck_STFRepCount_short+1)*32-1);
 nSpectrumAck_STFFin_short = ((nSpectrumAck_STFRepCount_short+1)*32):1:((nSpectrumAck_STFRepCount_short+2)*32-1);
@@ -434,7 +434,8 @@ cefEarlyWarning = 256;
 
 outBuffer = zeros(1024,1);
 
-agcPwrAvgNum = 512;
+agcPwrAvgNum = 128;
+agc_delay_lag = 32;
 
 lmsEqDepth = 76;
 lmsStep_init =  0.006; %LMS

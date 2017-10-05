@@ -19,7 +19,7 @@ seed = 579;
 
 %Example data for header
 type = 0;
-src = 1;
+src = 255;
 dst = 2;
 len = frame_len_bytes-crc_len_bytes;
 
