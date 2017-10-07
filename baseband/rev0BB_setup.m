@@ -443,7 +443,7 @@ lmsStep_final = 0.001;
 lmsStep_meta = (lmsStep_final - lmsStep_init)/cefLen;
 
 preambleSequentialDetect = 2;
-default_channel = 4;
+default_channel = 3;
 maxMsgSize = length(xSpectrum_PRE)+dataLenSymbols+300;
 
 % CRC Settings
