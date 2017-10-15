@@ -5,6 +5,8 @@ warning off;
 
 rev0BB_startup;
 
+model_name = 'rev0BB';
+
 timestamp = datestr(now,'ddmmmyyyy-HH_MM_SSAM');
 
 addpath(pwd);
@@ -13,23 +15,23 @@ addpath(currDir);
 tmpDir = tempname;
 mkdir(tmpDir);
 cd(tmpDir);
-load_system('gm_rev0BB');
+load_system(model_name);
 %rev0BB_setup;
 
 %% Init Model
-trials = 1000;
-dBSnrRange = -4:1:5;
+trials = 100;
+dBSnrRange = 10:1:16;
 indRange = 1:1:length(dBSnrRange);
 
 rev0BB_setup;
 
 %freqOffsetHz = 0;
 %txTimingOffset = 0;
-freqOffsetHz = 100000;
-txTimingOffset = -0.0001;
+freqOffsetHz = 5000;
+txTimingOffset = 0;
 
-iOffset = 0.01;
-qOffset = 0.01;
+iOffset = 0.00;
+qOffset = 0.00;
 
 trial_bit_errors = zeros(trials, length(indRange));
 trial_failures = zeros(trials, length(indRange));
@@ -40,43 +42,27 @@ for dBSnrInd = indRange
     for trial = 1:1:trials
         seed = abs(dBSnrRange(dBSnrInd)*1000+trial);
         awgnSeed = abs(dBSnrRange(dBSnrInd)*1000+trial+10000000);
-        [testMsg, testTextTrunkBin] = generate_random_frame(seed, dataLen, x_PRE_adj, after);
+        [testMsg, testTextTrunkRadix] = generate_random_frame(seed, payload_len_symbols, x_PRE_adj, after, radix, type, src, dst, len, crc_poly, crc_init, crc_xor);
+        
+        createTestVectors;
         
         rng(awgnSeed+100);
         txTimingPhase = rand(1);
         rxPhaseOffset = rand(1)*360;
         
-        pad_first = 2000;
-
-        mod_imperfection = zeros(pad_first, 1);
-        testMsgFPGA = cat(1, mod_imperfection, testMsg);
-        
-        simX = struct();
-        simX.time = [];
-        simX.signals.values = testMsgFPGA;
-        simX.signals.dimensions = 1;
-
-        dataDelay = length(cat(1, xCTRL_PRE_adj)) + 1 + 187+360+1;%delay in computing
-        
-        idealX = struct();
-        idealX.time = [];
-        idealX.signals.values = cat(1, testTextTrunkBin, after);
-        idealX.signals.dimensions = 1;
-        
-        simulink_out = sim('gm_rev0BB', 'SimulationMode', 'rapid');
+        simulink_out = sim(model_name, 'SimulationMode', 'accelerator');
         data_recieved = simulink_out.get('data_recieved');
         assignin('base','data_recieved',data_recieved);
         
-        if(length(testTextTrunkBin) ~= length(data_recieved))
+        if(length(testTextTrunkRadix) ~= length(data_recieved))
             disp(['SNR: ', num2str(dBSnrRange(dBSnrInd)),' Trial: ', num2str(trial), ' Recieved Data Length Unexpected (', num2str(length(data_recieved)), '): Likely that no data was recieved']);
-            bitErrors = length(testTextTrunkBin);
+            bitErrors = length(testTextTrunkRadix);
             failure = 1;
         else
-            delta = abs(double(data_recieved) - testTextTrunkBin);
-            bitErrors = sum(delta);
-            ber = bitErrors/length(data_recieved);
+            bitErrors = biterr(data_recieved, testTextTrunkRadix);
+            ber = bitErrors/(log2(radix)*length(data_recieved));
             failure = 0;
-            disp(['SNR: ', num2str(dBSnrRange(dBSnrInd)),' Trial: ', num2str(trial), ' BER: ', num2str(ber), ', Errors: ', num2str(bitErrors), ', Length: ', num2str(length(data_recieved))]);
+            disp(['SNR: ', num2str(dBSnrRange(dBSnrInd)),' Trial: ', num2str(trial), ' BER: ', num2str(ber), ', Errors: ', num2str(bitErrors), ', Length: ', num2str((log2(radix)*length(data_recieved)))]);
         end
         
         trial_failures(trial, dBSnrInd) = failure;
@@ -84,21 +70,26 @@ for dBSnrInd = indRange
     end
     
     sim_failures (dBSnrInd) = sum(trial_failures(:,dBSnrInd));
-    sim_ber(dBSnrInd) = sum(trial_bit_errors(:,dBSnrInd))/(trials*length(testTextTrunkBin));
+    sim_ber(dBSnrInd) = sum(trial_bit_errors(:,dBSnrInd))/(trials*(log2(radix)*length(data_recieved)));
     
-    idealBer(dBSnrInd) = berawgn(dBSnrRange(dBSnrInd) + 10*log10(overSample), 'psk', 2, 'nondiff');
+    %See https://www.mathworks.com/help/comm/ug/awgn-channel.html for a
+    %consise explanation of the difference between SNR, EsN0, and EbN0
+    EsN0 = dBSnrRange(dBSnrInd) + 10*log10(overSample);
+    infoBitsPerSymbol = log2(radix); %Change when coding introduced
+    EbN0 = EsN0 - 10*log10(infoBitsPerSymbol);
+    idealBer(dBSnrInd) = berawgn(dBSnrRange(dBSnrInd) + 10*log10(overSample), 'psk', radix, 'nondiff');
 end
 
 %% Plot
 
 fig1 = figure;
-semilogy(dBSnrRange + 10*log10(overSample), idealBer, 'b-');
+semilogy(dBSnrRange + 10*log10(overSample) - 10*log10(infoBitsPerSymbol), idealBer, 'b-');
 hold all;
-semilogy(dBSnrRange + 10*log10(overSample), sim_ber, 'r*-');
+semilogy(dBSnrRange + 10*log10(overSample) - 10*log10(infoBitsPerSymbol), sim_ber, 'r*-');
 xlabel('Eb/N0 (dB)')
 ylabel('BER')
 legend('Theoretical', 'Simulation');
-title('Baseband Simulation vs. Theoretical (Uncoded Coherent BPSK over AWGN)')
+title('Baseband Simulation vs. Theoretical (Uncoded Coherent QPSK over AWGN)')
 grid on;
 
 fig2 = figure;

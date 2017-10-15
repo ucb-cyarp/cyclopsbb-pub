@@ -205,7 +205,7 @@ expDomain = 3.3;
 expTol = .1;
 expResolution = 2^-5;
 %trigger = (80/128)^2;
-trigger = 0.30;
+trigger = 0.35;
 
 %[a, b] = butter(8, .3);
 
@@ -225,7 +225,7 @@ agc_detector_coef = ones(1,agc_detector_taps)./agc_detector_taps;
 lnDomain = 16;
 lnResolution = 2^-5;
 
-agcSaturation = 10;
+agcSaturation = 12;
 
 agc_sat_up  =  agcSaturation;
 agc_sat_low = -agcSaturation;

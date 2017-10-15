@@ -15,11 +15,12 @@ disp(['Payload+Header Length (Symbols) = ', num2str(dataLenSymbols)])
 %simple_ascii_message;
 %or
 %seed = 67;?
-seed = 579;
+%seed = 579;
+seed = 15007;
 
 %Example data for header
 type = 0;
-src = 255;
+src = 5;
 dst = 2;
 len = frame_len_bytes-crc_len_bytes;
 
@@ -31,19 +32,35 @@ createTestVectors;
 
 %% Imperfections
 maxDopplerHz = .1;
-useFadingChannel = true;
+useFadingChannel = false;
+manualChannel = false;
 channelSpec = 'cost207RAx4';
-channelMdl = stdchan(overSamplePer, maxDopplerHz, channelSpec);
-chanDelays = channelMdl.PathDelays/basePer;
-chanAvgPathGainsdB = channelMdl.AvgPathGaindB;
-chanPathGains = channelMdl.PathGains;
+%Manual Delay Set
+manualChanDelaysSymb = [1,2,3,4];
+manualChanPathGainDB = [0,0,0,0];
 
+if(useFadingChannel == true && manualChannel == false)
+    channelMdl = stdchan(overSamplePer, maxDopplerHz, channelSpec);
+    chanDelays = channelMdl.PathDelays;
+    chanDelaysSymb = chanDelays/basePer;
+    chanAvgPathGainsdB = channelMdl.AvgPathGaindB;
+    chanPathGains = channelMdl.PathGains;
 
-if(useFadingChannel == true)
     disp(['Channel: ' channelSpec]);
     disp(['Channel Delays (Symbols): ' mat2str(chanDelays)]);
     disp(['Average Path Gain (dB): ' mat2str(chanAvgPathGainsdB)]);
+elseif((useFadingChannel == true && manualChannel == true))
+    chanDelaysSymb = manualChanDelaysSymb;
+    chanDelays = chanDelaysSymb*basePer;
+    chanAvgPathGainsdB = manualChanPathGainDB;
+    chanPathGains = manualChanPathGainDB;
+    disp(['Channel: Manual']);
+    disp(['Channel Delays (Symbols): ' mat2str(chanDelays)]);
+    disp(['Average Path Gain (dB): ' mat2str(chanAvgPathGainsdB)]);
 else
+    chanDelaysSymb = manualChanDelaysSymb;
+    chanDelays = chanDelaysSymb*basePer;
+    chanPathGains=manualChanPathGainDB;
     disp(['Channel: AWGN']);
 end
 
@@ -56,10 +73,10 @@ end
 %dc_block_passband = 0.1; %MHz
 dc_block_passband = 0; %MHz
 
-%freqOffsetHz = 0;
+freqOffsetHz = 0;
 %freqOffsetHz = 1000;
 %freqOffsetHz = 2000;
-freqOffsetHz = 5000;
+%freqOffsetHz = 5000;
 %freqOffsetHz = 10000;
 %freqOffsetHz = 20000;
 %freqOffsetHz = 100000;
@@ -71,12 +88,12 @@ qScale = 1;
 %awgnSNR = -6;
 %awgnSNR = -3;
 %awgnSNR = 0;
-%awgnSNR = 2;
+awgnSNR = 2;
 %awgnSNR = 5.5;
 %awgnSNR = 6;
 %awgnSNR = 8;
 %awgnSNR = 10;
-awgnSNR = 15;
+%awgnSNR = 15;
 %awgnSNR = 20;
 %awgnSNR = 50;
 %awgnSNR = 92;
@@ -84,7 +101,8 @@ awgnSNR = 15;
 
 disp(['awgnSNRdB = ', num2str(awgnSNR)])
 
-awgnSeed = 67;
+%awgnSeed = 67;
+awgnSeed = 10015007;
 %awgnSeed = 245;
 
 
@@ -148,7 +166,6 @@ freeze_en_tr_int2   = false;
 freeze_en_cr_int2   = false;
 freeze_en_cr_phase  = false;
 freeze_en_cr_int1   = false;
-
 
 cal_sig_i_mult = 1.0;
 cal_sig_q_mult = 1.0;
