@@ -206,6 +206,7 @@ expTol = .1;
 expResolution = 2^-5;
 %trigger = (80/128)^2;
 trigger = 0.35;
+trigger_tolerance = 0.25; %used after an initial peak has been detected to provide some degree of tolerance
 
 %[a, b] = butter(8, .3);
 
@@ -445,6 +446,9 @@ lmsStep_meta = (lmsStep_final - lmsStep_init)/cefLen;
 preambleSequentialDetect = 2;
 default_channel = 3;
 maxMsgSize = length(xSpectrum_PRE)+dataLenSymbols+300;
+
+%Correlator Running Avg
+corrAvgLen = 32;
 
 % CRC Settings
 % Same poly as Ethernet (IEEE 802.3)

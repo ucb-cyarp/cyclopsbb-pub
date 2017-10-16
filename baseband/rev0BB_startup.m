@@ -33,10 +33,10 @@ createTestVectors;
 %% Imperfections
 maxDopplerHz = .1;
 useFadingChannel = true;
-manualChannel = true;
+manualChannel = false;
 channelSpec = 'cost207RAx4';
 %Manual Delay Set
-manualChanDelaysSymb = [1,2,3,4];
+manualChanDelaysSymb = [1,6,11,16];
 manualChanPathGainDB = [0,0,0,0];
 
 if(useFadingChannel == true && manualChannel == false)
@@ -44,10 +44,10 @@ if(useFadingChannel == true && manualChannel == false)
     chanDelays = channelMdl.PathDelays;
     chanDelaysSymb = chanDelays/basePer;
     chanAvgPathGainsdB = channelMdl.AvgPathGaindB;
-    chanPathGains = channelMdl.PathGains;
+    chanPathGains = channelMdl.AvgPathGaindB;
 
     disp(['Channel: ' channelSpec]);
-    disp(['Channel Delays (Symbols): ' mat2str(chanDelays)]);
+    disp(['Channel Delays (Symbols): ' mat2str(chanDelaysSymb)]);
     disp(['Average Path Gain (dB): ' mat2str(chanAvgPathGainsdB)]);
 elseif((useFadingChannel == true && manualChannel == true))
     chanDelaysSymb = manualChanDelaysSymb;
@@ -55,7 +55,7 @@ elseif((useFadingChannel == true && manualChannel == true))
     chanAvgPathGainsdB = manualChanPathGainDB;
     chanPathGains = manualChanPathGainDB;
     disp(['Channel: Manual']);
-    disp(['Channel Delays (Symbols): ' mat2str(chanDelays)]);
+    disp(['Channel Delays (Symbols): ' mat2str(chanDelaysSymb)]);
     disp(['Average Path Gain (dB): ' mat2str(chanAvgPathGainsdB)]);
 else
     chanDelaysSymb = manualChanDelaysSymb;
@@ -93,10 +93,10 @@ qScale = 1;
 %awgnSNR = 6;
 %awgnSNR = 8;
 %awgnSNR = 10;
-awgnSNR = 15;
+%awgnSNR = 15;
 %awgnSNR = 20;
 %awgnSNR = 50;
-%awgnSNR = 92;
+awgnSNR = 92;
 %awgnSNR = 100;
 
 disp(['awgnSNRdB = ', num2str(awgnSNR)])
