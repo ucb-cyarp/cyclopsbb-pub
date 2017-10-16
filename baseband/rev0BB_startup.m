@@ -93,11 +93,12 @@ qScale = 1;
 %awgnSNR = 6;
 %awgnSNR = 8;
 %awgnSNR = 10;
-%awgnSNR = 15;
+awgnSNR = 15;
 %awgnSNR = 20;
 %awgnSNR = 50;
-awgnSNR = 92;
+%awgnSNR = 92;
 %awgnSNR = 100;
+%awgnSNR = 1000;
 
 disp(['awgnSNRdB = ', num2str(awgnSNR)])
 

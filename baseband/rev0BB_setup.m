@@ -440,7 +440,7 @@ agc_delay_lag = 32;
 
 lmsEqDepth = 76;
 lmsStep_init =  0.006; %LMS
-lmsStep_final = 0.001;
+lmsStep_final = 0.004;
 lmsStep_meta = (lmsStep_final - lmsStep_init)/cefLen;
 
 preambleSequentialDetect = 2;
