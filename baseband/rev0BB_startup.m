@@ -32,8 +32,8 @@ createTestVectors;
 
 %% Imperfections
 maxDopplerHz = .1;
-useFadingChannel = false;
-manualChannel = false;
+useFadingChannel = true;
+manualChannel = true;
 channelSpec = 'cost207RAx4';
 %Manual Delay Set
 manualChanDelaysSymb = [1,2,3,4];
@@ -88,12 +88,12 @@ qScale = 1;
 %awgnSNR = -6;
 %awgnSNR = -3;
 %awgnSNR = 0;
-awgnSNR = 2;
+%awgnSNR = 2;
 %awgnSNR = 5.5;
 %awgnSNR = 6;
 %awgnSNR = 8;
 %awgnSNR = 10;
-%awgnSNR = 15;
+awgnSNR = 15;
 %awgnSNR = 20;
 %awgnSNR = 50;
 %awgnSNR = 92;
