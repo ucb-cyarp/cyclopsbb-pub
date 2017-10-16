@@ -32,36 +32,39 @@ createTestVectors;
 
 %% Imperfections
 maxDopplerHz = .1;
-useFadingChannel = true;
-manualChannel = false;
-channelSpec = 'cost207RAx4';
+channelSpec = 'AWGN';
+%channelSpec = 'Manual';
+%channelSpec = 'cost207RAx4';
 %Manual Delay Set
 manualChanDelaysSymb = [1,6,11,16];
 manualChanPathGainDB = [0,0,0,0];
 
-if(useFadingChannel == true && manualChannel == false)
+if(strcmp(channelSpec, 'AWGN'))
+    chanDelaysSymb = manualChanDelaysSymb;
+    chanDelays = chanDelaysSymb*basePer;
+    chanPathGains=manualChanPathGainDB;
+    useFadingChannel = false;
+    disp(['Channel: ', channelSpec]);
+elseif(strcmp(channelSpec, 'Manual'))
+    chanDelaysSymb = manualChanDelaysSymb;
+    chanDelays = chanDelaysSymb*basePer;
+    chanAvgPathGainsdB = manualChanPathGainDB;
+    chanPathGains = manualChanPathGainDB;
+    useFadingChannel = true;
+    disp(['Channel: ', channelSpec]);
+    disp(['Channel Delays (Symbols): ' mat2str(chanDelaysSymb)]);
+    disp(['Average Path Gain (dB): ' mat2str(chanAvgPathGainsdB)]);
+else
     channelMdl = stdchan(overSamplePer, maxDopplerHz, channelSpec);
     chanDelays = channelMdl.PathDelays;
     chanDelaysSymb = chanDelays/basePer;
     chanAvgPathGainsdB = channelMdl.AvgPathGaindB;
     chanPathGains = channelMdl.AvgPathGaindB;
+    useFadingChannel = true;
 
     disp(['Channel: ' channelSpec]);
     disp(['Channel Delays (Symbols): ' mat2str(chanDelaysSymb)]);
     disp(['Average Path Gain (dB): ' mat2str(chanAvgPathGainsdB)]);
-elseif((useFadingChannel == true && manualChannel == true))
-    chanDelaysSymb = manualChanDelaysSymb;
-    chanDelays = chanDelaysSymb*basePer;
-    chanAvgPathGainsdB = manualChanPathGainDB;
-    chanPathGains = manualChanPathGainDB;
-    disp(['Channel: Manual']);
-    disp(['Channel Delays (Symbols): ' mat2str(chanDelaysSymb)]);
-    disp(['Average Path Gain (dB): ' mat2str(chanAvgPathGainsdB)]);
-else
-    chanDelaysSymb = manualChanDelaysSymb;
-    chanDelays = chanDelaysSymb*basePer;
-    chanPathGains=manualChanPathGainDB;
-    disp(['Channel: AWGN']);
 end
 
 chanFilt = zeros(1, ceil(max(chanDelays))+1);
@@ -87,13 +90,13 @@ qScale = 1;
 
 %awgnSNR = -6;
 %awgnSNR = -3;
-%awgnSNR = 0;
+awgnSNR = 0;
 %awgnSNR = 2;
 %awgnSNR = 5.5;
 %awgnSNR = 6;
 %awgnSNR = 8;
 %awgnSNR = 10;
-awgnSNR = 15;
+%awgnSNR = 15;
 %awgnSNR = 20;
 %awgnSNR = 50;
 %awgnSNR = 92;
@@ -197,7 +200,7 @@ cal_sig_q_offset = 0.0;
 
 %% Start Simulink
 disp('Opening Simulink ...')
-open_system('rev0BB')
+%open_system('rev0BB')
 %open_system('gm_rev0BB')
 %load_system('rev0BB')
 disp('Ready to Simulate')

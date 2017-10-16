@@ -39,6 +39,14 @@ trial_failures = zeros(trials, length(indRange));
 for dBSnrInd = indRange
     awgnSNR = dBSnrRange(dBSnrInd);
     
+    %See https://www.mathworks.com/help/comm/ug/awgn-channel.html for a
+    %consise explanation of the difference between SNR, EsN0, and EbN0
+    EsN0 = dBSnrRange(dBSnrInd) + 10*log10(overSample);
+    infoBitsPerSymbol = log2(radix); %Change when coding introduced
+    EbN0 = EsN0 - 10*log10(infoBitsPerSymbol);
+    idealBer(dBSnrInd) = berawgn(EbN0, 'psk', radix, 'nondiff');
+    disp(['SNR (dB): ', num2str(dBSnrRange(dBSnrInd)), ', EbN0 (dB): ', num2str(EbN0), ', Ideal BER (AWGN): ', num2str(idealBer(dBSnrInd))]);
+    
     for trial = 1:1:trials
         seed = abs(dBSnrRange(dBSnrInd)*1000+trial);
         awgnSeed = abs(dBSnrRange(dBSnrInd)*1000+trial+10000000);
@@ -71,13 +79,6 @@ for dBSnrInd = indRange
     
     sim_failures (dBSnrInd) = sum(trial_failures(:,dBSnrInd));
     sim_ber(dBSnrInd) = sum(trial_bit_errors(:,dBSnrInd))/(trials*(log2(radix)*length(data_recieved)));
-    
-    %See https://www.mathworks.com/help/comm/ug/awgn-channel.html for a
-    %consise explanation of the difference between SNR, EsN0, and EbN0
-    EsN0 = dBSnrRange(dBSnrInd) + 10*log10(overSample);
-    infoBitsPerSymbol = log2(radix); %Change when coding introduced
-    EbN0 = EsN0 - 10*log10(infoBitsPerSymbol);
-    idealBer(dBSnrInd) = berawgn(EbN0, 'psk', radix, 'nondiff');
 end
 
 %% Plot
@@ -88,8 +89,8 @@ hold all;
 semilogy(dBSnrRange + 10*log10(overSample) - 10*log10(infoBitsPerSymbol), sim_ber, 'r*-');
 xlabel('Eb/N0 (dB)')
 ylabel('BER')
-legend('Theoretical', 'Simulation');
-title('Baseband Simulation vs. Theoretical (Uncoded Coherent QPSK over AWGN)')
+legend('Theoretical (AWGN)', ['Simulation (', channelSpec, ')']);
+title(['Baseband Simulation (', channelSpec, ') vs. Theoretical (Uncoded Coherent QPSK over AWGN)'])
 grid on;
 
 fig2 = figure;

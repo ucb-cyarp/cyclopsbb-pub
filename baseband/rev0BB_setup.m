@@ -205,8 +205,8 @@ expDomain = 3.3;
 expTol = .1;
 expResolution = 2^-5;
 %trigger = (80/128)^2;
-trigger = 0.35;
-trigger_tolerance = 0.25; %used after an initial peak has been detected to provide some degree of tolerance
+trigger = 0.37;
+trigger_tolerance = 0.27; %used after an initial peak has been detected to provide some degree of tolerance
 
 %[a, b] = butter(8, .3);
 
