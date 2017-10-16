@@ -77,7 +77,7 @@ for dBSnrInd = indRange
     EsN0 = dBSnrRange(dBSnrInd) + 10*log10(overSample);
     infoBitsPerSymbol = log2(radix); %Change when coding introduced
     EbN0 = EsN0 - 10*log10(infoBitsPerSymbol);
-    idealBer(dBSnrInd) = berawgn(dBSnrRange(dBSnrInd) + 10*log10(overSample), 'psk', radix, 'nondiff');
+    idealBer(dBSnrInd) = berawgn(EbN0, 'psk', radix, 'nondiff');
 end
 
 %% Plot
@@ -93,7 +93,7 @@ title('Baseband Simulation vs. Theoretical (Uncoded Coherent QPSK over AWGN)')
 grid on;
 
 fig2 = figure;
-bar(dBSnrRange + 10*log10(overSample), sim_failures);
+bar(dBSnrRange + 10*log10(overSample) - 10*log10(infoBitsPerSymbol), sim_failures);
 xlabel('Eb/N0 (dB)')
 ylabel('Number of Packet Decode Failures')
 title(['Number of Packet Decode Failures (No Valid Frame Detected) for ' num2str(trials), ' Trials'])
