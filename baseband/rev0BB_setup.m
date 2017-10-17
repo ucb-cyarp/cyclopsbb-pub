@@ -205,8 +205,8 @@ expDomain = 3.3;
 expTol = .1;
 expResolution = 2^-5;
 %trigger = (80/128)^2;
-trigger = 0.37;
-trigger_tolerance = 0.27; %used after an initial peak has been detected to provide some degree of tolerance
+trigger = 0.40;
+trigger_tolerance = 0.35; %used after an initial peak has been detected to provide some degree of tolerance
 
 %[a, b] = butter(8, .3);
 
@@ -352,6 +352,8 @@ xSpectrum_CEF = cat(2, Gu_512, Gv_512, Gv_512);
 
 xSpectrum_STF_short = cat(2, Gb_32(mod(nSpectrum_STFRep_short, 32)+1), -Gb_32(mod(nSpectrum_STFNeg_short, 32)+1), -Ga_32(mod(nSpectrum_STFFin_short, 32)+1)); %+1 is for matlab
 xSpectrum_CEF_short = cat(2, Gu_128_s, Gv_128_s, Gu_128_s, Gv_128_s, Gu_128_s, Gv_128_s, Gu_128_s, Gv_128_s, Gu_128_s, Gv_128_s, Gu_128_s, Gv_128_s, Gu_128_s, Gv_128_s);
+%xSpectrum_CEF_short = cat(2, Gu_128_s, Gv_128_s, Gu_128_s, Gv_128_s, Gu_128_s, Gv_128_s, Gu_128_s, Gv_128_s, Gu_128_s, Gv_128_s, Gu_128_s, Gv_128_s, Gu_128_s, Gv_128_s, Gu_128_s, Gv_128_s, Gu_128_s, Gv_128_s);
+%xSpectrum_CEF_short = cat(2, Gu_128_s, Gv_128_s, Gu_128_s, Gv_128_s, Gu_128_s, Gv_128_s, Gu_128_s, Gv_128_s, Gu_128_s, Gv_128_s, Gu_128_s, Gv_128_s, Gu_128_s, Gv_128_s, Gu_128_s, Gv_128_s, Gu_128_s, Gv_128_s, Gu_128_s, Gv_128_s, Gu_128_s, Gv_128_s, Gu_128_s, Gv_128_s, Gu_128_s, Gv_128_s, Gu_128_s, Gv_128_s);
 %xSpectrum_CEF_short = cat(2, Gu_128_s, Gv_128_s, Gv_128_s);
 
 xSpectrumAck_STF_short = cat(2, Gb_32(mod(nSpectrumAck_STFRep_short, 32)+1), -Gb_32(mod(nSpectrumAck_STFNeg_short, 32)+1), -Ga_32(mod(nSpectrumAck_STFFin_short, 32)+1)); %+1 is for matlab
@@ -438,9 +440,9 @@ outBuffer = zeros(1024,1);
 agcPwrAvgNum = 128;
 agc_delay_lag = 32;
 
-lmsEqDepth = 76;
+EqDepth = 76;
 lmsStep_init =  0.006; %LMS
-lmsStep_final = 0.004;
+lmsStep_final = 0.006;
 lmsStep_meta = (lmsStep_final - lmsStep_init)/cefLen;
 
 preambleSequentialDetect = 2;

@@ -20,7 +20,7 @@ load_system(model_name);
 
 %% Init Model
 trials = 10;
-dBSnrRange = -4:1:14;
+dBSnrRange = 10:1:14;
 indRange = 1:1:length(dBSnrRange);
 
 rev0BB_setup;

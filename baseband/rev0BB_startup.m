@@ -15,8 +15,8 @@ disp(['Payload+Header Length (Symbols) = ', num2str(dataLenSymbols)])
 %simple_ascii_message;
 %or
 %seed = 67;?
-%seed = 579;
-seed = 15007;
+seed = 579;
+%seed = 15007;
 
 %Example data for header
 type = 0;
@@ -76,10 +76,10 @@ end
 %dc_block_passband = 0.1; %MHz
 dc_block_passband = 0; %MHz
 
-freqOffsetHz = 0;
-%freqOffsetHz = 1000;
+%freqOffsetHz = 0;
+%freqOffsetHz = -1000;
 %freqOffsetHz = 2000;
-%freqOffsetHz = 5000;
+freqOffsetHz = -5000;
 %freqOffsetHz = 10000;
 %freqOffsetHz = 20000;
 %freqOffsetHz = 100000;
@@ -90,7 +90,7 @@ qScale = 1;
 
 %awgnSNR = -6;
 %awgnSNR = -3;
-awgnSNR = 0;
+%awgnSNR = 0;
 %awgnSNR = 2;
 %awgnSNR = 5.5;
 %awgnSNR = 6;
@@ -98,7 +98,7 @@ awgnSNR = 0;
 %awgnSNR = 10;
 %awgnSNR = 15;
 %awgnSNR = 20;
-%awgnSNR = 50;
+awgnSNR = 50;
 %awgnSNR = 92;
 %awgnSNR = 100;
 %awgnSNR = 1000;
@@ -106,8 +106,8 @@ awgnSNR = 0;
 disp(['awgnSNRdB = ', num2str(awgnSNR)])
 
 %awgnSeed = 67;
-awgnSeed = 10015007;
-%awgnSeed = 245;
+%awgnSeed = 10015007;
+awgnSeed = 245;
 
 
 %txTimingOffset = 0.0002;
