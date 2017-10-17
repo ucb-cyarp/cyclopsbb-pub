@@ -13,7 +13,7 @@ radix = 4; %QPSK
 bitsPerSymbol = log2(radix);
 
 %% Sim Params
-overSampleFreq = 20e6; %300 MHz would be optimal, now targeting 250 MHz
+overSampleFreq = 10e6; %300 MHz would be optimal, now targeting 250 MHz
 overSample = 4;
 slowSample = 2;
 baseFreq = overSampleFreq/overSample; %300 MHz

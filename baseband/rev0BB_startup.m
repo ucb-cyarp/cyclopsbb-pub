@@ -77,9 +77,9 @@ end
 dc_block_passband = 0; %MHz
 
 %freqOffsetHz = 0;
-%freqOffsetHz = -1000;
+freqOffsetHz = -1000;
 %freqOffsetHz = 2000;
-freqOffsetHz = -5000;
+%freqOffsetHz = 5000;
 %freqOffsetHz = 10000;
 %freqOffsetHz = 20000;
 %freqOffsetHz = 100000;
@@ -98,10 +98,10 @@ qScale = 1;
 %awgnSNR = 10;
 %awgnSNR = 15;
 %awgnSNR = 20;
-awgnSNR = 50;
+%awgnSNR = 50;
 %awgnSNR = 92;
 %awgnSNR = 100;
-%awgnSNR = 1000;
+awgnSNR = 1000;
 
 disp(['awgnSNRdB = ', num2str(awgnSNR)])
 
@@ -200,7 +200,7 @@ cal_sig_q_offset = 0.0;
 
 %% Start Simulink
 disp('Opening Simulink ...')
-%open_system('rev0BB')
+open_system('rev0BB')
 %open_system('gm_rev0BB')
 %load_system('rev0BB')
 disp('Ready to Simulate')
