@@ -70,7 +70,7 @@ end
 
 %Create Channel FIR Filter
 %Warning! Delays are rounded to sample periods.
-pathDelaysSamplePer = chanDelays*overSampleFreq*2;
+pathDelaysSamplePer = chanDelays*overSampleFreq;
 maxSampleDelay = max(pathDelaysSamplePer);
 pathGains = 10.^(chanAvgPathGainsdB./20);
 pathPhase = exp(j.*chanDelays.*carrierFreq.*2.*pi);
