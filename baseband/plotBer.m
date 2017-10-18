@@ -19,7 +19,7 @@ load_system(model_name);
 %rev0BB_setup;
 
 %% Init Model
-trials = 10;
+trials = 20;
 dBSnrRange = -4:1:20;
 indRange = 1:1:length(dBSnrRange);
 
@@ -58,7 +58,7 @@ for dBSnrInd = indRange
         txTimingPhase = rand(1);
         rxPhaseOffset = rand(1)*360;
         
-        simulink_out = sim(model_name, 'SimulationMode', 'accelerator');
+        simulink_out = sim(model_name, 'SimulationMode', 'normal');
         data_recieved = simulink_out.get('data_recieved');
         assignin('base','data_recieved',data_recieved);
         
