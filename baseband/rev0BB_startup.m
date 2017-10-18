@@ -76,7 +76,7 @@ pathGains = 10.^(chanAvgPathGainsdB./20);
 pathPhase = exp(j.*chanDelays.*carrierFreq.*2.*pi);
 %Normalize Path Gains
 powerNorm = sum(pathGains.^2);
-pathGains = pathGains./powerNorm;
+pathGains = pathGains./sqrt(powerNorm);
 %Fill Filter
 channelFIR = zeros(1, round(maxSampleDelay)+1);
 for pathID = 1:length(pathDelaysSamplePer)
@@ -108,11 +108,11 @@ qScale = 1;
 %awgnSNR = 6;
 %awgnSNR = 8;
 %awgnSNR = 10;
-%awgnSNR = 15;
+awgnSNR = 15;
 %awgnSNR = 20;
 %awgnSNR = 50;
 %awgnSNR = 92;
-awgnSNR = 100;
+%awgnSNR = 100;
 %awgnSNR = 1000;
 
 disp(['awgnSNRdB = ', num2str(awgnSNR)])
