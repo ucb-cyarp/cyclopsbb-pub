@@ -13,6 +13,7 @@ radix = 4; %QPSK
 bitsPerSymbol = log2(radix);
 
 %% Sim Params
+carrierFreq = 1e6+.1;
 overSampleFreq = 10e6; %300 MHz would be optimal, now targeting 250 MHz
 overSample = 4;
 slowSample = 2;
@@ -244,10 +245,10 @@ agcSettleThresh = 0.65;
 
 coarseCFO_averaging_samples = 512;
 atanDomainCoarseCFO = 128;
-atanResolutionCoarseCFO = 2^-12;
+atanResolutionCoarseCFO = 2^-14;
 
-frac_lut_domain_coarse_cfo = 128;
-frac_lut_res_coarse_cfo = 2^-12;
+frac_lut_domain_coarse_cfo = 32;
+frac_lut_res_coarse_cfo = 2^-14;
 frac_lut_range_max_coarse_cfo = 127;
 frac_lut_range_min_coarse_cfo = -frac_lut_range_max_coarse_cfo;
 frac_lut_table_breaks_coarse_cfo = -frac_lut_domain_coarse_cfo:frac_lut_res_coarse_cfo:(frac_lut_domain_coarse_cfo-1);
@@ -260,6 +261,8 @@ for ind = 1:length(frac_lut_table_data_coarse_cfo)
        frac_lut_table_data_coarse_cfo(ind) = frac_lut_range_min_coarse_cfo;
    end
 end
+
+coarseCFOAdaptDelay = 8;
 
 coarseCFOFreqStep = 500;
 
@@ -331,7 +334,9 @@ nSpectrum_STFRep = 0:1:(nSpectrum_STFRepCount*128-1);
 nSpectrum_STFNeg = (nSpectrum_STFRepCount*128):1:((nSpectrum_STFRepCount+1)*128-1);
 nSpectrum_STFFin = ((nSpectrum_STFRepCount+1)*128):1:((nSpectrum_STFRepCount+2)*128-1);
 
-nSpectrum_STFRepCount_short = 24;
+%nSpectrum_STFRepCount_short = 24;
+nSpectrum_STFRepCount_short = 28;
+%nSpectrum_STFRepCount_short = 50;
 nSpectrum_STFRep_short = 0:1:(nSpectrum_STFRepCount_short*32-1);
 nSpectrum_STFNeg_short = (nSpectrum_STFRepCount_short*32):1:((nSpectrum_STFRepCount_short+1)*32-1);
 nSpectrum_STFFin_short = ((nSpectrum_STFRepCount_short+1)*32):1:((nSpectrum_STFRepCount_short+2)*32-1);
@@ -440,7 +445,7 @@ outBuffer = zeros(1024,1);
 agcPwrAvgNum = 128;
 agc_delay_lag = 32;
 
-lmsEqDepth = 76;
+lmsEqDepth = 38;
 lmsStep_init =  0.006; %LMS
 lmsStep_final = 0.006;
 lmsStep_meta = (lmsStep_final - lmsStep_init)/cefLen;

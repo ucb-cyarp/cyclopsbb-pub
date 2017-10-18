@@ -32,12 +32,13 @@ createTestVectors;
 
 %% Imperfections
 maxDopplerHz = .1;
-channelSpec = 'AWGN';
+%channelSpec = 'AWGN';
 %channelSpec = 'Manual';
-%channelSpec = 'cost207RAx4';
+channelSpec = 'cost207RAx4';
 %Manual Delay Set
 manualChanDelaysSymb = [1,6,11,16];
 manualChanPathGainDB = [0,0,0,0];
+manualChanPathGain = [0.25, 0.25, 0.25, 0.25];
 
 if(strcmp(channelSpec, 'AWGN'))
     chanDelaysSymb = manualChanDelaysSymb;
@@ -49,7 +50,7 @@ elseif(strcmp(channelSpec, 'Manual'))
     chanDelaysSymb = manualChanDelaysSymb;
     chanDelays = chanDelaysSymb*basePer;
     chanAvgPathGainsdB = manualChanPathGainDB;
-    chanPathGains = manualChanPathGainDB;
+    chanPathGains = manualChanPathGain;
     useFadingChannel = true;
     disp(['Channel: ', channelSpec]);
     disp(['Channel Delays (Symbols): ' mat2str(chanDelaysSymb)]);
@@ -59,7 +60,7 @@ else
     chanDelays = channelMdl.PathDelays;
     chanDelaysSymb = chanDelays/basePer;
     chanAvgPathGainsdB = channelMdl.AvgPathGaindB;
-    chanPathGains = channelMdl.AvgPathGaindB;
+    chanPathGains = channelMdl.PathGains;
     useFadingChannel = true;
 
     disp(['Channel: ' channelSpec]);
@@ -67,19 +68,30 @@ else
     disp(['Average Path Gain (dB): ' mat2str(chanAvgPathGainsdB)]);
 end
 
-chanFilt = zeros(1, ceil(max(chanDelays))+1);
-%set filt coefs
-for(ind = 1:length(chanDelays))
-    chanFilt(ceil(chanDelays(ind))+1) = chanPathGains(ind);
+%Create Channel FIR Filter
+%Warning! Delays are rounded to sample periods.
+pathDelaysSamplePer = chanDelays*overSampleFreq*2;
+maxSampleDelay = max(pathDelaysSamplePer);
+pathGains = 10.^(chanAvgPathGainsdB./20);
+pathPhase = exp(j.*chanDelays.*carrierFreq.*2.*pi);
+%Normalize Path Gains
+powerNorm = sum(pathGains.^2);
+pathGains = pathGains./powerNorm;
+%Fill Filter
+channelFIR = zeros(1, round(maxSampleDelay)+1);
+for pathID = 1:length(pathDelaysSamplePer)
+    delayIndex = round(pathDelaysSamplePer(pathID))+1;
+    pathTap = pathGains(pathID)*pathPhase(pathID);
+    channelFIR(delayIndex) = complex(pathTap);
 end
 
 %dc_block_passband = 0.1; %MHz
 dc_block_passband = 0; %MHz
 
 %freqOffsetHz = 0;
-freqOffsetHz = -1000;
+%freqOffsetHz = -1000;
 %freqOffsetHz = 2000;
-%freqOffsetHz = 5000;
+freqOffsetHz = 5000;
 %freqOffsetHz = 10000;
 %freqOffsetHz = 20000;
 %freqOffsetHz = 100000;
@@ -100,8 +112,8 @@ qScale = 1;
 %awgnSNR = 20;
 %awgnSNR = 50;
 %awgnSNR = 92;
-%awgnSNR = 100;
-awgnSNR = 1000;
+awgnSNR = 100;
+%awgnSNR = 1000;
 
 disp(['awgnSNRdB = ', num2str(awgnSNR)])
 
