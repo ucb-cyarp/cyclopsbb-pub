@@ -41,17 +41,16 @@ manualChanPathGainDB = [0,0,0,0];
 manualChanPathGain = [0.25, 0.25, 0.25, 0.25];
 
 if(strcmp(channelSpec, 'AWGN'))
-    chanDelaysSymb = manualChanDelaysSymb;
+    chanDelaysSymb = [0];
     chanDelays = chanDelaysSymb*basePer;
-    chanPathGains=manualChanPathGainDB;
-    useFadingChannel = false;
+    chanPathGains=[0];
+    chanAvgPathGainsdB = [0];
     disp(['Channel: ', channelSpec]);
 elseif(strcmp(channelSpec, 'Manual'))
     chanDelaysSymb = manualChanDelaysSymb;
     chanDelays = chanDelaysSymb*basePer;
     chanAvgPathGainsdB = manualChanPathGainDB;
     chanPathGains = manualChanPathGain;
-    useFadingChannel = true;
     disp(['Channel: ', channelSpec]);
     disp(['Channel Delays (Symbols): ' mat2str(chanDelaysSymb)]);
     disp(['Average Path Gain (dB): ' mat2str(chanAvgPathGainsdB)]);
@@ -61,8 +60,6 @@ else
     chanDelaysSymb = chanDelays/basePer;
     chanAvgPathGainsdB = channelMdl.AvgPathGaindB;
     chanPathGains = channelMdl.PathGains;
-    useFadingChannel = true;
-
     disp(['Channel: ' channelSpec]);
     disp(['Channel Delays (Symbols): ' mat2str(chanDelaysSymb)]);
     disp(['Average Path Gain (dB): ' mat2str(chanAvgPathGainsdB)]);

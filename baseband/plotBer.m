@@ -58,7 +58,7 @@ for dBSnrInd = indRange
         txTimingPhase = rand(1);
         rxPhaseOffset = rand(1)*360;
         
-        simulink_out = sim(model_name, 'SimulationMode', 'normal');
+        simulink_out = sim(model_name, 'SimulationMode', 'rapid');
         data_recieved = simulink_out.get('data_recieved');
         assignin('base','data_recieved',data_recieved);
         
