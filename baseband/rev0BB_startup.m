@@ -14,7 +14,8 @@ disp(['Payload+Header Length (Symbols) = ', num2str(dataLenSymbols)])
 %simple_ascii_message;
 %or
 %seed = 67;?
-seed = 579;
+%seed = 579;
+seed = 3997;
 %seed = 15007;
 
 %Example data for header
@@ -118,8 +119,8 @@ disp(['awgnSNRdB = ', num2str(awgnSNR)])
 
 %awgnSeed = 67;
 %awgnSeed = 10015007;
-awgnSeed = 245;
-
+%awgnSeed = 245;
+awgnSeed = 9996003;
 
 %txTimingOffset = 0.0002;
 %txTimingOffset = -0.0001;
@@ -211,7 +212,7 @@ cal_sig_q_offset = 0.0;
 
 %% Start Simulink
 disp('Opening Simulink ...')
-open_system('rev0BB')
+%open_system('rev0BB')
 %open_system('gm_rev0BB')
 %load_system('rev0BB')
 disp('Ready to Simulate')
