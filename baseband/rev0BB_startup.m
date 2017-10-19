@@ -32,9 +32,9 @@ createTestVectors;
 
 %% Imperfections
 maxDopplerHz = .1;
-%channelSpec = 'AWGN';
+channelSpec = 'AWGN';
 %channelSpec = 'Manual';
-channelSpec = 'cost207RAx4';
+%channelSpec = 'cost207RAx4';
 %Manual Delay Set
 manualChanDelaysSymb = [1,6,11,16];
 manualChanPathGainDB = [0,0,0,0];
@@ -67,7 +67,7 @@ end
 
 %Create Channel FIR Filter
 %Warning! Delays are rounded to sample periods.
-pathDelaysSamplePer = chanDelays*overSampleFreq;
+pathDelaysSamplePer = chanDelays*channelizerFreq;
 maxSampleDelay = max(pathDelaysSamplePer);
 pathGains = 10.^(chanAvgPathGainsdB./20);
 pathPhase = exp(j.*chanDelays.*carrierFreq.*2.*pi);
@@ -85,10 +85,10 @@ end
 %dc_block_passband = 0.1; %MHz
 dc_block_passband = 0; %MHz
 
-%freqOffsetHz = 0;
+freqOffsetHz = 0;
 %freqOffsetHz = -1000;
 %freqOffsetHz = 2000;
-freqOffsetHz = 5000;
+%freqOffsetHz = 5000;
 %freqOffsetHz = 10000;
 %freqOffsetHz = 20000;
 %freqOffsetHz = 100000;
@@ -105,11 +105,11 @@ qScale = 1;
 %awgnSNR = 6;
 %awgnSNR = 8;
 %awgnSNR = 10;
-awgnSNR = 15;
+%awgnSNR = 15;
 %awgnSNR = 20;
 %awgnSNR = 50;
 %awgnSNR = 92;
-%awgnSNR = 100;
+awgnSNR = 100;
 %awgnSNR = 1000;
 
 disp(['awgnSNRdB = ', num2str(awgnSNR)])
@@ -209,7 +209,7 @@ cal_sig_q_offset = 0.0;
 
 %% Start Simulink
 disp('Opening Simulink ...')
-%open_system('rev0BB')
+open_system('rev0BB')
 %open_system('gm_rev0BB')
 %load_system('rev0BB')
 disp('Ready to Simulate')

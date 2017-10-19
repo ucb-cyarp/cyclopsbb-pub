@@ -235,7 +235,8 @@ agc_sat_low = -agcSaturation;
 agcExpDomain = agcSaturation;
 agcExpResolution = 2^-5;
 
-agcDesired = 0;
+%agcDesired = 0;
+agcDesired = -0.6931;
 %agcStep = 2^-10+2^-11;
 %agcStep = 2^-11;
 agcStep = 2^-9;
@@ -464,3 +465,70 @@ corrAvgLen = 32;
 crc_poly = [ 1  0  0  0  0  0  1  0  0  1  1  0  0  0  0  0  1  0  0  0  1  1  1  0  1  1  0  1  1  0  0  1  1 ];
 crc_init =    [ 1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1 ];
 crc_xor  =    [ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 ];
+
+%Channelizer Parameters
+numTaps = 100;
+
+numRealBands = 4;
+numBands = numRealBands / 2;
+filterLength = numTaps * numBands;
+PwrAve = 16;
+
+channelizerFreq = overSampleFreq/2*numRealBands;
+channelizerPer = 1/channelizerFreq;
+
+dftval = dftmtx(numBands);
+
+pb_mag    = 0.1;
+sb_mag    = 90;
+pb_freq   = ((1/numBands) * 0.8) * .5 ;
+sb_freq   = (1/numBands)* .5;
+ProtoPM = cfirpm(filterLength-1,[0,pb_freq,sb_freq,1],@lowpass,[pb_mag,sb_mag]);
+
+ProtoRRC = rcosdesign(0.02,numTaps,4,'sqrt');
+
+%Proto = conv(ProtoPM, ProtoRRC);
+Proto = ProtoRRC;
+%Proto = ProtoPM
+filterLength = length(Proto) - 1;
+
+Proto_T = Proto ;
+%plotProto ;
+
+% Proto = hamming (filterLength)';
+
+ %fvtool(Proto,'Fs',sampleFreqHz,'Color','White') % Visualize filter
+
+co = [];
+co1 = [];
+coeffsub =[;];
+
+
+for index = 1 : numBands
+    
+    for k = index : numBands : filterLength
+        co1 = cat(2,co, Proto(k) );
+        co = co1;
+    end
+    coeffsub1 = [ coeffsub; co ];
+    coeffsub = coeffsub1;
+    co = [];
+end
+
+co = [];
+co1 = [];
+coeffsub_T =[;];
+
+
+for index = 1 : numBands
+    
+    for k = index : numBands : filterLength
+        co1 = cat(2,co, Proto_T(k) );
+        co = co1;
+    end
+    coeffsub1 = [ coeffsub_T; co ];
+    coeffsub_T = coeffsub1;
+    co = [];
+end
+
+
