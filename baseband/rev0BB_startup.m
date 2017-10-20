@@ -32,9 +32,9 @@ createTestVectors;
 
 %% Imperfections
 maxDopplerHz = .1;
-%channelSpec = 'AWGN';
+channelSpec = 'AWGN';
 %channelSpec = 'Manual';
-channelSpec = 'cost207RAx4';
+%channelSpec = 'cost207RAx4';
 %Manual Delay Set
 manualChanDelaysSymb = [1,6,11,16];
 manualChanPathGainDB = [0,0,0,0];
@@ -105,8 +105,9 @@ qScale = 1;
 %awgnSNR = 6;
 %awgnSNR = 8;
 %awgnSNR = 10;
-awgnSNR = 15;
-%awgnSNR = 20;
+%awgnSNR = 15;
+awgnSNR = 20;
+%awgnSNR = 30;
 %awgnSNR = 50;
 %awgnSNR = 92;
 %awgnSNR = 100;
@@ -209,7 +210,7 @@ cal_sig_q_offset = 0.0;
 
 %% Start Simulink
 disp('Opening Simulink ...')
-%open_system('rev0BB')
+open_system('rev0BB')
 %open_system('gm_rev0BB')
 %load_system('rev0BB')
 disp('Ready to Simulate')
