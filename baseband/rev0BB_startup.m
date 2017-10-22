@@ -26,7 +26,7 @@ len = frame_len_bytes-crc_len_bytes;
 
 local_node_id = 2;
 
-[testMsg, testTextTrunkRadix] = generate_random_frame(seed, payload_len_symbols, x_PRE_adj, after, radix, type, src, dst, len, crc_poly, crc_init, crc_xor);
+[testMsg, testTextTrunkRadix] = generate_random_frame(seed, bitsPerSymbolHeader, payload_len_symbols, x_PRE_adj, after, radix, type, src, dst, len, crc_poly, crc_init, crc_xor);
 
 createTestVectors;
 
@@ -106,8 +106,8 @@ qScale = 1;
 %awgnSNR = 8;
 %awgnSNR = 10;
 %awgnSNR = 15;
-awgnSNR = 20;
-%awgnSNR = 30;
+%awgnSNR = 20;
+awgnSNR = 30;
 %awgnSNR = 50;
 %awgnSNR = 92;
 %awgnSNR = 100;

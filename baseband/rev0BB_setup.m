@@ -1,15 +1,26 @@
 %dataLenSymbols = 4096; %orig design
-header_len_bytes = 5; %This was a 32 bit CRC.  Will now be a 5 byte header of type, src, dst, len (2 bytes).  The 4 byte CRC will be appended to the end of the frame
+header_len_bytes = 6; %This was a 32 bit CRC.  Will now be a 6 byte header of mod_type, type, src, dst, len (2 bytes).  The 4 byte CRC will be appended to the end of the frame
+mod_scheme_len_bytes = 1;
 crc_len_bytes = 4;
 
 radix = 16; %QAM16
+radixHeader = 2; %BPSK
+radixMax = 16;
 bitsPerSymbol = log2(radix);
+bitsPerSymbolHeader = log2(radixHeader);
+bitsPerSymbolMax = log2(radixMax);
+
+% 0 = BPSK
+% 1 = QPSK
+% 2 = 16QAM
+modKeys = [0, 1, 2];
+modBPS  = [1, 2, 4];
 
 mtu_eth = 1500+26+2;%+2 is so that the result fits evenly in 32 bit words
 frames_per_superframe = 2;
 payload_len_bytes = mtu_eth*frames_per_superframe;
-frame_len_bytes = header_len_bytes + payload_len_bytes + crc_len_bytes;
-dataLenSymbols = frame_len_bytes*8/bitsPerSymbol; %/2 for QPSK
+frame_len_bytes = payload_len_bytes + crc_len_bytes;
+dataLenSymbols = header_len_bytes*8/bitsPerSymbolHeader + frame_len_bytes*8/bitsPerSymbol; %/2 for QPSK
 payload_len_symbols = payload_len_bytes*8/bitsPerSymbol; %/2 for QPSK
 
 lineWidth = 60;

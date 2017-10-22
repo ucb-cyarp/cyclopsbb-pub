@@ -1,4 +1,4 @@
-function [msg, header_payload_crc_symbols] = generate_random_frame(seed, payloadLenSymbols, xCTRL_PRE_adj, after, radix, type, src, dst, len, crc_poly, crc_init, crc_xor)
+function [msg, header_payload_crc_symbols] = generate_random_frame(seed, bitsPerSymbolHeader, payloadLenSymbols, xCTRL_PRE_adj, after, radix, type, src, dst, len, crc_poly, crc_init, crc_xor)
 
 rng(seed);
 
@@ -6,11 +6,21 @@ bitsPerSymbol = log2(radix);
 
 payload_symbols = randi(radix,payloadLenSymbols,1)-1;
 
-header_symbols = transpose([packed2unpacked([type, src, dst], 8, bitsPerSymbol), packed2unpacked([len], 16, bitsPerSymbol)]);
+if(radix == 0) %BPSK
+    modType = 0;
+elseif(radix == 2) %QPSK
+    modType = 1;
+else %16QAM
+    modType = 2;
+end
+
+header_symbols = transpose([packed2unpacked([modType, type, src, dst], 8, bitsPerSymbolHeader), packed2unpacked([len], 16, bitsPerSymbolHeader)]);
 
 header_payload_symbols = cat(1, header_symbols, payload_symbols);
 
-header_payload_binary = packed2unpacked(header_payload_symbols, bitsPerSymbol, 1);
+header_binary = packed2unpacked(header_symbols, bitsPerSymbolHeader, 1);
+payload_binary = packed2unpacked(payload_symbols, bitsPerSymbol, 1);
+header_payload_binary = cat(2, header_binary, payload_binary);
 
 crc_gen = comm.CRCGenerator(crc_poly, 'InitialConditions', crc_init, 'FinalXOR', crc_xor);
 codeword = step(crc_gen, transpose(header_payload_binary));

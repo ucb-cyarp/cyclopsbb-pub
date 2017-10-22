@@ -7,8 +7,9 @@ mod_imperfection = zeros(pad_first, 1);
 testMsgFPGA = cat(1, mod_imperfection, testMsg);
 
 preambleMask = zeros(length(x_PRE_adj), 1);
-packetMask = ones(length(testTextTrunkRadix), 1);
-modulationMask = cat(1, mod_imperfection, preambleMask, packetMask);
+headerMask = zeros(header_len_bytes*8/bitsPerSymbolHeader, 1);
+packetMask = ones(payload_len_symbols, 1)*2;
+modulationMask = cat(1, mod_imperfection, preambleMask, headerMask, packetMask);
 
 simX.time = [];
 simX.signals.values = testMsgFPGA;
