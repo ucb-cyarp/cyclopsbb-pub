@@ -6,9 +6,9 @@ pad_first = 1000;
 mod_imperfection = zeros(pad_first, 1);
 testMsgFPGA = cat(1, mod_imperfection, testMsg);
 
-preambleMask = zeros(length(x_PRE_adj), 1);
+preambleMask = zeros(length(x_PRE), 1);
 headerMask = zeros(header_len_bytes*8/bitsPerSymbolHeader, 1);
-packetMask = ones(payload_len_symbols, 1)*2;
+packetMask = ones(frame_len_bytes*8/bitsPerSymbol, 1)*2;
 modulationMask = cat(1, mod_imperfection, preambleMask, headerMask, packetMask);
 
 simX.time = [];
