@@ -23,9 +23,9 @@ mtu_eth = 1500+26+2;%+2 is so that the result fits evenly in 32 bit words
 if(radix == 2) %BPSK
     frames_per_superframe = 1;
 elseif(radix == 4) %QPSK
-    frames_per_superframe = 1;
+    frames_per_superframe = 2;
 else %16QAM
-    frames_per_superframe = 1;
+    frames_per_superframe = 4;
 end
 
 payload_len_bytes = mtu_eth*frames_per_superframe;
