@@ -1,4 +1,4 @@
-function [msg, header_payload_crc_symbols] = generate_random_frame(seed, bitsPerSymbolHeader, payloadLenSymbols, xCTRL_PRE_adj, after, radix, type, src, dst, len, crc_poly, crc_init, crc_xor)
+function [msg, header_payload_crc_symbols, header_payload_binary, crc_binary] = generate_random_frame(seed, bitsPerSymbolHeader, payloadLenSymbols, xCTRL_PRE_adj, after, radix, type, src, dst, len, crc_poly, crc_init, crc_xor)
 
 rng(seed);
 
@@ -6,9 +6,9 @@ bitsPerSymbol = log2(radix);
 
 payload_symbols = randi(radix,payloadLenSymbols,1)-1;
 
-if(radix == 0) %BPSK
+if(radix == 2) %BPSK
     modType = 0;
-elseif(radix == 2) %QPSK
+elseif(radix == 4) %QPSK
     modType = 1;
 else %16QAM
     modType = 2;

@@ -26,7 +26,7 @@ len = frame_len_bytes-crc_len_bytes;
 
 local_node_id = 2;
 
-[testMsg, testTextTrunkRadix] = generate_random_frame(seed, bitsPerSymbolHeader, payload_len_symbols, x_PRE_adj, after, radix, type, src, dst, len, crc_poly, crc_init, crc_xor);
+[testMsg, testTextTrunkRadix, header_payload_binary, crc_binary] = generate_random_frame(seed, bitsPerSymbolHeader, payload_len_symbols, x_PRE_adj, after, radix, type, src, dst, len, crc_poly, crc_init, crc_xor);
 
 createTestVectors;
 

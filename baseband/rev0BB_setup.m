@@ -17,7 +17,17 @@ modKeys = [0, 1, 2];
 modBPS  = [1, 2, 4];
 
 mtu_eth = 1500+26+2;%+2 is so that the result fits evenly in 32 bit words
-frames_per_superframe = 2;
+
+%Set the frame size based on the modulation scheme to maintain the same
+%number of symbols per packet.
+if(radix == 2) %BPSK
+    frames_per_superframe = 1;
+elseif(radix == 4) %QPSK
+    frames_per_superframe = 1;
+else %16QAM
+    frames_per_superframe = 1;
+end
+
 payload_len_bytes = mtu_eth*frames_per_superframe;
 frame_len_bytes = payload_len_bytes + crc_len_bytes;
 dataLenSymbols = header_len_bytes*8/bitsPerSymbolHeader + frame_len_bytes*8/bitsPerSymbol; %/2 for QPSK
