@@ -3,7 +3,7 @@ header_len_bytes = 6; %This was a 32 bit CRC.  Will now be a 6 byte header of mo
 mod_scheme_len_bytes = 1;
 crc_len_bytes = 4;
 
-radix = 4; %QAM16
+radix = 16; %QAM16
 radixHeader = 2; %BPSK
 radixMax = 16;
 bitsPerSymbol = log2(radix);
@@ -271,7 +271,7 @@ atanDomainCoarseCFO = 128;
 atanResolutionCoarseCFO = 2^-14;
 
 frac_lut_domain_coarse_cfo = 32;
-frac_lut_res_coarse_cfo = 2^-14;
+frac_lut_res_coarse_cfo = 2^-12;
 frac_lut_range_max_coarse_cfo = 127;
 frac_lut_range_min_coarse_cfo = -frac_lut_range_max_coarse_cfo;
 frac_lut_table_breaks_coarse_cfo = -frac_lut_domain_coarse_cfo:frac_lut_res_coarse_cfo:(frac_lut_domain_coarse_cfo-1);
