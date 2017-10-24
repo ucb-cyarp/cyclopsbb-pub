@@ -271,7 +271,7 @@ atanDomainCoarseCFO = 128;
 atanResolutionCoarseCFO = 2^-14;
 
 frac_lut_domain_coarse_cfo = 32;
-frac_lut_res_coarse_cfo = 2^-12;
+frac_lut_res_coarse_cfo = 2^-10;
 frac_lut_range_max_coarse_cfo = 127;
 frac_lut_range_min_coarse_cfo = -frac_lut_range_max_coarse_cfo;
 frac_lut_table_breaks_coarse_cfo = -frac_lut_domain_coarse_cfo:frac_lut_res_coarse_cfo:(frac_lut_domain_coarse_cfo-1);
@@ -487,3 +487,11 @@ corrAvgLen = 32;
 crc_poly = [ 1  0  0  0  0  0  1  0  0  1  1  0  0  0  0  0  1  0  0  0  1  1  1  0  1  1  0  1  1  0  0  1  1 ];
 crc_init =    [ 1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1 ];
 crc_xor  =    [ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 ];
+    
+%For 16QAM
+qam16Mod = comm.RectangularQAMModulator('ModulationOrder', 16, 'NormalizationMethod', 'Average power', 'AveragePower', 1, 'SymbolMapping', 'Binary');
+qam16_points = constellation(qam16Mod);
+qam16_power_normalized_distance = abs(qam16_points(1) - qam16_points(2));
+qam16_hdl_distance = 2;
+qam16_demod_scale_factor = qam16_hdl_distance/qam16_power_normalized_distance;
+
