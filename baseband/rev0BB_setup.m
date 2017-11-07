@@ -1,5 +1,5 @@
 %dataLenSymbols = 4096; %orig design
-header_len_bytes = 6; %This was a 32 bit CRC.  Will now be a 6 byte header of mod_type, type, src, dst, len (2 bytes).  The 4 byte CRC will be appended to the end of the frame
+header_len_bytes = 8; %This was a 32 bit CRC.  Will now be a 8 byte header of mod_type, type, src, dst, net_id (2 bytes), len (2 bytes).  The 4 byte CRC will be appended to the end of the frame
 mod_scheme_len_bytes = 1;
 crc_len_bytes = 4;
 
@@ -21,14 +21,13 @@ mtu_eth = 1500+26+2;%+2 is so that the result fits evenly in 32 bit words
 %Set the frame size based on the modulation scheme to maintain the same
 %number of symbols per packet.
 if(radix == 2) %BPSK
-    frames_per_superframe = 1;
+    payload_len_bytes = mtu_eth;
 elseif(radix == 4) %QPSK
-    frames_per_superframe = 2;
+    payload_len_bytes = mtu_eth*2+4;
 else %16QAM
-    frames_per_superframe = 4;
+    payload_len_bytes = mtu_eth*4+12;
 end
 
-payload_len_bytes = mtu_eth*frames_per_superframe;
 frame_len_bytes = payload_len_bytes + crc_len_bytes;
 dataLenSymbols = header_len_bytes*8/bitsPerSymbolHeader + frame_len_bytes*8/bitsPerSymbol; %/2 for QPSK
 payload_len_symbols = payload_len_bytes*8/bitsPerSymbol; %/2 for QPSK

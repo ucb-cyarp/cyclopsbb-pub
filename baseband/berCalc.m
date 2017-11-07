@@ -20,7 +20,11 @@ else
     EsN0 = awgnSNR + 10*log10(overSample);
     infoBitsPerSymbol = log2(radix); %Change when coding introduced
     EbN0 = EsN0 - 10*log10(infoBitsPerSymbol);
-    idealBer = berawgn(EbN0, 'qam', radix, 'nondiff');
+    if(radix >= 4)
+        idealBer = berawgn(EbN0, 'qam', radix, 'nondiff');
+    else
+        idealBer = berawgn(EbN0, 'psk', radix, 'nondiff');
+    end
     
     disp(['SNR (dB): ', num2str(awgnSNR), ', EbN0 (dB): ', num2str(EbN0), ', BER: ', num2str(ber), ' [Ideal: ', num2str(idealBer), '], Errors: ', num2str(bitErrors), ', Length: ', num2str(log2(radix)*length(data_recieved))]);
 end

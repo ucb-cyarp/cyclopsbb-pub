@@ -1,4 +1,4 @@
-function [msg, header_payload_crc_symbols, header_payload_binary, crc_binary] = generate_random_frame(seed, bitsPerSymbolHeader, payloadLenSymbols, xCTRL_PRE_adj, after, radix, type, src, dst, len, crc_poly, crc_init, crc_xor)
+function [msg, header_payload_crc_symbols, header_payload_binary, crc_binary] = generate_random_frame(seed, bitsPerSymbolHeader, payloadLenSymbols, xCTRL_PRE_adj, after, radix, type, src, dst, net_id, len, crc_poly, crc_init, crc_xor)
 
 rng(seed);
 
@@ -14,7 +14,7 @@ else %16QAM
     modType = 2;
 end
 
-header_symbols = transpose([packed2unpacked([modType, type, src, dst], 8, bitsPerSymbolHeader), packed2unpacked([len], 16, bitsPerSymbolHeader)]);
+header_symbols = transpose([packed2unpacked([modType, type, src, dst], 8, bitsPerSymbolHeader), packed2unpacked([net_id], 16, bitsPerSymbolHeader), packed2unpacked([len], 16, bitsPerSymbolHeader)]);
 
 header_payload_symbols = cat(1, header_symbols, payload_symbols);
 

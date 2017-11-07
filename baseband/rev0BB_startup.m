@@ -22,11 +22,12 @@ seed = 15007;
 type = 0;
 src = 5;
 dst = 2;
+net_id = 1;
 len = frame_len_bytes-crc_len_bytes;
 
 local_node_id = 2;
 
-[testMsg, testTextTrunkRadix, header_payload_binary, crc_binary] = generate_random_frame(seed, bitsPerSymbolHeader, payload_len_symbols, x_PRE_adj, after, radix, type, src, dst, len, crc_poly, crc_init, crc_xor);
+[testMsg, testTextTrunkRadix, header_payload_binary, crc_binary] = generate_random_frame(seed, bitsPerSymbolHeader, payload_len_symbols, x_PRE_adj, after, radix, type, src, dst, net_id, len, crc_poly, crc_init, crc_xor);
 
 createTestVectors;
 

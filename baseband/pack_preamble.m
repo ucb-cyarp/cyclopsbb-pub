@@ -7,7 +7,7 @@ for i = 0:1:(length(pre)-1)
 end
 
 disp(['Length Bytes: ' num2str(ceil(length(pre)/8))]);
-disp(['Length Bytes: ' num2str(ceil(length(pre)/packed_word))]);
+disp(['Length Words: ' num2str(ceil(length(pre)/packed_word))]);
 
 disp(mat2str(dec2hex(packed,8)));
 disp(mat2str(packed));
