@@ -458,7 +458,8 @@ expectedPer = int16(128*expectedWidth);
 tol         = int16(15+expectedPer*4); %allow for a momentary loss (ie. due to adaptive filtering)
 
 stfLen = length(x_STF);
-stfLenTol = 50;
+%stfLenTol = 50;
+minSTFPeaks = 3;
 cefLen = length(x_CEF);
 preLen = length(x_PRE);
 
