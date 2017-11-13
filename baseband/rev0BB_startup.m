@@ -14,9 +14,9 @@ disp(['Payload+Header Length (Symbols) = ', num2str(dataLenSymbols)])
 %simple_ascii_message;
 %or
 %seed = 67;?
-%seed = 579;
+seed = 579;
 %seed = 3997;
-seed = 15007;
+%seed = 15007;
 
 %Example data for header
 type = 0;
@@ -116,9 +116,9 @@ awgnSNR = 30;
 
 disp(['awgnSNRdB = ', num2str(awgnSNR)])
 
-%awgnSeed = 67;
+awgnSeed = 67;
 %awgnSeed = 10015007;
-awgnSeed = 245;
+%awgnSeed = 245;
 %awgnSeed = 9996003;
 
 %txTimingOffset = 0.0002;
