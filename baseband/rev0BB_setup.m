@@ -3,7 +3,7 @@ header_len_bytes = 8; %This was a 32 bit CRC.  Will now be a 8 byte header of mo
 mod_scheme_len_bytes = 1;
 crc_len_bytes = 4;
 
-radix = 2; %QAM16
+radix = 16; %QAM16
 radixHeader = 2; %BPSK
 radixMax = 16;
 bitsPerSymbol = log2(radix);
@@ -501,4 +501,4 @@ qam16_demod_scale_factor = qam16_hdl_distance/qam16_power_normalized_distance;
 %For out of band emmissionms
 %txLPF = designfilt('lowpassfir', 'PassbandFrequency', .25, 'StopbandFrequency', .3, 'PassbandRipple', 1, 'StopbandAttenuation', 140);
 %txLPF_coef = txLPF.Coefficients;
-txLPF_coef = firpm(200, [0 0.25 0.30 1], [1 1 0 0]);
+txLPF_coef = firpm(90, [0 0.25 0.30 1], [1 1 0 0]);
