@@ -33,12 +33,12 @@ createTestVectors;
 
 %% Imperfections
 maxDopplerHz = .1;
-channelSpec = 'AWGN';
-%channelSpec = 'Manual';
+%channelSpec = 'AWGN';
+channelSpec = 'Manual';
 %channelSpec = 'cost207RAx4';
 %Manual Delay Set
 manualChanDelaysSymb = [1,6,11,16];
-manualChanPathGainDB = [0,0,0,0];
+manualChanPathGainDB = [0,-3,-10,-20];
 manualChanPathGain = [0.25, 0.25, 0.25, 0.25];
 
 if(strcmp(channelSpec, 'AWGN'))
@@ -86,10 +86,10 @@ end
 %dc_block_passband = 0.1; %MHz
 dc_block_passband = 0; %MHz
 
-freqOffsetHz = 0;
+%freqOffsetHz = 0;
 %freqOffsetHz = -1000;
 %freqOffsetHz = 2000;
-%freqOffsetHz = 5000;
+freqOffsetHz = 5000;
 %freqOffsetHz = 10000;
 %freqOffsetHz = 20000;
 %freqOffsetHz = 100000;
@@ -130,8 +130,8 @@ disp(['SymbolFreqOffsetHz = ', num2str(SymbolFreqOffsetHz)])
 
 rng(awgnSeed);
 txTimingPhase = rand(1);
-%rxPhaseOffset = rand(1)*360; %Random
-rxPhaseOffset = 0; %Fixed
+rxPhaseOffset = rand(1)*360; %Random
+%rxPhaseOffset = 0; %Fixed
 
 %tx_rx_gain = 0.5882;
 tx_rx_gain = 1;
