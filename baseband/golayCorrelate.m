@@ -9,7 +9,7 @@ function [ c ] = golayCorrelate(input, W, D)
     for i = 1:(length(input))
         for stage = 1:(length(D))
             afterDelay = readSample(partialB(stage, :), i-D(stage));
-            afterScale = readSample(partialA(stage, :), i)*conj(W(stage));
+            afterScale = readSample(partialA(stage, :), i)*W(stage);
             partialA(stage+1, i) = afterDelay + afterScale;
             partialB(stage+1, i) = -afterDelay + afterScale;
         end

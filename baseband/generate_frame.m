@@ -1,4 +1,4 @@
-function [msg, textTrunk, textTrunkBin] = generate_frame(str, len, xCTRL_PRE_adj, after)
+function [msg, textTrunk, textTrunkBin] = generate_frame(str, len, xCTRL_PRE_adj, startWord, guard, after)
 
 if (idivide(len,uint32(8)) <= uint32(length(str)))
 	%truncate
@@ -20,4 +20,4 @@ end
 
 %testTextTrunkCoded = convolutionVect( testTextTrunkBin(1:floor(dataLen/24)), eccTrellis );
 
-msg = cat(1, xCTRL_PRE_adj, textTrunkBin, after);
+msg = cat(1, xCTRL_PRE_adj, guard, startWord, textTrunkBin, after);
