@@ -36,7 +36,7 @@ lineWidth = 60;
 
 %% Sim Params
 carrierFreq = 1e6+.1;
-overSampleFreq = 20e6; %300 MHz would be optimal, now targeting 250 MHz
+overSampleFreq = 80e6; %300 MHz would be optimal, now targeting 250 MHz
 overSample = 4;
 slowSample = 2;
 baseFreq = overSampleFreq/overSample; %300 MHz
