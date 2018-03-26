@@ -33,9 +33,9 @@ createTestVectors;
 
 %% Imperfections
 maxDopplerHz = .1;
-%channelSpec = 'AWGN';
+channelSpec = 'AWGN';
 %channelSpec = 'Manual';
-channelSpec = 'cost207RAx4';
+%channelSpec = 'cost207RAx4';
 %Manual Delay Set
 manualChanDelaysSymb = [1,6,11,16];
 manualChanPathGainDB = [0,-3,-10,-20];
