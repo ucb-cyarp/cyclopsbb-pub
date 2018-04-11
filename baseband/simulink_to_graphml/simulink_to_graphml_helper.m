@@ -1,9 +1,9 @@
-function simulink_to_graphml_helper( system, share_fact, verbose, parent_enabled, parent_enable_src)
+function simulink_to_graphml_helper( system, verbose, parent_enabled, parent_enable_src)
 %simulink_to_graphml_helper Converts a simulink system to a GraphML file.
 %   Detailed explanation goes here
 
 % Conducts a DFS traversal of the simulink graph, transposing to a GraphML
-% files as it goes. (Need to traverse the entire tree so may as well use
+% file as it goes. (Need to traverse the entire tree so may as well use
 % DFS rather than BFS).
 
 % Start: Virtual nodes "inputs", "outputs", "unconnected", "terminated" and 
@@ -85,5 +85,17 @@ function simulink_to_graphml_helper( system, share_fact, verbose, parent_enabled
         % NOTE: To determine if the output belongs to an enabled subsystem,
         % a stack indecating if a subsystem is enabled or not is also kept.
 
+% NOTE: Multiple driver nets are not allowed in simulink and are not
+% allowed in the GraphML translation.  However, net fanout is allowed.  The
+% net fanout is described as completely seperate arcs in the GraphML
+% translation.
+
+% NOTE: Bidirectional or tristate arcs are not allowed.  The Simulink data
+% flow graph is assumed to be a directional (not nesssisarily acyclic)
+% graph.
+        
+% ==Begin==
+
+        
 end
 
