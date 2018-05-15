@@ -13,7 +13,7 @@ disp(['Payload+Header Length (Symbols) = ', num2str(dataLenSymbols)])
 
 %simple_ascii_message;
 %or
-%seed = 67;?
+%seed = 67;
 seed = 579;
 %seed = 3997;
 %seed = 15007;
