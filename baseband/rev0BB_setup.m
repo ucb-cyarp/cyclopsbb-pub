@@ -249,7 +249,7 @@ agc_detector_taps = 16;
 agc_detector_coef = ones(1,agc_detector_taps)./agc_detector_taps;
 
 lnDomain = 16;
-lnResolution = 2^-5;
+lnResolution = 2^-3;
 
 agcSaturation = 12;
 
@@ -257,7 +257,7 @@ agc_sat_up  =  agcSaturation;
 agc_sat_low = -agcSaturation;
 
 agcExpDomain = agcSaturation;
-agcExpResolution = 2^-5;
+agcExpResolution = 2^-3;
 
 agcDesired = 0;
 %agcStep = 2^-10+2^-11;
