@@ -471,7 +471,7 @@ agcPwrAvgNum = 128;
 agc_delay_lag = 32;
 
 lmsEqDepth = 38;
-lmsStep_init =  0.006; %LMS
+lmsStep_init =  0.012; %LMS
 lmsStep_final = 0.006;
 lmsStep_meta = (lmsStep_final - lmsStep_init)/cefLen;
 
