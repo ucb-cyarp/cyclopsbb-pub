@@ -10,11 +10,14 @@ assignin('base','data_recieved',data_recieved);
 
 disp(' ')
 
+%For testing 2 packets in 1 sim (a duplicate of the generated packet)
+testTextTrunkRadixDouble = cat(1, testTextTrunkRadix, testTextTrunkRadix);
+
 %% BER Comparison
-if(length(testTextTrunkRadix) ~= length(data_recieved))
+if(length(testTextTrunkRadixDouble) ~= length(data_recieved))
     disp(['Recieved Data Length Unexpected (', num2str(length(data_recieved)), '): Likely that no data was recieved']);
 else
-    bitErrors = biterr(data_recieved, testTextTrunkRadix);
+    bitErrors = biterr(data_recieved, testTextTrunkRadixDouble);
     ber = bitErrors/(log2(radix)*length(data_recieved));
     
     EsN0 = awgnSNR + 10*log10(overSample);
