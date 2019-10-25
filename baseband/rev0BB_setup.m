@@ -180,22 +180,22 @@ for ind = 1:length(frac_lut_table_data)
 end
 
 
-averaging_samples = 128;
+averaging_samples = 64;
 averaging_num = ones(1, averaging_samples);
 averaging_denom = zeros(1, averaging_samples);
 averaging_denom(1) = 1;
 
-timing_smooth_samples = 16;
+timing_smooth_samples = 32;
 %[smooth_num, smooth_denom] = butter(smooth_samples, 0.35, 'low');
 %smooth_num = firpm(smooth_samples-1,[0 .01 .04 .5]*2,[1 1 0 0]);
 timing_smooth_num = (1/timing_smooth_samples).*ones(1, timing_smooth_samples);
 timing_smooth_denom = zeros(1, timing_smooth_samples);
 
 timing_i = 0.25;
-timing_p = 45*0.0005;
+timing_p = 25*0.0005;
 timing_d = 0;
 
-timing_pre_scale = 0.0001;
+timing_pre_scale = 0.00005;
 
 timing_integrator1_decay=0.999;
 timing_integrator2_decay=0;
