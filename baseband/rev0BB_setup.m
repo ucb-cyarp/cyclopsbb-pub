@@ -180,7 +180,7 @@ for ind = 1:length(frac_lut_table_data)
 end
 
 
-averaging_samples = 64;
+averaging_samples = 128;
 averaging_num = ones(1, averaging_samples);
 averaging_denom = zeros(1, averaging_samples);
 averaging_denom(1) = 1;
@@ -195,7 +195,7 @@ timing_i = 0.25;
 timing_p = 25*0.0005;
 timing_d = 0;
 
-timing_pre_scale = 0.00005;
+timing_pre_scale = 0.0001;
 
 timing_integrator1_decay=0.999;
 timing_integrator2_decay=0;
