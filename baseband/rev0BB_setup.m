@@ -121,12 +121,12 @@ cr_smooth_second_num = [1, 0];
 cr_smooth_second_denom = [1, -0.999];
 
 cr_i_preamp = 2^-9;
-cr_integrator1_decay = 0.999;
+cr_integrator1_decay = 1;
 cr_integrator2_decay = 0;
 
-cr_i = 0.004;
+cr_i = 0.020;
 %cr_i = 0;
-cr_p = 0.005;
+cr_p = 0.015;
 %cr_p = 0.0080;
 %cr_p = 0.0075;
 
@@ -192,7 +192,7 @@ timing_smooth_num = (1/timing_smooth_samples).*ones(1, timing_smooth_samples);
 timing_smooth_denom = zeros(1, timing_smooth_samples);
 
 timing_i = 0.25;
-timing_p = 25*0.0005;
+timing_p = 45*0.0005;
 timing_d = 0;
 
 timing_pre_scale = 0.0001;
