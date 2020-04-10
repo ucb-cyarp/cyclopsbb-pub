@@ -4,7 +4,7 @@ clear; close all; clc;
 %% Init Model
 rev0BB_startup;
 
-simulink_out = sim('rev0BB', 'SimulationMode', 'normal');
+simulink_out = sim('rev0BB', 'SimulationMode', 'accelerator');
 data_recieved = simulink_out.get('data_recieved');
 assignin('base','data_recieved',data_recieved);
 

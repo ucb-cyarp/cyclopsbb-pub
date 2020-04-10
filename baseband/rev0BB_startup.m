@@ -9,6 +9,9 @@ rev0BB_setup;
 
 disp(['Payload+Header Length (Symbols) = ', num2str(dataLenSymbols)])
 
+%% Setup Channelizer
+setup_channelizer;
+
 %% Message
 
 %simple_ascii_message;
@@ -86,10 +89,10 @@ end
 %dc_block_passband = 0.1; %MHz
 dc_block_passband = 0; %MHz
 
-%freqOffsetHz = 0;
+freqOffsetHz = 0;
 %freqOffsetHz = -1000;
 %freqOffsetHz = 2000;
-freqOffsetHz = 5000;
+% % freqOffsetHz = 5000;
 %freqOffsetHz = 10000;
 %freqOffsetHz = 20000;
 %freqOffsetHz = 100000;
