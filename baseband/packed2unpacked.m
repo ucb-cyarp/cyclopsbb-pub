@@ -4,6 +4,10 @@ function [ unpackedArray ] = packed2unpacked( packedArray, bitsPerWord, bitsPerS
 
 unpackedArray = [];
 
+if(mod(bitsPerWord, bitsPerSymbol) ~=0)
+    error('packed2unpacked currenrly requies bitsPerWord to be a multiple of bitsPerSymbol')
+end
+
 for(i = 1:length(packedArray))
     %for each of these bytes, divide into symbols
     bitString = dec2bin(packedArray(i), bitsPerWord);

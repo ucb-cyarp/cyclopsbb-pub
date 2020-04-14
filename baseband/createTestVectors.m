@@ -1,3 +1,4 @@
+function [simX, modX] = createTestVectors(radix, testMsg, testTextTrunkRadix, x_PRE, x_PRE_adj, header_len_bytes, bitsPerSymbolHeader, frame_len_bytes, bitsPerSymbol, after, pad_first)
 %pad some 0's to the front (simulate what occurs in the FPGA given the
 %modulator)
 
@@ -8,8 +9,6 @@ elseif(radix == 4) %QPSK
 else %16QAM
     modType = 2;
 end
-
-pad_first = 1000;
 
 mod_imperfection = zeros(pad_first, 1);
 testMsgFPGA = cat(1, mod_imperfection, testMsg);

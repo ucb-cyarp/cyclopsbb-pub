@@ -10,6 +10,8 @@ bitsPerSymbol = log2(radix);
 bitsPerSymbolHeader = log2(radixHeader);
 bitsPerSymbolMax = log2(radixMax);
 
+bitsPerPackedWordRx = bitsPerSymbolMax; %This is what returned from the packed data output of the Rx
+
 % 0 = BPSK
 % 1 = QPSK
 % 2 = 16QAM

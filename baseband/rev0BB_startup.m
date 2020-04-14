@@ -30,9 +30,16 @@ len = frame_len_bytes-crc_len_bytes;
 
 local_node_id = 2;
 
-[testMsg, testTextTrunkRadix, header_payload_binary, crc_binary] = generate_random_frame(seed, bitsPerSymbolHeader, payload_len_symbols, x_PRE_adj, after, radix, type, src, dst, net_id, len, crc_poly, crc_init, crc_xor);
+pad_first = 1000;
 
-createTestVectors;
+[testMsg_ch0, testTextTrunkRadix_ch0, header_payload_binary_ch0, crc_binary_ch0, header_payload_packed_ch0, transmittedBits_ch0] = generate_random_frame(seed, bitsPerSymbolHeader, payload_len_symbols, x_PRE_adj, after, radix, type, src, dst, net_id, len, crc_poly, crc_init, crc_xor, bitsPerPackedWordRx);
+[simX_ch0, modX_ch0] = createTestVectors(radix, testMsg_ch0, testTextTrunkRadix_ch0, x_PRE, x_PRE_adj, header_len_bytes, bitsPerSymbolHeader, frame_len_bytes, bitsPerSymbol, after, pad_first);
+[testMsg_ch1, testTextTrunkRadix_ch1, header_payload_binary_ch1, crc_binary_ch1, header_payload_packed_ch1, transmittedBits_ch1] = generate_random_frame(seed+1, bitsPerSymbolHeader, payload_len_symbols, x_PRE_adj, after, radix, type, src, dst, net_id, len, crc_poly, crc_init, crc_xor, bitsPerPackedWordRx);
+[simX_ch1, modX_ch1] = createTestVectors(radix, testMsg_ch1, testTextTrunkRadix_ch1, x_PRE, x_PRE_adj, header_len_bytes, bitsPerSymbolHeader, frame_len_bytes, bitsPerSymbol, after, pad_first);
+[testMsg_ch2, testTextTrunkRadix_ch2, header_payload_binary_ch2, crc_binary_ch2, header_payload_packed_ch2, transmittedBits_ch2] = generate_random_frame(seed+2, bitsPerSymbolHeader, payload_len_symbols, x_PRE_adj, after, radix, type, src, dst, net_id, len, crc_poly, crc_init, crc_xor, bitsPerPackedWordRx);
+[simX_ch2, modX_ch2] = createTestVectors(radix, testMsg_ch2, testTextTrunkRadix_ch2, x_PRE, x_PRE_adj, header_len_bytes, bitsPerSymbolHeader, frame_len_bytes, bitsPerSymbol, after, pad_first);
+[testMsg_ch3, testTextTrunkRadix_ch3, header_payload_binary_ch3, crc_binary_ch3, header_payload_packed_ch3, transmittedBits_ch3] = generate_random_frame(seed+3, bitsPerSymbolHeader, payload_len_symbols, x_PRE_adj, after, radix, type, src, dst, net_id, len, crc_poly, crc_init, crc_xor, bitsPerPackedWordRx);
+[simX_ch3, modX_ch3] = createTestVectors(radix, testMsg_ch3, testTextTrunkRadix_ch3, x_PRE, x_PRE_adj, header_len_bytes, bitsPerSymbolHeader, frame_len_bytes, bitsPerSymbol, after, pad_first);
 
 %% Imperfections
 maxDopplerHz = .1;
@@ -109,9 +116,9 @@ qScale = 1;
 %awgnSNR = 6;
 %awgnSNR = 8;
 %awgnSNR = 10;
-%awgnSNR = 15;
+awgnSNR = 15;
 %awgnSNR = 20;
-awgnSNR = 30;
+% awgnSNR = 30;
 %awgnSNR = 50;
 %awgnSNR = 92;
 %awgnSNR = 100;
