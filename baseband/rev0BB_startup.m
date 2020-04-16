@@ -96,10 +96,10 @@ end
 %dc_block_passband = 0.1; %MHz
 dc_block_passband = 0; %MHz
 
-freqOffsetHz = 0;
+% freqOffsetHz = 0;
 %freqOffsetHz = -1000;
 %freqOffsetHz = 2000;
-% % freqOffsetHz = 5000;
+freqOffsetHz = 5000;
 %freqOffsetHz = 10000;
 %freqOffsetHz = 20000;
 %freqOffsetHz = 100000;
@@ -116,7 +116,7 @@ qScale = 1;
 %awgnSNR = 6;
 %awgnSNR = 8;
 %awgnSNR = 10;
-%awgnSNR = 15;
+% awgnSNR = 15;
 %awgnSNR = 20;
 awgnSNR = 30;
 %awgnSNR = 50;
@@ -131,7 +131,7 @@ awgnSeed = 67;
 %awgnSeed = 245;
 %awgnSeed = 9996003;
 
-%txTimingOffset = 0.0002;
+% txTimingOffset = 0.0002;
 %txTimingOffset = -0.0001;
 txTimingOffset = 0;
 
