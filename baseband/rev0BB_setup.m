@@ -47,6 +47,8 @@ overSamplePer = 1/overSampleFreq;
 slowPer = overSamplePer*slowSample;
 fifo_slow_per = overSamplePer * overSample/slowSample;
 
+RxFeedbackPipelining = 128*3;
+
 eccTrellis = poly2trellis(7, [133 171 165]);
 
 maxVal = 4;
