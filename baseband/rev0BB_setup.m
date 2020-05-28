@@ -196,13 +196,20 @@ timing_smooth_num = (1/timing_smooth_samples).*ones(1, timing_smooth_samples);
 timing_smooth_denom = zeros(1, timing_smooth_samples);
 
 timing_i = 0.25;
-timing_p = 45*0.0005;
+% timing_p = 45*0.0005;
+timing_p = -1/2^2;
 timing_d = 0;
+
+timingWorstCaseOffset = overSample*1.05; %This is used by the dataFSM in the slow baseband to know how many delays to remove when signaling the early end of the packet, accounting for the pipelining delay back to the timing recovery block
 
 timing_pre_scale = 0.0001;
 
 timing_integrator1_decay=0.999;
 timing_integrator2_decay=0;
+
+timing_tolerance = 1; %This is used to allow a shift of the peak by +- 1 sample per period as the fractional delay is adjusted
+
+forceSlowRxStrobed = false; %If true, strobes (ie. samples) will be passed to the slow RX while no packet has been detected. This makes the slow Rx load more consistent but wastes power/energy as computation is not needed until a packet is detected and timing recovery occurs
 
 %for 256 smoothing
 %i=0.85, p=100, d=25 or 10
@@ -478,6 +485,21 @@ lmsEqDepth = 38;
 lmsStep_init =  0.012; %LMS
 lmsStep_final = 0.006;
 lmsStep_meta = (lmsStep_final - lmsStep_init)/cefLen;
+
+delayToOutputFromDataFSM = lmsEqDepth/2-1 + regular_pipeline*9 + cr_mult_pipeline*4; %This is how many samples
+timingRecoveryDoneSamplesEarly = floor(RxFeedbackPipelining/timingWorstCaseOffset) - delayToOutputFromDataFSM;
+timingRecoveryDoneSamplesEarlyExtraDelay = 0;
+
+%To keep the FSM simple (ie. to avoid having multiple versions), we need
+%timingRecoveryDoneSamplesEarly>=1
+if timingRecoveryDoneSamplesEarly == 0
+    timingRecoveryDoneSamplesEarlyExtraDelay = 1;
+    timingRecoveryDoneSamplesEarly = 1;
+elseif timingRecoveryDoneSamplesEarly < 0
+    timingRecoveryDoneSamplesEarlyExtraDelay = -timingRecoveryDoneSamplesEarly+1;
+    timingRecoveryDoneSamplesEarly = 1;
+end
+%Delay is added on the output of the FSM to compensate
 
 preambleSequentialDetect = 2;
 default_channel = 3;

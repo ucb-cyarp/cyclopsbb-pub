@@ -16,7 +16,7 @@ setup_channelizer;
 
 %simple_ascii_message;
 %or
-%seed = 67;?
+%seed = 67;
 seed = 579;
 %seed = 3997;
 %seed = 15007;
@@ -96,10 +96,10 @@ end
 %dc_block_passband = 0.1; %MHz
 dc_block_passband = 0; %MHz
 
-% freqOffsetHz = 0;
+freqOffsetHz = 0;
 %freqOffsetHz = -1000;
 %freqOffsetHz = 2000;
-freqOffsetHz = 5000;
+% freqOffsetHz = 5000;
 %freqOffsetHz = 10000;
 %freqOffsetHz = 20000;
 %freqOffsetHz = 100000;
@@ -118,7 +118,7 @@ qScale = 1;
 %awgnSNR = 10;
 % awgnSNR = 15;
 %awgnSNR = 20;
-awgnSNR = 30;
+ awgnSNR = 30;
 %awgnSNR = 50;
 %awgnSNR = 92;
 %awgnSNR = 100;
@@ -126,10 +126,13 @@ awgnSNR = 30;
 
 disp(['awgnSNRdB = ', num2str(awgnSNR)])
 
-awgnSeed = 67;
-%awgnSeed = 10015007;
-%awgnSeed = 245;
-%awgnSeed = 9996003;
+% awgnSeed = 67; %problem (decends but close to crossing point)
+% awgnSeed = 68; %acends
+% awgnSeed = 69;
+awgnSeed = 70; %decends
+% awgnSeed = 10015007;
+% awgnSeed = 245;
+% awgnSeed = 9996003;
 
 % txTimingOffset = 0.0002;
 %txTimingOffset = -0.0001;
@@ -139,7 +142,7 @@ SymbolFreqOffsetHz = 1/((1+txTimingOffset)*overSamplePer) - 1/overSamplePer;
 disp(['SymbolFreqOffsetHz = ', num2str(SymbolFreqOffsetHz)])
 
 rng(awgnSeed);
-txTimingPhase = rand(1);
+txTimingPhase = rand(1)*channelizerUpDownSampling;
 rxPhaseOffset = rand(1)*360; %Random
 %rxPhaseOffset = 0; %Fixed
 
