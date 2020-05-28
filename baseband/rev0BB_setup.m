@@ -195,9 +195,13 @@ timing_smooth_samples = 32;
 timing_smooth_num = (1/timing_smooth_samples).*ones(1, timing_smooth_samples);
 timing_smooth_denom = zeros(1, timing_smooth_samples);
 
-timing_i = 0.25;
+% timing_i = 0;
+timing_i = -1/(golay_type*overSample);
+timing_i_pre_scale = 1/2^1;
 % timing_p = 45*0.0005;
+% timing_p = -1/2^2;
 timing_p = -1/2^2;
+% timing_p = 0;
 timing_d = 0;
 
 timingWorstCaseOffset = overSample*1.05; %This is used by the dataFSM in the slow baseband to know how many delays to remove when signaling the early end of the packet, accounting for the pipelining delay back to the timing recovery block

@@ -129,13 +129,15 @@ disp(['awgnSNRdB = ', num2str(awgnSNR)])
 % awgnSeed = 67; %problem (decends but close to crossing point)
 % awgnSeed = 68; %acends
 % awgnSeed = 69;
-awgnSeed = 70; %decends
+% awgnSeed = 70; %decends
 % awgnSeed = 10015007;
 % awgnSeed = 245;
+% awgnSeed = 300;
+awgnSeed = 400;
 % awgnSeed = 9996003;
 
 % txTimingOffset = 0.0002;
-%txTimingOffset = -0.0001;
+% txTimingOffset = -0.0001;
 txTimingOffset = 0;
 
 SymbolFreqOffsetHz = 1/((1+txTimingOffset)*overSamplePer) - 1/overSamplePer;
