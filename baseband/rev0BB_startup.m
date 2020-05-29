@@ -138,6 +138,7 @@ awgnSeed = 67; %problem (decends but close to crossing point)
 
 % txTimingOffset = 0.0002;
 % txTimingOffset = -0.0001;
+% txTimingOffset = 0.00001;
 txTimingOffset = 0;
 
 SymbolFreqOffsetHz = 1/((1+txTimingOffset)*overSamplePer) - 1/overSamplePer;

@@ -203,9 +203,13 @@ timing_smooth_denom = zeros(1, timing_smooth_samples);
 % timing_i_pre_scale = 1/2^1;
 % timing_p = 45*0.0005;
 % timing_p = -1/2^2;
-timing_p = -1/2^1;
+timing_p = -1/2^2;
 % timing_p = 0;
 timing_d = 0;
+enableTRFreqCorrection = true;
+
+timing_differentiator_len = 61;
+timing_differentiator_grpDelay_roundUp = ceil(timing_differentiator_len/2);
 
 timingWorstCaseOffset = overSample*1.05; %This is used by the dataFSM in the slow baseband to know how many delays to remove when signaling the early end of the packet, accounting for the pipelining delay back to the timing recovery block
 
@@ -377,7 +381,8 @@ nSpectrum_STFNeg = (nSpectrum_STFRepCount*128):1:((nSpectrum_STFRepCount+1)*128-
 nSpectrum_STFFin = ((nSpectrum_STFRepCount+1)*128):1:((nSpectrum_STFRepCount+2)*128-1);
 
 %nSpectrum_STFRepCount_short = 24;
-nSpectrum_STFRepCount_short = 28;
+% nSpectrum_STFRepCount_short = 28; %Used in SC2
+nSpectrum_STFRepCount_short = 52;
 %nSpectrum_STFRepCount_short = 50;
 nSpectrum_STFRep_short = 0:1:(nSpectrum_STFRepCount_short*32-1);
 nSpectrum_STFNeg_short = (nSpectrum_STFRepCount_short*32):1:((nSpectrum_STFRepCount_short+1)*32-1);
