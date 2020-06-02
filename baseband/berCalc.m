@@ -4,6 +4,15 @@ clear; close all; clc;
 %% Init Model
 rev0BB_startup;
 
+% header_len_bytes gives the header length in bytes
+% payload_len_bytes gives the payload length
+% crc_len_bytes gives the CRC length in bytes
+% frame_len_bytes gives the payload + crc length in bytes
+
+if header_len_bytes ~= 8
+    error('Header length is unexpected');
+end 
+
 simulink_out = sim('rev0BB', 'SimulationMode', 'accelerator');
 data_recieved_packed = {simulink_out.get('data_recieved_packed_ch0'), ...
                         simulink_out.get('data_recieved_packed_ch1'), ...
@@ -11,6 +20,7 @@ data_recieved_packed = {simulink_out.get('data_recieved_packed_ch0'), ...
                         simulink_out.get('data_recieved_packed_ch3')};
 
 %For testing 2 packets in 1 sim (a duplicate of the generated packet)
+packetsPerChannel = 2;
 expected_packed_data = {transpose(cat(2, header_payload_packed_ch0, header_payload_packed_ch0)), ...
                         transpose(cat(2, header_payload_packed_ch1, header_payload_packed_ch1)), ...
                         transpose(cat(2, header_payload_packed_ch2, header_payload_packed_ch2)), ...
@@ -24,8 +34,6 @@ bitsSent = {2*transmittedBits_ch0, ...
 disp(' ')
 
 %% BER Comparison
-bitErrorsTotal = 0;
-bitsSentTotal = 0;
 
 effectiveOversmple = overSample*channelizerUpDownSampling/numChannels; %Due the channelizer, we are actually using more bandwidth than we usually would.
 %Note that the oversample ratio the inverse of the ratio of signal
@@ -43,19 +51,129 @@ else
     idealBer = berawgn(EbN0, 'psk', radix, 'nondiff');
 end
 
-for chan=0:3
-    if(length(expected_packed_data{chan+1}) ~= length(data_recieved_packed{chan+1}))
-        disp(['Recieved Data Length Unexpected (', num2str(length(data_recieved_packed)), '): Possible that no data was recieved']);
-    else
-        bitErrors = biterr(data_recieved_packed{chan+1}, expected_packed_data{chan+1});
-        ber = bitErrors/bitsSent{chan+1}; %It is possible the packed data is not completly filled
-        bitErrorsTotal = bitErrorsTotal + bitErrors;
-        bitsSentTotal = bitsSentTotal + bitsSent{chan+1};
-
-        disp(['Channel ' num2str(chan) ': SNR (dB): ', num2str(awgnSNR), ', EbN0 (dB): ', num2str(EbN0), ', BER (Header + Payload): ', num2str(ber), ' [Ideal (Payload Only): ', num2str(idealBer), '], Errors: ', num2str(bitErrors), ', Length: ', num2str(bitsSent{chan+1})]);
-    end
+if(radixHeader >= 4)
+    headerIdealBer = berawgn(EbN0, 'qam', radixHeader, 'nondiff');
+else
+    headerIdealBer = berawgn(EbN0, 'psk', radixHeader, 'nondiff');
 end
 
-totalBer = bitErrorsTotal/bitsSentTotal;
+%Decode the header
+% PACKET FORMAT
+% ###Header (BPSK)###
+% # Modulation Type #  8 bits
+% #*****************#
+% #   Packet Type   #  8 bits
+% #*****************#
+% #       Src       #  8 bits
+% #*****************#
+% #       Dst       #  8 bits
+% #*****************#
+% #     Network     # 16 bits
+% #       ID        #
+% #*****************#
+% #  Length (Bytes) # 16 bits
+% #(w/o hdr or CRC) #
+% ###################
+% #     Payload     # len bytes
+% #    (Modtype)    #
+% #                 #
+% ###################
+% #      CRC        # 4 bytes
+% #    (ModType)    #
+% ###################
 
-disp(['All Channels: SNR (dB): ', num2str(awgnSNR), ', EbN0 (dB): ', num2str(EbN0), ', BER (Header + Payload): ', num2str(totalBer), ' [Ideal (Payload Only): ', num2str(idealBer), '], Errors: ', num2str(bitErrorsTotal), ', Length: ', num2str(bitsSentTotal)]);
+headerBitErrors = 0;
+headerBits = 0;
+payloadBitErrors = 0;
+payloadBits = 0;
+packetDecodeCompleteFailure = 0;
+packetDecodeFailureDueToModulationFieldCorruption = 0;
+
+disp(['SNR (dB): ', num2str(awgnSNR), ', EbN0 (dB): ', num2str(EbN0)])
+
+for chan=0:3
+    disp(['  Channel: ' num2str(chan)']);
+    cursor = 1;
+    expectedCursor = 1;
+    headerBitErrorsCh = 0;
+    headerBitsCh = 0;
+    payloadBitErrorsCh = 0;
+    payloadBitsCh = 0;
+    packetDecodeCompleteFailureCh = 0;
+    packetDecodeFailureDueToModulationFieldCorruptionCh = 0;
+    
+    for packet = 0:(packetsPerChannel-1)
+        if cursor + header_len_bytes-1 > length(data_recieved_packed{chan+1})
+           %The header was not completely recieved, complete failure
+           packetDecodeCompleteFailureCh = packetDecodeCompleteFailureCh+1;
+%            disp(['    Channel: ' num2str(chan) ' Packet: ' num2str(packet) ' failed to decode']);
+        else
+            modulationRx = data_recieved_packed{chan+1}(cursor);
+            radixRx = modTypeToRadix(modulationRx);
+            
+            %Get the uncoded BER for the header
+            headerBitErrorsLocal = biterr(data_recieved_packed{chan+1}(cursor:(cursor+header_len_bytes-1)), expected_packed_data{chan+1}(expectedCursor:(expectedCursor+header_len_bytes-1)));
+            headerBERLocal = headerBitErrorsLocal/header_len_bytes*8;
+            
+            cursor = cursor + header_len_bytes;
+            expectedCursor = expectedCursor + header_len_bytes;
+            
+            headerBitErrorsCh = headerBitErrorsCh + headerBitErrorsLocal;
+            headerBitsCh = headerBitsCh + header_len_bytes*8;
+
+            %Check if decoded radix is different from expected radix
+            if(radixRx ~= radix)
+                packetDecodeFailureDueToModulationFieldCorruptionCh = packetDecodeFailureDueToModulationFieldCorruptionCh+1;
+%                 disp(['    Channel: ' num2str(chan) ' Packet: ' num2str(packet) ' failed to decode due to an error in the modulation field of the header.  Header BER: ' num2str(headerBERLocal)]);
+                
+                %Advance cursor based on what the reciever thought the
+                %radix was
+                payloadLengthRx = fixedPayloadLength(radixRx);
+                frameLengthLengthRx = payloadLengthRx + crc_len_bytes;
+                cursor = cursor + frameLengthLengthRx;
+                expectedCursor = expectedCursor + frame_len_bytes;
+            else
+                %Calculate BER for the payload
+
+                if(cursor + frame_len_bytes-1 > length(data_recieved_packed{chan+1}))
+                    error('Length of recieved frame does not match length expected for given modulation scheme');
+                else
+                    payloadBitErrorsLocal = biterr(data_recieved_packed{chan+1}(cursor:(cursor+frame_len_bytes-1)), expected_packed_data{chan+1}(expectedCursor:(expectedCursor+frame_len_bytes-1)));
+                    payloadBERLocal = payloadBitErrorsLocal/frame_len_bytes*8; %It is possible the packed data is not completly filled
+                    payloadBitErrorsCh = payloadBitErrorsCh + payloadBitErrorsLocal;
+                    payloadBitsCh = payloadBitsCh + frame_len_bytes*8;
+                    cursor = cursor + frame_len_bytes;
+                    expectedCursor = expectedCursor + frame_len_bytes;
+
+                    disp(['    Packet: ' num2str(packet) ', BER (Header): ' num2str(headerBERLocal) ' [Ideal: ' num2str(headerIdealBer) '], BER (Payload): ' num2str(payloadBERLocal) ' [Ideal: ' num2str(idealBer) '], Errors (Header): ' num2str(headerBitErrorsLocal) '/' num2str(header_len_bytes*8) ', Errors (Payload): ' num2str(payloadBitErrorsLocal) '/' num2str(frame_len_bytes*8)]);
+                end
+            end
+        end
+    end
+    
+    %Report Channel & Accumulate Global Stats
+    headerBitErrors = headerBitErrors + headerBitErrorsCh;
+    headerBits = headerBits + headerBitsCh;
+    payloadBitErrors = payloadBitErrors + payloadBitErrorsCh;
+    payloadBits = payloadBits + payloadBitsCh;
+    packetDecodeCompleteFailure = packetDecodeCompleteFailure + packetDecodeCompleteFailureCh;
+    packetDecodeFailureDueToModulationFieldCorruption = packetDecodeFailureDueToModulationFieldCorruption + packetDecodeFailureDueToModulationFieldCorruptionCh;
+
+    headerBERCh = headerBitErrorsCh/headerBitsCh;
+    payloadBERCh = payloadBitErrorsCh/payloadBitsCh;
+    disp(['    Channel Summary: Packet Decode Failures (Did Not Rx): ' num2str(packetDecodeCompleteFailureCh) ', Packet Decode Failures (Corrupted Modulation Fld): ' num2str(packetDecodeFailureDueToModulationFieldCorruptionCh) ', BER (Header): ' num2str(headerBERCh) ' [Ideal: ' num2str(headerIdealBer) '], BER (Payload): ' num2str(payloadBERCh) ' [Ideal: ' num2str(idealBer) '], Errors (Header): ' num2str(headerBitErrorsCh) '/' num2str(headerBitsCh) ', Errors (Payload): ' num2str(payloadBitErrorsCh) '/' num2str(payloadBitsCh)]);
+
+end
+
+%Report Overall
+
+%Note, packets with complete or partial decode errors are not incuded
+%in the BER calculation for the payload.  Packets with partial decode errors
+%are included in the BER calculation for the header.  Packet failures
+%are reported seperatly.
+
+%Report Total
+totalHeaderBer = headerBitErrors/headerBits;
+totalPayloadBer = payloadBitErrors/payloadBits;
+disp(['    Global Summary: Packet Decode Failures (Did Not Rx): ' num2str(packetDecodeCompleteFailure) ', Packet Decode Failures (Corrupted Modulation Fld): ' num2str(packetDecodeFailureDueToModulationFieldCorruption) ', BER (Header): ' num2str(totalHeaderBer) ' [Ideal: ' num2str(headerIdealBer) '], BER (Payload): ' num2str(totalPayloadBer) ' [Ideal: ' num2str(idealBer) '], Errors (Header): ' num2str(headerBitErrors) '/' num2str(headerBits) ', Errors (Payload): ' num2str(payloadBitErrorsCh) '/' num2str(payloadBits)]);
+    

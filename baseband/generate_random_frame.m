@@ -6,13 +6,7 @@ bitsPerSymbol = log2(radix);
 
 payload_symbols = randi(radix,payloadLenSymbols,1)-1;
 
-if(radix == 2) %BPSK
-    modType = 0;
-elseif(radix == 4) %QPSK
-    modType = 1;
-else %16QAM
-    modType = 2;
-end
+modType = radixToModType(radix);
 
 header_symbols = transpose([packed2unpacked([modType, type, src, dst], 8, bitsPerSymbolHeader), packed2unpacked([net_id], 16, bitsPerSymbolHeader), packed2unpacked([len], 16, bitsPerSymbolHeader)]);
 

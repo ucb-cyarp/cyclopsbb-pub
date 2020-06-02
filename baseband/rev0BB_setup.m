@@ -3,7 +3,7 @@ header_len_bytes = 8; %This was a 32 bit CRC.  Will now be a 8 byte header of mo
 mod_scheme_len_bytes = 1;
 crc_len_bytes = 4;
 
-radix = 16; %QAM16
+radix = 4; %QAM16
 radixHeader = 2; %BPSK
 radixMax = 16;
 bitsPerSymbol = log2(radix);
@@ -18,17 +18,9 @@ bitsPerPackedWordRx = bitsPerSymbolMax; %This is what returned from the packed d
 modKeys = [0, 1, 2];
 modBPS  = [1, 2, 4];
 
-mtu_eth = 1500+26+2;%+2 is so that the result fits evenly in 32 bit words
-
 %Set the frame size based on the modulation scheme to maintain the same
 %number of symbols per packet.
-if(radix == 2) %BPSK
-    payload_len_bytes = mtu_eth;
-elseif(radix == 4) %QPSK
-    payload_len_bytes = mtu_eth*2+4;
-else %16QAM
-    payload_len_bytes = mtu_eth*4+12;
-end
+payload_len_bytes = fixedPayloadLength(radix);
 
 frame_len_bytes = payload_len_bytes + crc_len_bytes;
 dataLenSymbols = header_len_bytes*8/bitsPerSymbolHeader + frame_len_bytes*8/bitsPerSymbol; %/2 for QPSK
@@ -203,7 +195,7 @@ timing_smooth_denom = zeros(1, timing_smooth_samples);
 % timing_i_pre_scale = 1/2^1;
 % timing_p = 45*0.0005;
 % timing_p = -1/2^2;
-timing_p = -1/2^2;
+timing_p = -1/2^2 - 1/2^3;
 % timing_p = 0;
 timing_d = 0;
 enableTRFreqCorrection = true;
@@ -382,7 +374,7 @@ nSpectrum_STFFin = ((nSpectrum_STFRepCount+1)*128):1:((nSpectrum_STFRepCount+2)*
 
 %nSpectrum_STFRepCount_short = 24;
 % nSpectrum_STFRepCount_short = 28; %Used in SC2
-nSpectrum_STFRepCount_short = 52;
+nSpectrum_STFRepCount_short = 60;
 %nSpectrum_STFRepCount_short = 50;
 nSpectrum_STFRep_short = 0:1:(nSpectrum_STFRepCount_short*32-1);
 nSpectrum_STFNeg_short = (nSpectrum_STFRepCount_short*32):1:((nSpectrum_STFRepCount_short+1)*32-1);
