@@ -3,7 +3,7 @@ header_len_bytes = 8; %This was a 32 bit CRC.  Will now be a 8 byte header of mo
 mod_scheme_len_bytes = 1;
 crc_len_bytes = 4;
 
-radix = 4; %QAM16
+radix = 16; %QAM16
 radixHeader = 2; %BPSK
 radixMax = 16;
 bitsPerSymbol = log2(radix);
