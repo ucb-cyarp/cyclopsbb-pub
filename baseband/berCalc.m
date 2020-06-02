@@ -13,11 +13,15 @@ if header_len_bytes ~= 8
     error('Header length is unexpected');
 end 
 
-simulink_out = sim('rev0BB', 'SimulationMode', 'accelerator');
+simStartTime = datetime('now');
+simulink_out = sim('rev0BB', 'SimulationMode', 'rapid');
 data_recieved_packed = {simulink_out.get('data_recieved_packed_ch0'), ...
                         simulink_out.get('data_recieved_packed_ch1'), ...
                         simulink_out.get('data_recieved_packed_ch2'), ...
                         simulink_out.get('data_recieved_packed_ch3')};
+simEndTime = datetime('now');
+simDuration = simEndTime - simStartTime;
+disp(['Sim Ran in ' char(simDuration)])
 
 %For testing 2 packets in 1 sim (a duplicate of the generated packet)
 packetsPerChannel = 2;
@@ -175,5 +179,5 @@ end
 %Report Total
 totalHeaderBer = headerBitErrors/headerBits;
 totalPayloadBer = payloadBitErrors/payloadBits;
-disp(['    Global Summary: Packet Decode Failures (Did Not Rx): ' num2str(packetDecodeCompleteFailure) ', Packet Decode Failures (Corrupted Modulation Fld): ' num2str(packetDecodeFailureDueToModulationFieldCorruption) ', BER (Header): ' num2str(totalHeaderBer) ' [Ideal: ' num2str(headerIdealBer) '], BER (Payload): ' num2str(totalPayloadBer) ' [Ideal: ' num2str(idealBer) '], Errors (Header): ' num2str(headerBitErrors) '/' num2str(headerBits) ', Errors (Payload): ' num2str(payloadBitErrorsCh) '/' num2str(payloadBits)]);
+disp(['  Global Summary: Packet Decode Failures (Did Not Rx): ' num2str(packetDecodeCompleteFailure) ', Packet Decode Failures (Corrupted Modulation Fld): ' num2str(packetDecodeFailureDueToModulationFieldCorruption) ', BER (Header): ' num2str(totalHeaderBer) ' [Ideal: ' num2str(headerIdealBer) '], BER (Payload): ' num2str(totalPayloadBer) ' [Ideal: ' num2str(idealBer) '], Errors (Header): ' num2str(headerBitErrors) '/' num2str(headerBits) ', Errors (Payload): ' num2str(payloadBitErrors) '/' num2str(payloadBits)]);
     
