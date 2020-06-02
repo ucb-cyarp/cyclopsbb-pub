@@ -3,6 +3,7 @@ clear; close all; clc;
 
 warning off;
 
+%Perform Initial Setup
 rev0BB_startup;
 
 model_name = 'rev0BB';
@@ -16,88 +17,89 @@ tmpDir = tempname;
 mkdir(tmpDir);
 cd(tmpDir);
 load_system(model_name);
-%rev0BB_setup;
 
-%% Init Model
-trials = 20;
-dBSnrRange = -4:1:20;
+
+%% Sweep Parameters
+trials = 1;
+% dBSnrRange = -4:1:20;
+dBSnrRange = [-3, 0, 3, 6, 10, 20, 30];
 indRange = 1:1:length(dBSnrRange);
-
-rev0BB_setup;
 
 %freqOffsetHz = 0;
 %txTimingOffset = 0;
 freqOffsetHz = 5000;
 txTimingOffset = 0;
 
-iOffset = 0.00;
-qOffset = 0.00;
+%% Sweep
 
-trial_bit_errors = zeros(trials, length(indRange));
-trial_failures = zeros(trials, length(indRange));
+trial_bit_payload_errors = zeros(trials, length(indRange));
+trial_bit_payload_bits_sent = zeros(trials, length(indRange));
+trial_failures_complete = zeros(trials, length(indRange));
+trial_failures_modulation_field_corrupted = zeros(trials, length(indRange));
+
+idealBer = zeros(1, length(indRange));
+EbN0 = zeros(1, length(indRange));
+sim_failures_complete = zeros(1, length(indRange));
+sim_failures_modulation_field_corrupted = zeros(1, length(indRange));
+sim_ber = zeros(1, length(indRange));
 
 for dBSnrInd = indRange
     awgnSNR = dBSnrRange(dBSnrInd);
     
     %See https://www.mathworks.com/help/comm/ug/awgn-channel.html for a
     %consise explanation of the difference between SNR, EsN0, and EbN0
-    EsN0 = dBSnrRange(dBSnrInd) + 10*log10(overSample);
-    infoBitsPerSymbol = log2(radix); %Change when coding introduced
-    EbN0 = EsN0 - 10*log10(infoBitsPerSymbol);
-    idealBer(dBSnrInd) = berawgn(EbN0, 'psk', radix, 'nondiff');
-    disp(['SNR (dB): ', num2str(dBSnrRange(dBSnrInd)), ', EbN0 (dB): ', num2str(EbN0), ', Ideal BER (AWGN): ', num2str(idealBer(dBSnrInd))]);
+    effectiveOversmple = overSample*channelizerUpDownSampling/numChannels; %Due the channelizer, we are actually using more bandwidth than we usually would.
+    [EbN0Loc, EsN0Loc, idealBerLoc] = getIdealBER(awgnSNR, effectiveOversmple, radix);
+    
+    idealBer(dBSnrInd) = idealBerLoc;
+    EbN0(dBSnrInd) = EbN0Loc;
+    disp(['SNR (dB): ', num2str(dBSnrRange(dBSnrInd)), ', EbN0 (dB): ', num2str(EbN0Loc), ', Ideal BER (AWGN): ', num2str(idealBer(dBSnrInd))]);
     
     for trial = 1:1:trials
         seed = abs(dBSnrRange(dBSnrInd)*1000+trial);
         awgnSeed = abs(dBSnrRange(dBSnrInd)*1000+trial+10000000);
-        [testMsg, testTextTrunkRadix] = generate_random_frame(seed, payload_len_symbols, x_PRE_adj, after, radix, type, src, dst, len, crc_poly, crc_init, crc_xor);
         
-        createTestVectors;
+        %Setup the Simulation
+        rev0BB_startup_core; %Using the core function to avoid resetting workspace and overriding sweep parameters
         
-        rng(awgnSeed+100);
-        txTimingPhase = rand(1);
-        rxPhaseOffset = rand(1)*360;
+        %Run BER Calc Point
+        berCalcPoint;
         
-        simulink_out = sim(model_name, 'SimulationMode', 'rapid');
-        data_recieved = simulink_out.get('data_recieved');
-        assignin('base','data_recieved',data_recieved);
+        %Accumulate 
         
-        if(length(testTextTrunkRadix) ~= length(data_recieved))
-            disp(['SNR: ', num2str(dBSnrRange(dBSnrInd)),' Trial: ', num2str(trial), ' Recieved Data Length Unexpected (', num2str(length(data_recieved)), '): Likely that no data was recieved']);
-            bitErrors = length(testTextTrunkRadix);
-            failure = 1;
-        else
-            bitErrors = biterr(data_recieved, testTextTrunkRadix);
-            ber = bitErrors/(log2(radix)*length(data_recieved));
-            failure = 0;
-            disp(['SNR: ', num2str(dBSnrRange(dBSnrInd)),' Trial: ', num2str(trial), ' BER: ', num2str(ber), ', Errors: ', num2str(bitErrors), ', Length: ', num2str((log2(radix)*length(data_recieved)))]);
-        end
-        
-        trial_failures(trial, dBSnrInd) = failure;
-        trial_bit_errors(trial, dBSnrInd) = bitErrors;
+        trial_failures_complete(trial, dBSnrInd) = packetDecodeCompleteFailure;
+        trial_failures_modulation_field_corrupted(trial, dBSnrInd) = packetDecodeFailureDueToModulationFieldCorruption;
+        trial_bit_payload_errors(trial, dBSnrInd) = payloadBitErrors;
+        trial_bit_payload_bits_sent(trial, dBSnrInd) = payloadBits;
     end
     
-    sim_failures (dBSnrInd) = sum(trial_failures(:,dBSnrInd));
-    sim_ber(dBSnrInd) = sum(trial_bit_errors(:,dBSnrInd))/(trials*(log2(radix)*length(data_recieved)));
+    sim_failures_complete(dBSnrInd) = sum(trial_failures_complete(:,dBSnrInd));
+    sim_failures_modulation_field_corrupted(dBSnrInd) = sum(trial_failures_modulation_field_corrupted(:,dBSnrInd));
+    sim_ber(dBSnrInd) = sum(trial_bit_payload_errors(:,dBSnrInd))/sum(trial_bit_payload_bits_sent(:,dBSnrInd));
 end
 
 %% Plot
 
 fig1 = figure;
-semilogy(dBSnrRange + 10*log10(overSample) - 10*log10(infoBitsPerSymbol), idealBer, 'b-');
+semilogy(EbN0, idealBer, 'b-');
 hold all;
-semilogy(dBSnrRange + 10*log10(overSample) - 10*log10(infoBitsPerSymbol), sim_ber, 'r*-');
+semilogy(EbN0, sim_ber, 'r*-');
 xlabel('Eb/N0 (dB)')
 ylabel('BER')
-legend('Theoretical (AWGN)', ['Simulation (', channelSpec, ')']);
-title(['Baseband Simulation (', channelSpec, ') vs. Theoretical (Uncoded Coherent QPSK over AWGN)'])
+legend('Theoretical (AWGN)', ['Simulation (', channelSpec, ') - Header Excluded']);
+
+title(['Baseband Simulation (', channelSpec, ') - Failures Excluded vs. Theoretical (Uncoded Coherent ' radixToModulationStr(radix) ' over AWGN)'])
 grid on;
 
 fig2 = figure;
-bar(dBSnrRange + 10*log10(overSample) - 10*log10(infoBitsPerSymbol), sim_failures);
+bar(EbN0, sim_failures_complete);
+hold all;
+bar(EbN0, sim_failures_modulation_field_corrupted);
+hold off;
 xlabel('Eb/N0 (dB)')
 ylabel('Number of Packet Decode Failures')
-title(['Number of Packet Decode Failures (No Valid Frame Detected) for ' num2str(trials), ' Trials'])
+legend('Complete Packet Decode Failure', 'Packet Decode Failure Due to Corrupted Modulation Field');
+title(['Packet Decode Failures for ' num2str(trials) ' Trials'])
 grid on;
 
 
