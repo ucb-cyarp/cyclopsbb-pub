@@ -20,14 +20,15 @@ load_system(model_name);
 
 
 %% Sweep Parameters
-trials = 1;
+trials = 5;
 % dBSnrRange = -4:1:20;
 dBSnrRange = [-3, 0, 3, 6, 10, 20, 30];
 indRange = 1:1:length(dBSnrRange);
 
 %freqOffsetHz = 0;
 %txTimingOffset = 0;
-freqOffsetHz = 5000;
+% freqOffsetHz = 5000;
+freqOffsetHz = 0;
 txTimingOffset = 0;
 
 %% Sweep
@@ -37,8 +38,9 @@ trial_bit_payload_bits_sent = zeros(trials, length(indRange));
 trial_failures_complete = zeros(trials, length(indRange));
 trial_failures_modulation_field_corrupted = zeros(trials, length(indRange));
 
-idealBer = zeros(1, length(indRange));
-EbN0 = zeros(1, length(indRange));
+%Avoid collisions from variables in berCalcPoint script
+sim_idealBer = zeros(1, length(indRange));
+sim_EbN0 = zeros(1, length(indRange));
 sim_failures_complete = zeros(1, length(indRange));
 sim_failures_modulation_field_corrupted = zeros(1, length(indRange));
 sim_ber = zeros(1, length(indRange));
@@ -51,8 +53,8 @@ for dBSnrInd = indRange
     effectiveOversmple = overSample*channelizerUpDownSampling/numChannels; %Due the channelizer, we are actually using more bandwidth than we usually would.
     [EbN0Loc, EsN0Loc, idealBerLoc] = getIdealBER(awgnSNR, effectiveOversmple, radix);
     
-    idealBer(dBSnrInd) = idealBerLoc;
-    EbN0(dBSnrInd) = EbN0Loc;
+    sim_idealBer(dBSnrInd) = idealBerLoc;
+    sim_EbN0(dBSnrInd) = EbN0Loc;
     disp(['SNR (dB): ', num2str(dBSnrRange(dBSnrInd)), ', EbN0 (dB): ', num2str(EbN0Loc), ', Ideal BER (AWGN): ', num2str(idealBer(dBSnrInd))]);
     
     for trial = 1:1:trials
@@ -81,9 +83,9 @@ end
 %% Plot
 
 fig1 = figure;
-semilogy(EbN0, idealBer, 'b-');
+semilogy(sim_EbN0, sim_idealBer, 'b-');
 hold all;
-semilogy(EbN0, sim_ber, 'r*-');
+semilogy(sim_EbN0, sim_ber, 'r*-');
 xlabel('Eb/N0 (dB)')
 ylabel('BER')
 legend('Theoretical (AWGN)', ['Simulation (', channelSpec, ') - Header Excluded']);
@@ -92,12 +94,10 @@ title(['Baseband Simulation (', channelSpec, ') - Failures Excluded vs. Theoreti
 grid on;
 
 fig2 = figure;
-bar(EbN0, sim_failures_complete);
-hold all;
-bar(EbN0, sim_failures_modulation_field_corrupted);
-hold off;
+sim_failures = [transpose(sim_failures_complete), transpose(sim_failures_modulation_field_corrupted)];
+bar(sim_EbN0, sim_failures, 'stacked');
 xlabel('Eb/N0 (dB)')
-ylabel('Number of Packet Decode Failures')
+ylabel('Number of Packet Decode Failures (Stacked)')
 legend('Complete Packet Decode Failure', 'Packet Decode Failure Due to Corrupted Modulation Field');
 title(['Packet Decode Failures for ' num2str(trials) ' Trials'])
 grid on;
