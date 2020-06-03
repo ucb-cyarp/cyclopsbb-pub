@@ -20,7 +20,7 @@ load_system(model_name);
 
 
 %% Sweep Parameters
-trials = 5;
+trials = 1;
 % dBSnrRange = -4:1:20;
 dBSnrRange = [-3, 0, 3, 6, 10, 20, 30];
 indRange = 1:1:length(dBSnrRange);
@@ -55,7 +55,7 @@ for dBSnrInd = indRange
     
     sim_idealBer(dBSnrInd) = idealBerLoc;
     sim_EbN0(dBSnrInd) = EbN0Loc;
-    disp(['SNR (dB): ', num2str(dBSnrRange(dBSnrInd)), ', EbN0 (dB): ', num2str(EbN0Loc), ', Ideal BER (AWGN): ', num2str(idealBer(dBSnrInd))]);
+    disp(['SNR (dB): ', num2str(dBSnrRange(dBSnrInd)), ', EbN0 (dB): ', num2str(EbN0Loc), ', Ideal BER (AWGN): ', num2str(idealBerLoc)]);
     
     for trial = 1:1:trials
         seed = abs(dBSnrRange(dBSnrInd)*1000+trial);
