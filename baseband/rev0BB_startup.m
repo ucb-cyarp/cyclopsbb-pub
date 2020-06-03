@@ -30,8 +30,8 @@ manualChanPathGainDB = [0,-3,-10,-20];
 manualChanPathGain = [0.25, 0.25, 0.25, 0.25];
 
 %awgnSNR = -6;
-%awgnSNR = -3;
-% awgnSNR = 0;
+% awgnSNR = -3;
+awgnSNR = 0;
 % awgnSNR = 2;
 %awgnSNR = 5.5;
 % awgnSNR = 6;
@@ -39,7 +39,7 @@ manualChanPathGain = [0.25, 0.25, 0.25, 0.25];
 % awgnSNR = 10;
 % awgnSNR = 15;
 %awgnSNR = 20;
- awgnSNR = 30;
+% awgnSNR = 30;
 %awgnSNR = 50;
 %awgnSNR = 92;
 %awgnSNR = 100;
@@ -63,7 +63,7 @@ rev0BB_startup_core;
 
 %% Start Simulink
 disp('Opening Simulink ...')
-%open_system('rev0BB')
+open_system('rev0BB')
 %open_system('gm_rev0BB')
-load_system('rev0BB')
+%load_system('rev0BB')
 disp('Ready to Simulate')

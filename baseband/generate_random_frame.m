@@ -6,7 +6,7 @@ bitsPerSymbol = log2(radix);
 
 payload_symbols = randi(radix,payloadLenSymbols,1)-1;
 
-modType = radixToModType(radix);
+modType = radixToModType(radix, true); %Modtype in packet is repcoded
 
 header_symbols = transpose([packed2unpacked([modType, type, src, dst], 8, bitsPerSymbolHeader), packed2unpacked([net_id], 16, bitsPerSymbolHeader), packed2unpacked([len], 16, bitsPerSymbolHeader)]);
 

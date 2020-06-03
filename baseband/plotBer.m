@@ -90,7 +90,7 @@ xlabel('Eb/N0 (dB)')
 ylabel('BER')
 legend('Theoretical (AWGN)', ['Simulation (', channelSpec, ') - Header Excluded']);
 
-title(['Baseband Simulation (', channelSpec, ') - Failures Excluded vs. Theoretical (Uncoded Coherent ' radixToModulationStr(radix) ' over AWGN)'])
+title(['Baseband Simulation (', channelSpec, ') - Failures Excluded (Modulation Field Rep3 Coded) vs. Theoretical (Uncoded Coherent ' radixToModulationStr(radix) ' over AWGN)'])
 grid on;
 
 fig2 = figure;
@@ -99,7 +99,7 @@ bar(sim_EbN0, sim_failures, 'stacked');
 xlabel('Eb/N0 (dB)')
 ylabel('Number of Packet Decode Failures (Stacked)')
 legend('Complete Packet Decode Failure', 'Packet Decode Failure Due to Corrupted Modulation Field');
-title(['Packet Decode Failures for ' num2str(trials) ' Trials'])
+title(['Packet Decode Failures for ' num2str(trials) ' Trials (Modulation Field Rep3 Coded)'])
 grid on;
 
 

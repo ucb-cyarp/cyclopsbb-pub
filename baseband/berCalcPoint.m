@@ -115,7 +115,18 @@ for chan=0:3
                 error('Header Decoding Needs to be updated for new packing');
             end
             modulationRx = data_recieved_packed{chan+1}(cursor) + data_recieved_packed{chan+1}(cursor+1)*2^4;
-            radixRx = modTypeToRadix(modulationRx);
+            
+            %Perform the majority function because the modulation type is
+            %repcoded
+            modulationRxInt = uint8(modulationRx);
+            
+            repA = bitand(modulationRxInt, 3);
+            repB = bitand(bitsrl(modulationRxInt, 2), 3);
+            repC = bitand(bitsrl(modulationRxInt, 4), 3);
+            
+            modulationRxDecoded = bitor(bitor(bitand(repA, repB), bitand(repA, repC)), bitand(repB, repC));
+            
+            radixRx = modTypeToRadix(modulationRxDecoded);
             
             %Get the uncoded BER for the header
             headerBitErrorsLocal = biterr(data_recieved_packed{chan+1}(cursor:(cursor+header_len_bytes*lengthMultiplier-1)), expected_packed_data{chan+1}(expectedCursor:(expectedCursor+header_len_bytes*lengthMultiplier-1)));
