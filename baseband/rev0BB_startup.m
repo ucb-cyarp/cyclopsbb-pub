@@ -31,14 +31,14 @@ manualChanPathGain = [0.25, 0.25, 0.25, 0.25];
 
 %awgnSNR = -6;
 % awgnSNR = -3;
-awgnSNR = 0;
+% awgnSNR = 0;
 % awgnSNR = 2;
 %awgnSNR = 5.5;
 % awgnSNR = 6;
 %awgnSNR = 8;
 % awgnSNR = 10;
-% awgnSNR = 15;
-%awgnSNR = 20;
+awgnSNR = 15;
+% awgnSNR = 20;
 % awgnSNR = 30;
 %awgnSNR = 50;
 %awgnSNR = 92;

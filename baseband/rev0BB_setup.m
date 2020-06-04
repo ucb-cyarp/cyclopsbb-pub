@@ -195,7 +195,7 @@ timing_smooth_denom = zeros(1, timing_smooth_samples);
 % timing_i_pre_scale = 1/2^1;
 % timing_p = 45*0.0005;
 % timing_p = -1/2^2;
-timing_p = -1/2^2 - 1/2^3;
+timing_p = -1/2^2 -1/2^3;
 % timing_p = 0;
 timing_d = 0;
 enableTRFreqCorrection = true;
@@ -210,7 +210,7 @@ timing_pre_scale = 0.0001;
 timing_integrator1_decay=0.999;
 timing_integrator2_decay=0;
 
-timing_tolerance = 1; %This is used to allow a shift of the peak by +- 1 sample per period as the fractional delay is adjusted
+timing_tolerance = 2; %This is used to allow a shift of the peak by +- 1 sample per period as the fractional delay is adjusted
 
 forceSlowRxStrobed = false; %If true, strobes (ie. samples) will be passed to the slow RX while no packet has been detected. This makes the slow Rx load more consistent but wastes power/energy as computation is not needed until a packet is detected and timing recovery occurs
 
