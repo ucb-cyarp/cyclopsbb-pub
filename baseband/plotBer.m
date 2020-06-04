@@ -20,9 +20,9 @@ load_system(model_name);
 
 
 %% Sweep Parameters
-trials = 1;
+trials = 15;
 % dBSnrRange = -4:1:20;
-dBSnrRange = [-3, 0, 3, 6, 10, 20, 30];
+dBSnrRange = [-3, 0, 3, 6, 10, 15, 20, 25];
 indRange = 1:1:length(dBSnrRange);
 
 %freqOffsetHz = 0;
