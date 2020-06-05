@@ -214,6 +214,10 @@ timing_tolerance = 2; %This is used to allow a shift of the peak by +- 1 sample 
 
 forceSlowRxStrobed = false; %If true, strobes (ie. samples) will be passed to the slow RX while no packet has been detected. This makes the slow Rx load more consistent but wastes power/energy as computation is not needed until a packet is detected and timing recovery occurs
 
+trEarlyLateAvgNumSamp = 256;
+trEarlyLatePGain = -0.0175;
+% trEarlyLatePGain = 0;
+
 %for 256 smoothing
 %i=0.85, p=100, d=25 or 10
 
