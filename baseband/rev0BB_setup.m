@@ -210,12 +210,23 @@ timing_pre_scale = 0.0001;
 timing_integrator1_decay=0.999;
 timing_integrator2_decay=0;
 
-timing_tolerance = 2; %This is used to allow a shift of the peak by +- 1 sample per period as the fractional delay is adjusted
+timing_tolerance = 4; %This is used to allow a shift of the peak by +- 1 sample per period as the fractional delay is adjusted
+%TOOD: Optimize setting
+timing_cefEarlyWarningTollerance = 20; %This is because CEF early warning does not have its delay corrected.  As a result, extra tollerance is needed to account for any integer delay changes that occur durring the STF and should be based on the expected maximum timing frequency offset
 
 forceSlowRxStrobed = false; %If true, strobes (ie. samples) will be passed to the slow RX while no packet has been detected. This makes the slow Rx load more consistent but wastes power/energy as computation is not needed until a packet is detected and timing recovery occurs
 
 trEarlyLateAvgNumSamp = 256;
 trEarlyLatePGain = -0.0175;
+
+trTappedDelayBase = 40;
+trFarrowTaps = 4;
+trTappedDelayLen = trTappedDelayBase+trFarrowTaps; %Include samples for the interpolator
+trInitialDelay = round((trTappedDelayLen+1-trFarrowTaps)/2+1);
+
+trLenToFSM = 32/2 + 6*regular_pipeline + 7*mult_pipeline +timing_differentiator_grpDelay_roundUp;
+trMatch = mod(trLenToFSM, overSample);
+
 % trEarlyLatePGain = 0;
 
 %for 256 smoothing
@@ -440,6 +451,8 @@ dst_field_len = 8;
 flush_delay = regular_pipeline*2+mult_pipeline+4; %4 for a little additional slack
 
 golay_type = 32;
+
+timingMaxSymbols = dataLenSymbols + length(x_CEF) + length(x_STF)/x_STFRepCount*2+100; %This is to catch any weird case where a reset is not recieved by the timing block.
 
 %Pkt Types
 std_pkt_type = 0;
