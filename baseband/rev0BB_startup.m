@@ -37,26 +37,26 @@ manualChanPathGain = [0.25, 0.25, 0.25, 0.25];
 % awgnSNR = 6;
 %awgnSNR = 8;
 % awgnSNR = 10;
-% awgnSNR = 15;
+awgnSNR = 15;
 % awgnSNR = 20;
-awgnSNR = 30;
+% awgnSNR = 30;
 %awgnSNR = 50;
 %awgnSNR = 92;
 %awgnSNR = 100;
 %awgnSNR = 1000;
 
-% freqOffsetHz = 0;
+freqOffsetHz = 0;
 % freqOffsetHz = -1000;
-freqOffsetHz = 2000;
+% freqOffsetHz = 2000;
 % freqOffsetHz = 5000;
 %freqOffsetHz = 10000;
 %freqOffsetHz = 20000;
 %freqOffsetHz = 100000;
 
-txTimingOffset = 0.0002;
+% txTimingOffset = 0.0002;
 % txTimingOffset = -0.0001;
 % txTimingOffset = 0.00001;
-% txTimingOffset = 0;
+txTimingOffset = 0;
 
 %% Setup Parameters
 rev0BB_startup_core;
