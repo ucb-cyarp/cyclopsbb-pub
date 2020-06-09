@@ -22,8 +22,8 @@ awgnSeed = 67; %problem (decends but close to crossing point)
 %% Imperfections
 maxDopplerHz = .1;
 channelSpec = 'AWGN';
-%channelSpec = 'Manual';
-%channelSpec = 'cost207RAx4';
+% channelSpec = 'Manual';
+% channelSpec = 'cost207RAx4';
 %Manual Delay Set
 manualChanDelaysSymb = [1,6,11,16];
 manualChanPathGainDB = [0,-3,-10,-20];
@@ -45,18 +45,18 @@ awgnSNR = 30;
 %awgnSNR = 100;
 %awgnSNR = 1000;
 
-freqOffsetHz = 0;
-%freqOffsetHz = -1000;
-%freqOffsetHz = 2000;
+% freqOffsetHz = 0;
+% freqOffsetHz = -1000;
+freqOffsetHz = 2000;
 % freqOffsetHz = 5000;
 %freqOffsetHz = 10000;
 %freqOffsetHz = 20000;
 %freqOffsetHz = 100000;
 
-% txTimingOffset = 0.0002;
+txTimingOffset = 0.0002;
 % txTimingOffset = -0.0001;
 % txTimingOffset = 0.00001;
-txTimingOffset = 0;
+% txTimingOffset = 0;
 
 %% Setup Parameters
 rev0BB_startup_core;
