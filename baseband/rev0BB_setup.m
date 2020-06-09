@@ -61,6 +61,7 @@ rcTxFilt = rcSqrtFilt;
 rcRxFilt = rcSqrtFilt;
 
 rcNormalFilt = rcosdesign(rcFiltRolloffFactor, rcFiltSpanSymbols, overSample, 'normal');
+rcNormalFilt = rcNormalFilt./2;
 
 % rcFiltSpanSamp = rcFiltSpanSymbols*overSample+1; %The filter designer makes the order odd
 rcFiltSpanSamp = length(rcNormalFilt); %This should be the same as above
@@ -212,11 +213,12 @@ timing_integrator2_decay=0;
 
 timing_tolerance = 4; %This is used to allow a shift of the peak by +- 1 sample per period as the fractional delay is adjusted
 %TOOD: Optimize setting
-timing_cefEarlyWarningTollerance = 20; %This is because CEF early warning does not have its delay corrected.  As a result, extra tollerance is needed to account for any integer delay changes that occur durring the STF and should be based on the expected maximum timing frequency offset
+timing_cefEarlyWarningTollerance = 5; %This is because CEF early warning does not have its delay corrected.  As a result, extra tollerance is needed to account for any integer delay changes that occur durring the STF and should be based on the expected maximum timing frequency offset
 
 forceSlowRxStrobed = false; %If true, strobes (ie. samples) will be passed to the slow RX while no packet has been detected. This makes the slow Rx load more consistent but wastes power/energy as computation is not needed until a packet is detected and timing recovery occurs
 
 trEarlyLateAvgNumSamp = 256;
+% trEarlyLatePGain = 0;
 trEarlyLatePGain = -0.0175;
 
 trTappedDelayBase = 40;
@@ -224,7 +226,7 @@ trFarrowTaps = 4;
 trTappedDelayLen = trTappedDelayBase+trFarrowTaps; %Include samples for the interpolator
 trInitialDelay = round((trTappedDelayLen+1-trFarrowTaps)/2+1);
 
-trLenToFSM = 32/2 + 6*regular_pipeline + 7*mult_pipeline +timing_differentiator_grpDelay_roundUp;
+trLenToFSM = 32/2 + 6*regular_pipeline + 7*mult_pipeline +timing_differentiator_grpDelay_roundUp + rcFiltGrpDelay;
 trMatch = mod(trLenToFSM, overSample);
 
 % trEarlyLatePGain = 0;
