@@ -321,6 +321,81 @@ coarseCFOAdaptDelay = 1;
 
 coarseCFOFreqStep = 500;
 
+%% Channelizer
+%The following is based on 4 20 MHz channels spaced 25 MHz apart.
+%The sample rate for this is 160 MHz with 32 FFT bins (5 MHz each).
+%This is in turn scaled down to whatever the real sample rate of the
+%radio is but the relative channel widths and seperation will remain the
+%same.
+
+%Channel, Bin Mapping
+%      0, 24
+%      1, 29
+%      2,  2
+%      3,  7
+
+%It appears that the bin positions are in reverse order for some reason
+%Suspect this may be due to the order in which values were fed into the FFT
+%and IFFT blocks
+%TODO: Investigate
+
+% chanBinMapping = [24, 29, 2, 7];
+chanBinMapping = [7, 2, 29, 24];
+
+%Possible filters:
+%Narrow: Passband:  9 MHz, Stopband: 11 MHz
+%Wide:   Passband: 10 MHz, Stopband: 12 MHz
+
+
+
+chanFFTSize = 32;
+chanInterpDec = 2;
+chanProtoFiltLen = 10*chanFFTSize;
+
+if mod(chanProtoFiltLen, chanFFTSize) ~= 0
+    error('Prototype filter length must be a multiple of the FFT size');
+end
+
+chanPassBand = 10/80;
+chanStopBand = 12/80;
+
+chanPrototypeFilt = firpm(chanProtoFiltLen-1, [0, chanPassBand, chanStopBand, 1], [1, 1, 0, 0]);
+
+%Break the prototype filter into phases (1 per row)
+chanPrototypeFiltPolyPhase = zeros(chanFFTSize, chanProtoFiltLen/chanFFTSize);
+
+for coefInd = 1:chanProtoFiltLen
+    row = mod(coefInd-1, chanFFTSize)+1;
+    col = idivide(int32(coefInd-1), int32(chanFFTSize))+1;
+    
+    chanPrototypeFiltPolyPhase(row, col) = chanPrototypeFilt(coefInd);
+end
+
+%Create a version of the polyphase filters to be used with a vector
+%representation of the state
+
+chanPrototypeFiltPolyPhaseSparse = zeros(chanFFTSize, chanProtoFiltLen);
+
+for row = 1:chanFFTSize
+    for col = 1:chanProtoFiltLen/chanFFTSize
+        %Start placing elements in row positions
+        chanPrototypeFiltPolyPhaseSparse(row, row+(col-1)*chanFFTSize) = chanPrototypeFiltPolyPhase(row, col);
+    end
+end
+
+chanPrototypeFiltPolyPhaseSparse = transpose(chanPrototypeFiltPolyPhaseSparse);
+
+chanPrototypeFiltPolyPhaseSparseRx = zeros(chanFFTSize, chanProtoFiltLen);
+
+for row = 1:chanFFTSize
+    for col = 1:chanProtoFiltLen/chanFFTSize
+        %Start placing elements in row positions
+        chanPrototypeFiltPolyPhaseSparseRx(row, (chanFFTSize-row+1)+(col-1)*chanFFTSize) = chanPrototypeFiltPolyPhase(row, col);
+    end
+end
+
+chanPrototypeFiltPolyPhaseSparseRx = transpose(chanPrototypeFiltPolyPhaseSparseRx);
+
 %% Golay Sequence
 Ga_128 = [+1, +1, -1, -1, -1, -1, -1, -1, -1, +1, -1, +1, +1, -1, -1, +1, +1, +1, -1, -1, +1, +1, +1, +1, -1, +1, -1, +1, -1, +1, +1, -1, -1, -1, +1, +1, +1, +1, +1, +1, +1, -1, +1, -1, -1, +1, +1, -1, +1, +1, -1, -1, +1, +1, +1, +1, -1, +1, -1, +1, -1, +1, +1, -1, +1, +1, -1, -1, -1, -1, -1, -1, -1, +1, -1, +1, +1, -1, -1, +1, +1, +1, -1, -1, +1, +1, +1, +1, -1, +1, -1, +1, -1, +1, +1, -1, +1, +1, -1, -1, -1, -1, -1, -1, -1, +1, -1, +1, +1, -1, -1, +1, -1, -1, +1, +1, -1, -1, -1, -1, +1, -1, +1, -1, +1, -1, -1, +1];
 Gb_128 = [-1, -1, +1, +1, +1, +1, +1, +1, +1, -1, +1, -1, -1, +1, +1, -1, -1, -1, +1, +1, -1, -1, -1, -1, +1, -1, +1, -1, +1, -1, -1, +1, +1, +1, -1, -1, -1, -1, -1, -1, -1, +1, -1, +1, +1, -1, -1, +1, -1, -1, +1, +1, -1, -1, -1, -1, +1, -1, +1, -1, +1, -1, -1, +1, +1, +1, -1, -1, -1, -1, -1, -1, -1, +1, -1, +1, +1, -1, -1, +1, +1, +1, -1, -1, +1, +1, +1, +1, -1, +1, -1, +1, -1, +1, +1, -1, +1, +1, -1, -1, -1, -1, -1, -1, -1, +1, -1, +1, +1, -1, -1, +1, -1, -1, +1, +1, -1, -1, -1, -1, +1, -1, +1, -1, +1, -1, -1, +1];
