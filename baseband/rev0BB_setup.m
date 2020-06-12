@@ -339,8 +339,8 @@ coarseCFOFreqStep = 500;
 %and IFFT blocks
 %TODO: Investigate
 
-% chanBinMapping = [24, 29, 2, 7];
-chanBinMapping = [7, 2, 29, 24];
+chanBinMapping = [24, 29, 2, 7];
+% chanBinMapping = [7, 2, 29, 24];
 
 %Possible filters:
 %Narrow: Passband:  9 MHz, Stopband: 11 MHz
