@@ -25,6 +25,8 @@ trials = 15;
 dBSnrRange = [-3, 0, 3, 6, 10, 12, 15, 18];
 indRange = 1:1:length(dBSnrRange);
 
+rxPhaseFixed = true; %Disable for random carrier phase offset
+
 %freqOffsetHz = 0;
 %txTimingOffset = 0;
 % freqOffsetHz = 5000;
