@@ -343,9 +343,9 @@ chanBinMapping = [24, 29, 2, 7];
 % chanBinMapping = [7, 2, 29, 24];
 
 %Possible filters:
-%Narrow: Passband:  9 MHz, Stopband: 11 MHz
-%Wide:   Passband: 10 MHz, Stopband: 12 MHz
-
+%Narrow:     Passband:  9 MHz, Stopband: 11 MHz
+%Wide:       Passband: 10 MHz, Stopband: 12 MHz
+%Extra Wide: Passband: 12 MHz, Stopband: 14 MHz
 
 
 chanFFTSize = 32;

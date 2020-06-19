@@ -27,6 +27,9 @@ indRange = 1:1:length(dBSnrRange);
 
 rxPhaseFixed = true; %Disable for random carrier phase offset
 
+txChanEn = [false, true, false, false];
+rxMonitorCh = 1;
+
 %freqOffsetHz = 0;
 %txTimingOffset = 0;
 % freqOffsetHz = 5000;

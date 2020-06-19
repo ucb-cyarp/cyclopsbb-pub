@@ -19,6 +19,10 @@ awgnSeed = 67; %problem (decends but close to crossing point)
 % awgnSeed = 400;
 % awgnSeed = 9996003;
 
+%% Tx Select
+txChanEn = [false, true, false, false];
+rxMonitorCh = 1;
+
 %% Imperfections
 maxDopplerHz = .1;
 channelSpec = 'AWGN';
