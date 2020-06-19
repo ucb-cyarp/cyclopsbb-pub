@@ -151,20 +151,13 @@ effectiveOversmple = overSample*channelizerUpDownSampling/numChannels; %Due the 
 %to 1/8.  However, with 4 signals, the collective signal occupies 1/2 of
 %the available bandwidth (plus some excess BW).
 
-[EbN0, EsN0, idealBer] = getIdealBER(awgnSNR, effectiveOversmple, radix);
+[EbN0, EsN0, idealBer, idealEVM] = getIdealBER(awgnSNR, effectiveOversmple, radix);
 
 if(radixHeader >= 4)
     headerIdealBer = berawgn(EbN0, 'qam', radixHeader, 'nondiff');
 else
     headerIdealBer = berawgn(EbN0, 'psk', radixHeader, 'nondiff');
 end
-
-%Compute ideal EVM
-idealEVM = 10^(EsN0/(-20))*100; %TODO: Check.  Keysight equation used SNR but it seems too high (doing better than ideal).  Expect EsN0 is what was really was needed
-%Based on 2.10 of
-%https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=4136960, it looks
-%like there is an assumptuon that Es/N0 = SNR which is not strictly
-%speaking true
 
 %Decode the header
 % PACKET FORMAT
@@ -285,7 +278,7 @@ for chan=0:(numChannels-1)
                     error('Length of recieved frame does not match length expected for given modulation scheme');
                 else
                     payloadBitErrorsLocal = biterr(data_recieved_packed{chan+1}(cursor:(cursor+frame_len_bytes*lengthMultiplier-1)), expected_packed_data{chan+1}(expectedCursor:(expectedCursor+frame_len_bytes*lengthMultiplier-1)));
-                    payloadBERLocal = payloadBitErrorsLocal/frame_len_bytes*8; %It is possible the packed data is not completly filled
+                    payloadBERLocal = payloadBitErrorsLocal/(frame_len_bytes*8); %It is possible the packed data is not completly filled
                     payloadBitErrorsCh = payloadBitErrorsCh + payloadBitErrorsLocal;
                     payloadBitsCh = payloadBitsCh + frame_len_bytes*8;
 

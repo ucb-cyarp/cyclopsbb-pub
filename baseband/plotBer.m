@@ -47,17 +47,28 @@ sim_failures_complete = zeros(1, length(indRange));
 sim_failures_modulation_field_corrupted = zeros(1, length(indRange));
 sim_ber = zeros(1, length(indRange));
 
+sim_idealEvm = zeros(1, length(indRange));
+sim_finalEvm = zeros(1, length(indRange));
+sim_afterTREvm = zeros(1, length(indRange));
+
 for dBSnrInd = indRange
     awgnSNR = dBSnrRange(dBSnrInd);
     
     %See https://www.mathworks.com/help/comm/ug/awgn-channel.html for a
     %consise explanation of the difference between SNR, EsN0, and EbN0
     effectiveOversmple = overSample*channelizerUpDownSampling/numChannels; %Due the channelizer, we are actually using more bandwidth than we usually would.
-    [EbN0Loc, EsN0Loc, idealBerLoc] = getIdealBER(awgnSNR, effectiveOversmple, radix);
+    [EbN0Loc, EsN0Loc, idealBerLoc, idealEVMLoc] = getIdealBER(awgnSNR, effectiveOversmple, radix);
     
     sim_idealBer(dBSnrInd) = idealBerLoc;
     sim_EbN0(dBSnrInd) = EbN0Loc;
+    sim_idealEvm(dBSnrInd) = idealEVMLoc;
+    
     disp(['SNR (dB): ', num2str(dBSnrRange(dBSnrInd)), ', EbN0 (dB): ', num2str(EbN0Loc), ', Ideal BER (AWGN): ', num2str(idealBerLoc)]);
+    
+    finalErrorVector = [];
+    afterTRErrorVector = [];
+    
+    payloadRMSLoc = 0;
     
     for trial = 1:1:trials
         seed = abs(dBSnrRange(dBSnrInd)*1000+trial);
@@ -69,31 +80,59 @@ for dBSnrInd = indRange
         %Run BER Calc Point
         berCalcPoint;
         
-        %Accumulate 
+        if trial == 1
+            payloadRMSLoc = payloadRMS;
+        elseif payloadRMSLoc ~= payloadRMS
+            error('Payload RMS Reference is not permitted to change durring BER sweep');
+        end
         
+        %Accumulate 
         trial_failures_complete(trial, dBSnrInd) = packetDecodeCompleteFailure;
         trial_failures_modulation_field_corrupted(trial, dBSnrInd) = packetDecodeFailureDueToModulationFieldCorruption;
         trial_bit_payload_errors(trial, dBSnrInd) = payloadBitErrors;
         trial_bit_payload_bits_sent(trial, dBSnrInd) = payloadBits;
+        finalErrorVector = cat(1, finalErrorVector, payloadErrorVector);
+        afterTRErrorVector = cat(1, afterTRErrorVector, payloadErrorVectorTR);
     end
     
     sim_failures_complete(dBSnrInd) = sum(trial_failures_complete(:,dBSnrInd));
     sim_failures_modulation_field_corrupted(dBSnrInd) = sum(trial_failures_modulation_field_corrupted(:,dBSnrInd));
     sim_ber(dBSnrInd) = sum(trial_bit_payload_errors(:,dBSnrInd))/sum(trial_bit_payload_bits_sent(:,dBSnrInd));
+    
+    sim_finalEvm(dBSnrInd) = rms(abs(finalErrorVector))*100/payloadRMSLoc;
+    sim_afterTREvm(dBSnrInd) = rms(abs(afterTRErrorVector))*100/payloadRMSLoc;
 end
 
 %% Plot
 
+%Get a smooth plot for ideal terms
+idealPlotStep = 0.01;
+minSNR = min(dBSnrRange);
+maxSNR = max(dBSnrRange);
+snrPlotRange = minSNR:idealPlotStep:maxSNR;
+
+sim_EbN0_plot = zeros(size(snrPlotRange));
+sim_idealBer_plot = zeros(size(snrPlotRange));
+sim_idealEvm_plot = zeros(size(snrPlotRange));
+
+for awgnSNRInd = 1:length(snrPlotRange)
+    awgnSNR = snrPlotRange(awgnSNRInd);
+    [EbN0Loc, EsN0Loc, idealBerLoc, idealEVMLoc] = getIdealBER(awgnSNR, effectiveOversmple, radix);
+    sim_EbN0_plot(awgnSNRInd) = EbN0Loc;
+    sim_idealBer_plot(awgnSNRInd) = idealBerLoc;
+    sim_idealEvm_plot(awgnSNRInd) = idealEVMLoc;
+end
+
 fig1 = figure;
-semilogy(sim_EbN0, sim_idealBer, 'b-');
+semilogy(sim_EbN0_plot, sim_idealBer_plot, 'b-');
 hold all;
 semilogy(sim_EbN0, sim_ber, 'r*-');
 xlabel('Eb/N0 (dB)')
 ylabel('BER')
 legend('Theoretical (AWGN)', ['Simulation (', channelSpec, ') - Header Excluded']);
-
 title(['Baseband Simulation (', channelSpec, ') - Failures Excluded (Modulation Field Rep3 Coded) vs. Theoretical (Uncoded Coherent ' radixToModulationStr(radix) ' over AWGN)'])
-grid on;
+grid minor;
+xlimits = xlim;
 
 fig2 = figure;
 sim_failures = [transpose(sim_failures_complete), transpose(sim_failures_modulation_field_corrupted)];
@@ -102,8 +141,20 @@ xlabel('Eb/N0 (dB)')
 ylabel('Number of Packet Decode Failures (Stacked)')
 legend('Complete Packet Decode Failure', 'Packet Decode Failure Due to Corrupted Modulation Field');
 title(['Packet Decode Failures for ' num2str(trials) ' Trials (Modulation Field Rep3 Coded)'])
+xlim(xlimits);
 grid on;
 
+fig3 = figure;
+plot(sim_EbN0_plot, sim_idealEvm_plot, 'b-');
+hold all;
+plot(sim_EbN0, sim_finalEvm, 'r*-');
+plot(sim_EbN0, sim_afterTREvm, 'k*-');
+xlabel('Eb/N0 (dB)')
+ylabel('EVM % (Normalized to RMS of Constallation Pts)')
+legend('Theoretical (AWGN)', ['EVM After EQ (', channelSpec, ') - Header Excluded'], ['EVM After TR (', channelSpec, ') - Header Excluded']);
+title(['Baseband Simulation (', channelSpec, ') - Failures Excluded (Modulation Field Rep3 Coded) vs. Theoretical (Uncoded Coherent ' radixToModulationStr(radix) ' over AWGN)'])
+xlim(xlimits);
+grid minor;
 
 %% Cleanup
 %close_system('rev0BB');
