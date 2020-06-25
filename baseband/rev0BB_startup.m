@@ -34,7 +34,7 @@ manualChanDelaysSymb = [1,6,11,16];
 manualChanPathGainDB = [0,-3,-10,-20];
 manualChanPathGain = [0.25, 0.25, 0.25, 0.25];
 
-rxPhaseFixed = true;
+rxPhaseFixed = false;
 
 %awgnSNR = -6;
 % awgnSNR = -3;

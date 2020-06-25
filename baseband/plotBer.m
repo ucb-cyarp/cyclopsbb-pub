@@ -25,7 +25,7 @@ trials = 15;
 dBSnrRange = [-3, 0, 3, 6, 10, 12, 15, 18];
 indRange = 1:1:length(dBSnrRange);
 
-rxPhaseFixed = true; %Disable for random carrier phase offset
+rxPhaseFixed = false; %Disable for random carrier phase offset
 
 txChanEn = [true, true, true, true];
 rxMonitorCh = 1;
