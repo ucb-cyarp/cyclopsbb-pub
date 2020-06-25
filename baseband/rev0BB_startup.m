@@ -19,9 +19,9 @@ awgnSeed = 67; %problem (decends but close to crossing point)
 % awgnSeed = 400;
 % awgnSeed = 9996003;
 
-%% Tx Select
-txChanEn = [true, true, true, true];
-% txChanEn = [false, true, false, false];
+% Tx Select
+% txChanEn = [true, true, true, true];
+txChanEn = [false, true, false, false];
 rxMonitorCh = 1;
 
 %% Imperfections

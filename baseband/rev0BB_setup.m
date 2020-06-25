@@ -51,7 +51,7 @@ rx_gain = 1;
 rx_gain_i = 1;
 rx_gain_q = 1;
 
-rcFiltRolloffFactor = 0.1;
+rcFiltRolloffFactor = 1.0;
 rcFiltSpanSymbols = 16;
 rcFileLinearAmpGain = 1;
 
@@ -199,8 +199,8 @@ timing_smooth_denom = zeros(1, timing_smooth_samples);
 timing_p = -1/2^2 -1/2^3;
 % timing_p = 0;
 timing_d = 0;
-enableTRPreambleEstimation = false;
-enableTRFreqCorrection = false;
+enableTRPreambleEstimation = true;
+enableTRFreqCorrection = true;
 
 timing_differentiator_len = 61; %The block adds 1
 timing_differentiator_grpDelay_roundUp = ceil((timing_differentiator_len)/2); %The block adds one which is subtracted again here.  The group delay is rounded up to a full sample
@@ -220,7 +220,8 @@ forceSlowRxStrobed = false; %If true, strobes (ie. samples) will be passed to th
 
 trEarlyLateAvgNumSamp = 256;
 % trEarlyLatePGain = 0;
-trEarlyLatePGain = -0.0175;
+% trEarlyLatePGain = -0.0175;
+trEarlyLatePGain = -0.0044;
 
 trTappedDelayBase = 40;
 trFarrowTaps = 4;
@@ -366,14 +367,17 @@ end
 % chanPassBand = 8/80;
 % chanStopBand = 10/80;
 %Narrow:       Passband:  9 MHz, Stopband: 11 MHz
-chanPassBand = 9/80;
-chanStopBand = 11/80;
+% chanPassBand = 9/80;
+% chanStopBand = 11/80;
 %Wide:         Passband: 10 MHz, Stopband: 12 MHz
 % chanPassBand = 10/80;
 % chanStopBand = 12/80;
 %Extra Wide:   Passband: 12 MHz, Stopband: 14 MHz
 % chanPassBand = 12/80;
 % chanStopBand = 14/80;
+
+chanPassBand = 20/80;
+chanStopBand = 22/80;
 
 chanPrototypeFilt = firpm(chanProtoFiltLen-1, [0, chanPassBand, chanStopBand, 1], [1, 1, 0, 0]);
 
