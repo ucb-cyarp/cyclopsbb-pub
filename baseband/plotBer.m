@@ -27,7 +27,7 @@ indRange = 1:1:length(dBSnrRange);
 
 rxPhaseFixed = true; %Disable for random carrier phase offset
 
-txChanEn = [false, true, false, false];
+txChanEn = [true, true, true, true];
 rxMonitorCh = 1;
 
 %freqOffsetHz = 0;
@@ -169,5 +169,6 @@ rmpath(currDir);
 
 savefig(fig1, ['BERvsEbN0-fig1-',timestamp]);
 savefig(fig2, ['BERvsEbN0-fig2-',timestamp]);
+savefig(fig3, ['BERvsEbN0-fig3-',timestamp]);
 save(['BERvsEbN0-workspace-',timestamp]);
 
