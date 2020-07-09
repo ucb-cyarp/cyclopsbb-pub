@@ -19,6 +19,11 @@ awgnSeed = 67; %problem (decends but close to crossing point)
 % awgnSeed = 400;
 % awgnSeed = 9996003;
 
+%% Tx Select
+txChanEn = [true, true, true, true];
+% txChanEn = [false, true, false, false];
+rxMonitorCh = 1;
+
 %% Imperfections
 maxDopplerHz = .1;
 channelSpec = 'AWGN';
@@ -29,7 +34,7 @@ manualChanDelaysSymb = [1,6,11,16];
 manualChanPathGainDB = [0,-3,-10,-20];
 manualChanPathGain = [0.25, 0.25, 0.25, 0.25];
 
-rxPhaseFixed = true;
+rxPhaseFixed = false;
 
 %awgnSNR = -6;
 % awgnSNR = -3;
