@@ -85,8 +85,6 @@ x_PRE_adj = transpose((x_PRE.*-1 + 1)./2);
 
 after = zeros(100, 1);
 
-golayGrpDelaySamp = golayType*overSample/2;
-
 cefLen = length(x_CEF);
 
 %% Setup CRC (Not Currently Used But Relied on By Fctns)
@@ -153,8 +151,7 @@ trFarrowTaps = 4;
 trTappedDelayLen = trTappedDelayBase+trFarrowTaps; %Include samples for the interpolator
 trInitialDelay = round((trTappedDelayLen+1-trFarrowTaps)/2+1);
 
-% trLenToFSM = golayType/2 + timing_differentiator_grpDelay_roundUp + rcFiltGrpDelay; %+1 due to rounded delay?
-trLenToFSM = golayType/2 + timing_differentiator_grpDelay_roundUp + rcFiltGrpDelay;
+trLenToFSM = timing_differentiator_grpDelay_roundUp; %Omitted correlator delay as the peak will occure immediatly the last symbol in the correlated sequence enters the correlator.  However, the differentiator does introduce additional group delay
 %The ideal match would be to bring the symbol clock / strobe into the 
 %future (from it's standpoint) to align with the samples before all the 
 %filters.  Hence, the negative sign.
