@@ -27,8 +27,8 @@ indRange = 1:1:length(dBSnrRange);
 
 rxPhaseFixed = false; %Disable for random carrier phase offset
 
-txChanEn = [true, true, true, true];
-rxMonitorCh = 1;
+% txChanEn = [true, true, true, true];
+% rxMonitorCh = 1;
 
 %freqOffsetHz = 0;
 %txTimingOffset = 0;
@@ -78,7 +78,7 @@ for dBSnrInd = indRange
         awgnSeed = abs(dBSnrRange(dBSnrInd)*1000+trial+10000000);
         
         %Setup the Simulation
-        rev0BB_startup_core; %Using the core function to avoid resetting workspace and overriding sweep parameters
+        rev1BB_startup_core; %Using the core function to avoid resetting workspace and overriding sweep parameters
         
         %Run BER Calc Point
         berCalcPoint;
