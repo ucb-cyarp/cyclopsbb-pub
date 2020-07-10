@@ -154,7 +154,7 @@ plot(sim_EbN0, sim_finalEvm, 'r*-');
 plot(sim_EbN0, sim_afterTREvm, 'k*-');
 xlabel('Eb/N0 (dB)')
 ylabel('EVM % (Normalized to RMS of Constallation Pts)')
-legend('Theoretical (AWGN)', ['EVM After EQ (', channelSpec, ') - Header Excluded'], ['EVM After TR (', channelSpec, ') - Header Excluded']);
+legend('Theoretical (AWGN)', ['EVM Before Demod (', channelSpec, ') - Header Excluded'], ['EVM After TR (', channelSpec, ') - Header Excluded']);
 title(['Baseband Simulation (', channelSpec, ') - Failures Excluded (Modulation Field Rep3 Coded) vs. Theoretical (Uncoded Coherent ' radixToModulationStr(radix) ' over AWGN)'])
 xlim(xlimits);
 grid minor;

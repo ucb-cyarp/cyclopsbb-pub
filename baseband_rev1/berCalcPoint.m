@@ -311,7 +311,7 @@ for chan=0:(numChannels-1)
                     disp(['    Packet: ' num2str(packet) ', BER (Header): ' num2str(headerBERLocal) ' [Ideal: ' num2str(headerIdealBer) '], BER (Payload): ' num2str(payloadBERLocal) ' [Ideal: ' num2str(idealBer) ']']);
                     disp(['      Errors (Header): ' num2str(headerBitErrorsLocal) '/' num2str(header_len_bytes*8) ', Errors (Payload): ' num2str(payloadBitErrorsLocal) '/' num2str(frame_len_bytes*8)]);
                     disp(['      After TR: EVM (Header): ' num2str(evmHeaderTR) ' [Ideal: ' num2str(idealEVM) '], EVM (Payload): ' num2str(evmPayloadTR) ' [Ideal: ' num2str(idealEVM) ']']);
-                    disp(['      After EQ: EVM (Header): ' num2str(evmHeader) ' [Ideal: ' num2str(idealEVM) '], EVM (Payload): ' num2str(evmPayload) ' [Ideal: ' num2str(idealEVM) ']']);
+                    disp(['      B4 Demod: EVM (Header): ' num2str(evmHeader) ' [Ideal: ' num2str(idealEVM) '], EVM (Payload): ' num2str(evmPayload) ' [Ideal: ' num2str(idealEVM) ']']);
                 end
             end
         end
@@ -341,7 +341,7 @@ for chan=0:(numChannels-1)
     disp(['      BER (Header): ' num2str(headerBERCh) ' [Ideal: ' num2str(headerIdealBer) '], BER (Payload): ' num2str(payloadBERCh) ' [Ideal: ' num2str(idealBer) ']']);
     disp(['      Errors (Header): ' num2str(headerBitErrorsCh) '/' num2str(headerBitsCh) ', Errors (Payload): ' num2str(payloadBitErrorsCh) '/' num2str(payloadBitsCh)]);
     disp(['      After TR: EVM (Header): ' num2str(evmHeaderTR) ' [Ideal: ' num2str(idealEVM) '], EVM (Payload): ' num2str(evmPayloadTR) ' [Ideal: ' num2str(idealEVM) ']']);
-    disp(['      After EQ: EVM (Header): ' num2str(evmHeader) ' [Ideal: ' num2str(idealEVM) '], EVM (Payload): ' num2str(evmPayload) ' [Ideal: ' num2str(idealEVM) ']']);
+    disp(['      B4 Demod: EVM (Header): ' num2str(evmHeader) ' [Ideal: ' num2str(idealEVM) '], EVM (Payload): ' num2str(evmPayload) ' [Ideal: ' num2str(idealEVM) ']']);
 end
 
 %Report Overall
