@@ -74,6 +74,8 @@ for dBSnrInd = indRange
     payloadRMSLoc = 0;
     
     for trial = 1:1:trials
+        disp(['Trial ' num2str(trial) ' of ' num2str(trials)]);
+        
         seed = abs(dBSnrRange(dBSnrInd)*1000+trial);
         awgnSeed = abs(dBSnrRange(dBSnrInd)*1000+trial+10000000);
         
