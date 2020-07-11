@@ -22,7 +22,8 @@ load_system(model_name);
 %% Sweep Parameters
 trials = 15;
 % dBSnrRange = -4:1:20;
-dBSnrRange = [-3, 0, 3, 6, 10, 12, 15, 18];
+dBSnrRange = [-3, 0, 3, 6, 10, 12, 15, 18, 21, 25];
+% dBSnrRange = [18];
 indRange = 1:1:length(dBSnrRange);
 
 rxPhaseFixed = true; %Disable for random carrier phase offset

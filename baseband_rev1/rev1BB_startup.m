@@ -19,6 +19,9 @@ awgnSeed = 67; %problem (decends but close to crossing point)
 % awgnSeed = 400;
 % awgnSeed = 9996003;
 
+% seed = abs(18*1000+1);
+% awgnSeed = abs(18*1000+1+10000000);
+
 %% Imperfections
 maxDopplerHz = .1;
 channelSpec = 'AWGN';
@@ -40,6 +43,7 @@ rxPhaseFixed = true;
 % awgnSNR = 8;
 % awgnSNR = 10;
 % awgnSNR = 15;
+% awgnSNR = 18;
 % awgnSNR = 20;
 awgnSNR = 30;
 %awgnSNR = 50;
