@@ -1,9 +1,17 @@
 %berCalcPoint Calculates BER (for header & payload) as well as tracking
 %packets that failed to decode for a single configuration point of the
-%radio/simulation.
-%NOTE: The workspace must be setup before this is called
-%NOTE: This is not a function so that it can access the base workspace
-%TODO: Refactor into functions
+%radio/simulation.  This version relies on the simulation being conducted
+%seperatly and the results/parameters of the 
+
+function [totalHeaderBer, totalPayloadBer, evmHeader, evmHeaderTR, evmPayload, evmPayloadTR, ...
+          packetDecodeCompleteFailure, packetDecodeFailureDueToModulationFieldCorruption, ...
+          payloadBitErrors, payloadBits, payloadErrorVector, payloadErrorVectorTR, payloadRMS] = ...
+    berCalcPointParSim(data_recieved_packed, symbols_recieved, symbols_afterTR_recieved, ... %These should be cell arrays
+                       expected_packed_data, expected_symbols, ...
+                       numChannels, packetsPerChannel, ...
+                       header_len_bytes, crc_len_bytes, frame_len_bytes, ...
+                       bitsPerSymbolHeader, bitsPerSymbol, ...
+                       radixHeader, radix, overSample, bitsPerSymbolMax, channelizerUpDownSampling, awgnSNR)
 
 % header_len_bytes gives the header length in bytes
 % payload_len_bytes gives the payload length
@@ -15,45 +23,11 @@ if header_len_bytes ~= 8
 end 
 
 %% Run Sim
-simStartTime = datetime('now');
-simulink_out = sim('rev1BB', 'SimulationMode', 'rapid');
-data_recieved_packed = {simulink_out.get('data_recieved_packed_ch0')};
-% data_recieved_packed = {simulink_out.get('data_recieved_packed_ch0'), ...
-%                         simulink_out.get('data_recieved_packed_ch1'), ...
-%                         simulink_out.get('data_recieved_packed_ch2'), ...
-%                         simulink_out.get('data_recieved_packed_ch3')};
-                    
-symbols_recieved = {simulink_out.get('data_recieved_constPt_ch0')};
-% symbols_recieved = {simulink_out.get('data_recieved_constPt_ch0'), ...
-%                     simulink_out.get('data_recieved_constPt_ch1'), ...
-%                     simulink_out.get('data_recieved_constPt_ch2'), ...
-%                     simulink_out.get('data_recieved_constPt_ch3')};
-                
-symbols_afterTR_recieved = {simulink_out.get('data_recieved_afterTR_ch0')};
-% symbols_afterTR_recieved = {simulink_out.get('data_recieved_afterTR_ch0'), ...
-%                             simulink_out.get('data_recieved_afterTR_ch1'), ...
-%                             simulink_out.get('data_recieved_afterTR_ch2'), ...
-%                             simulink_out.get('data_recieved_afterTR_ch3')};
-                
-simEndTime = datetime('now');
-simDuration = simEndTime - simStartTime;
-disp(['Sim Ran in ' char(simDuration)])
+% We will assume that the sim has already been run and that a series of 
+% arrays will be provided by the calling script.  This is now a function
+
 
 %% Compute Ideal Vectors
-
-%For testing 2 packets in 1 sim (a duplicate of the generated packet)
-packetsPerChannel = 2;
-expected_packed_data = {transpose(cat(2, header_payload_packed_ch0, header_payload_packed_ch0))};
-% expected_packed_data = {transpose(cat(2, header_payload_packed_ch0, header_payload_packed_ch0)), ...
-%                         transpose(cat(2, header_payload_packed_ch1, header_payload_packed_ch1)), ...
-%                         transpose(cat(2, header_payload_packed_ch2, header_payload_packed_ch2)), ...
-%                         transpose(cat(2, header_payload_packed_ch3, header_payload_packed_ch3))};
-                    
-expected_symbols = {cat(1, headerPayloadCRCSymbols_ch0, headerPayloadCRCSymbols_ch0)};
-% expected_symbols = {cat(1, headerPayloadCRCSymbols_ch0, headerPayloadCRCSymbols_ch0), ...
-%                     cat(1, headerPayloadCRCSymbols_ch1, headerPayloadCRCSymbols_ch1), ...
-%                     cat(1, headerPayloadCRCSymbols_ch2, headerPayloadCRCSymbols_ch2), ...
-%                     cat(1, headerPayloadCRCSymbols_ch3, headerPayloadCRCSymbols_ch3)};
                 
 %Create expected constallation points
 headerSymbols = header_len_bytes*8/bitsPerSymbolHeader;
@@ -332,11 +306,11 @@ for chan=0:(numChannels-1)
 
     headerBERCh = headerBitErrorsCh/headerBitsCh;
     payloadBERCh = payloadBitErrorsCh/payloadBitsCh;
-    disp(['    Channel Summary: Packet Decode Failures (Did Not Rx): ' num2str(packetDecodeCompleteFailureCh) ', Packet Decode Failures (Corrupted Modulation Fld): ' num2str(packetDecodeFailureDueToModulationFieldCorruptionCh)]);
-    disp(['      BER (Header): ' num2str(headerBERCh) ' [Ideal: ' num2str(headerIdealBer) '], BER (Payload): ' num2str(payloadBERCh) ' [Ideal: ' num2str(idealBer) ']']);
-    disp(['      Errors (Header): ' num2str(headerBitErrorsCh) '/' num2str(headerBitsCh) ', Errors (Payload): ' num2str(payloadBitErrorsCh) '/' num2str(payloadBitsCh)]);
-    disp(['      After TR: EVM (Header): ' num2str(evmHeaderTR) ' [Ideal: ' num2str(idealEVM) '], EVM (Payload): ' num2str(evmPayloadTR) ' [Ideal: ' num2str(idealEVM) ']']);
-    disp(['      B4 Demod: EVM (Header): ' num2str(evmHeader) ' [Ideal: ' num2str(idealEVM) '], EVM (Payload): ' num2str(evmPayload) ' [Ideal: ' num2str(idealEVM) ']']);
+%     disp(['    Channel Summary: Packet Decode Failures (Did Not Rx): ' num2str(packetDecodeCompleteFailureCh) ', Packet Decode Failures (Corrupted Modulation Fld): ' num2str(packetDecodeFailureDueToModulationFieldCorruptionCh)]);
+%     disp(['      BER (Header): ' num2str(headerBERCh) ' [Ideal: ' num2str(headerIdealBer) '], BER (Payload): ' num2str(payloadBERCh) ' [Ideal: ' num2str(idealBer) ']']);
+%     disp(['      Errors (Header): ' num2str(headerBitErrorsCh) '/' num2str(headerBitsCh) ', Errors (Payload): ' num2str(payloadBitErrorsCh) '/' num2str(payloadBitsCh)]);
+%     disp(['      After TR: EVM (Header): ' num2str(evmHeaderTR) ' [Ideal: ' num2str(idealEVM) '], EVM (Payload): ' num2str(evmPayloadTR) ' [Ideal: ' num2str(idealEVM) ']']);
+%     disp(['      B4 Demod: EVM (Header): ' num2str(evmHeader) ' [Ideal: ' num2str(idealEVM) '], EVM (Payload): ' num2str(evmPayload) ' [Ideal: ' num2str(idealEVM) ']']);
 end
 
 %Report Overall
@@ -354,8 +328,10 @@ evmHeaderTR = rms(abs(headerErrorVectorTR))*100/headerRMS;
 evmPayload = rms(abs(payloadErrorVector))*100/payloadRMS;
 evmPayloadTR = rms(abs(payloadErrorVectorTR))*100/payloadRMS;
 
-disp(['  Global Summary: Packet Decode Failures (Did Not Rx): ' num2str(packetDecodeCompleteFailure) ', Packet Decode Failures (Corrupted Modulation Fld): ' num2str(packetDecodeFailureDueToModulationFieldCorruption) ]);
-disp(['    BER (Header): ' num2str(totalHeaderBer) ' [Ideal: ' num2str(headerIdealBer) '], BER (Payload): ' num2str(totalPayloadBer) ' [Ideal: ' num2str(idealBer) ']']);
-disp(['    Errors (Header): ' num2str(headerBitErrors) '/' num2str(headerBits) ', Errors (Payload): ' num2str(payloadBitErrors) '/' num2str(payloadBits)]);
-disp(['    After TR: EVM (Header): ' num2str(evmHeaderTR) ' [Ideal: ' num2str(idealEVM) '], EVM (Payload): ' num2str(evmPayloadTR) ' [Ideal: ' num2str(idealEVM) ']']);
-disp(['    B4 Demod: EVM (Header): ' num2str(evmHeader) ' [Ideal: ' num2str(idealEVM) '], EVM (Payload): ' num2str(evmPayload) ' [Ideal: ' num2str(idealEVM) ']']);
+% disp(['  Global Summary: Packet Decode Failures (Did Not Rx): ' num2str(packetDecodeCompleteFailure) ', Packet Decode Failures (Corrupted Modulation Fld): ' num2str(packetDecodeFailureDueToModulationFieldCorruption) ]);
+% disp(['    BER (Header): ' num2str(totalHeaderBer) ' [Ideal: ' num2str(headerIdealBer) '], BER (Payload): ' num2str(totalPayloadBer) ' [Ideal: ' num2str(idealBer) ']']);
+% disp(['    Errors (Header): ' num2str(headerBitErrors) '/' num2str(headerBits) ', Errors (Payload): ' num2str(payloadBitErrors) '/' num2str(payloadBits)]);
+% disp(['    After TR: EVM (Header): ' num2str(evmHeaderTR) ' [Ideal: ' num2str(idealEVM) '], EVM (Payload): ' num2str(evmPayloadTR) ' [Ideal: ' num2str(idealEVM) ']']);
+% disp(['    B4 Demod: EVM (Header): ' num2str(evmHeader) ' [Ideal: ' num2str(idealEVM) '], EVM (Payload): ' num2str(evmPayload) ' [Ideal: ' num2str(idealEVM) ']']);
+
+end

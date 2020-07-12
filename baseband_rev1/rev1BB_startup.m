@@ -69,7 +69,7 @@ rev1BB_startup_core;
 
 %% Start Simulink
 disp('Opening Simulink ...')
-open_system('rev1BB')
+% open_system('rev1BB')
 %open_system('gm_rev1BB')
-%load_system('rev1BB')
+load_system('rev1BB')
 disp('Ready to Simulate')
