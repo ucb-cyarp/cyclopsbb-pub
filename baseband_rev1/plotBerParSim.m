@@ -39,6 +39,7 @@ freqOffsetHz = 0;
 txTimingOffset = 0;
 
 %% Create Parameters for Sweep
+simStartTime = datetime('now');
 
 trial_bit_payload_errors = zeros(trials, length(indRange));
 trial_bit_payload_bits_sent = zeros(trials, length(indRange));
@@ -132,7 +133,8 @@ for dBSnrInd = indRange
 %         simInputs(configInd) = simInputs(configInd).setModelParameter('SimulationMode', 'rapid', ...
 %                 'RapidAcceleratorUpToDateCheck', 'off');
 
-        simInputs(configInd) = simInputs(configInd).setModelParameter('SimulationMode', 'rapid');
+%         simInputs(configInd) = simInputs(configInd).setModelParameter('SimulationMode', 'rapid');
+        simInputs(configInd) = simInputs(configInd).setModelParameter('SimulationMode', 'accelerator');
 %         simInputs(configInd) = simInputs(configInd).setModelParameter('SimulationMode', 'normal');
             
         %Store 
@@ -165,9 +167,14 @@ for dBSnrInd = indRange
     end
 end
 
+simEndTime = datetime('now');
+simDuration = simEndTime - simStartTime;
+disp(['Setup Simulink Inputs in ' char(simDuration)])
+
 %% Start parpool
 numcores = feature('numcores');
 pool = parpool(numcores);
+% pool = parpool(16);
 
 %% Run the Simulations
 simStartTime = datetime('now');
