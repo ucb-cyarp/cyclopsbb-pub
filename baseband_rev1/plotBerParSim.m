@@ -20,9 +20,9 @@ load_system(model_name);
 
 
 %% Sweep Parameters
-trials = 20;
-% dBSnrRange = -4:1:20;
-dBSnrRange = [-3, 0, 3, 6, 10, 12, 15, 18, 21];
+trials = 15;
+dBSnrRange = -2:1:18;
+% dBSnrRange = [-3, 0, 3, 6, 10, 12, 15, 18, 21];
 % dBSnrRange = [12, 15];
 % dBSnrRange = [18];
 indRange = 1:1:length(dBSnrRange);
