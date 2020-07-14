@@ -11,7 +11,7 @@ Note:
 
  The following plots are based on a BER sweep with 15 trials per point.  Each trial consisted of a packet being transmitted twice with a gap in between transmissions.
 
- The runs were conducted between July 11 and July 14, 2020 with commit 2ce053330be6b412ac5f6afa005150617b5773c0 modified to enable the different scenarios.
+ The runs were conducted between July 11 and July 14, 2020 with commit [2ce053330be6b412ac5f6afa005150617b5773c0](https://github.com/ucb-cyarp/cyclopsbb/commit/2ce053330be6b412ac5f6afa005150617b5773c0) modified to enable the different scenarios.
 
 ## Summaries:
 - [BER Plots](berPlots.md)
