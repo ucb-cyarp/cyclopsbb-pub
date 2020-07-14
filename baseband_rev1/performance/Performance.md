@@ -1,10 +1,10 @@
 # Cyclops Baseband PHY Performance
 
-The following sections describe the performance of the Cyclops Rev1 PHY under different scenarios.  Metrics considered include the uncoded BER rate and the EVM immediatly after Symbol Timing Recovery (TR) and before the final demodulation.
+The following sections describe the performance of the Cyclops Rev1 PHY under different scenarios.  Metrics considered include the uncoded BER rate and the EVM immediately after Symbol Timing Recovery (TR) and before the final demodulation.
 
 Note:
  - The sweep was conducted for the entire domain of the blue (ideal) line.  The absence of datapoints in the BER plot signifies that no bit errors were detected.
- - Before points where no errors were detected, there may be what appears to be a momentary uptick in the BER.  This is likely due to very low error rate being difficult to estimate without longer test runs.
+ - Before points where no errors were detected, there may be what appears to be a momentary uptick in the BER.  This is likely due to very low error rate being difficult to estimate accuratly without longer test runs.
  - BER only includes packets that were successfully detected and where the modulation field was interpreted correctly.  See the failure graphs for how many trials were excluded for each data point.
  - The after TR EVM is only valid when no CFO or phase offset is present.
  - The ideal EVM in these plots is a bit off at the moment, particularly for low SNR.
