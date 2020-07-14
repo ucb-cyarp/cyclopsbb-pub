@@ -24,17 +24,17 @@ Note:
     - [QPSK](AWGN_NoImparements_QPSK.md)
     - [BPSK](AWGN_NoImparements_BPSK.md)
 - AWGN Channel - Random Carrier and Timing Phase Offset
-    - [16QAM](AWGN_NoImparements_RandomInitPhase_16QAM)
-    - [QPSK](AWGN_NoImparements_RandomInitPhase_QPSK)
-    - [BPSK](AWGN_NoImparements_RandomInitPhase_BPSK)
+    - [16QAM](AWGN_NoImparements_RandomInitPhase_16QAM.md)
+    - [QPSK](AWGN_NoImparements_RandomInitPhase_QPSK.md)
+    - [BPSK](AWGN_NoImparements_RandomInitPhase_BPSK.md)
 - AWGN Channel - 2 KHz CFO, -1.6 KHz Timing Frequency Offset
-    - [16QAM](AWGN_16QAM)
-    - [QPSK](AWGN_QPSK)
-    - [BPSK](AWGN_BPSK)
+    - [16QAM](AWGN_16QAM.md)
+    - [QPSK](AWGN_QPSK.md)
+    - [BPSK](AWGN_BPSK.md)
 - cost207RAx4 Channel - 2 KHz CFO, -1.6 KHz Timing Frequency Offset
-    - [16QAM](cost207RAx4_16QAM)
-    - [QPSK](cost207RAx4_QPSK)
-    - [BPSK](cost207RAx4_BPSK)
+    - [16QAM](cost207RAx4_16QAM.md)
+    - [QPSK](cost207RAx4_QPSK.md)
+    - [BPSK](cost207RAx4_BPSK.md)
 
 ## cost207RAx4 Model
  The cost207RAx4 realziation was the same in each case and was derived from the stdchan cost207RAx4 model built into Matlab.  The channel emulation filter has the following configuration:
