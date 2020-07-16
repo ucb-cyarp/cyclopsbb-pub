@@ -284,8 +284,8 @@ semilogy(sim_EbN0, sim_ber, 'r*-');
 xlabel('Eb/N0 (dB)')
 ylabel('BER')
 legend('Theoretical (AWGN)', ['Simulation (', channelSpec, ') - Header Excluded']);
-title(['Baseband Simulation (', channelSpec, ') - Failures Excluded (Modulation Field Rep3 Coded) vs. Theoretical (Uncoded Coherent ' radixToModulationStr(radix) ' over AWGN)'])
-grid minor;
+title({['Baseband Simulation (', channelSpec, ') - Failures Excluded (Modulation Field Rep3 Coded) vs.'], ['Theoretical (Uncoded Coherent ' radixToModulationStr(radix) ' over AWGN)']})
+grid on;
 xlimits = xlim;
 
 fig2 = figure;
@@ -302,13 +302,19 @@ fig3 = figure;
 plot(sim_EbN0_plot, sim_idealEvm_plot, 'b-');
 hold all;
 plot(sim_EbN0, sim_finalEvm, 'r*-');
-plot(sim_EbN0, sim_afterTREvm, 'k*-');
+if rxPhaseFixed
+    plot(sim_EbN0, sim_afterTREvm, 'k*-');
+end
 xlabel('Eb/N0 (dB)')
 ylabel('EVM % (Normalized to RMS of Constallation Pts)')
-legend('Theoretical (AWGN)', ['EVM Before Demod (', channelSpec, ') - Header Excluded'], ['EVM After TR (', channelSpec, ') - Header Excluded']);
-title(['Baseband Simulation (', channelSpec, ') - Failures Excluded (Modulation Field Rep3 Coded) vs. Theoretical (Uncoded Coherent ' radixToModulationStr(radix) ' over AWGN)'])
+if rxPhaseFixed
+    legend('Theoretical (AWGN)', ['EVM Before Demod (', channelSpec, ') - Header Excluded'], ['EVM After TR (', channelSpec, ') - Header Excluded']);
+else
+    legend('Theoretical (AWGN)', ['EVM Before Demod (', channelSpec, ') - Header Excluded']);
+end
+title({['Baseband Simulation (', channelSpec, ') - Failures Excluded (Modulation Field Rep3 Coded) vs.'], ['Theoretical (Uncoded Coherent ' radixToModulationStr(radix) ' over AWGN)']})
 xlim(xlimits);
-grid minor;
+grid on;
 
 %% Cleanup
 %close_system('rev0BB');
