@@ -9,7 +9,7 @@ rev1BB_startup;
 model_name = 'rev1BB';
 
 reportName = 'BERvsEbN0';
-timestamp = strtrim(datestr(now,'ddmmmyyyy-HH_MM_SSAM'));
+timestamp = strrep(datestr(now,'ddmmmyyyy-HH_MM_SSAM'), ' ', '');
 
 %Change to a temporary dir to perform the work
 addpath(pwd);
