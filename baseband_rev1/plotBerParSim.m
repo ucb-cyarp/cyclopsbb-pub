@@ -287,7 +287,7 @@ xlabel('Eb/N0 (dB)')
 ylabel('BER')
 legend('Theoretical (AWGN)', ['Simulation (', channelSpec, ') - Header Excluded']);
 title({['Baseband Simulation (', channelSpec, ') - Failures Excluded (Modulation Field Rep3 Coded) vs.'], ['Theoretical (Uncoded Coherent ' radixToModulationStr(radix) ' over AWGN)']})
-grid major;
+grid on;
 xlimits = xlim;
 
 fig2 = figure;
@@ -316,7 +316,7 @@ else
 end
 title({['Baseband Simulation (', channelSpec, ') - Failures Excluded (Modulation Field Rep3 Coded) vs.'], ['Theoretical (Uncoded Coherent ' radixToModulationStr(radix) ' over AWGN)']})
 xlim(xlimits);
-grid major;
+grid on;
 
 %% Cleanup
 %close_system('rev0BB');
