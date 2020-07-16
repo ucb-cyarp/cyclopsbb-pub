@@ -8,8 +8,10 @@ rev1BB_startup;
 
 model_name = 'rev1BB';
 
-timestamp = datestr(now,'ddmmmyyyy-HH_MM_SSAM');
+reportName = 'BERvsEbN0';
+timestamp = strtrim(datestr(now,'ddmmmyyyy-HH_MM_SSAM'));
 
+%Change to a temporary dir to perform the work
 addpath(pwd);
 currDir = pwd;
 addpath(currDir);
@@ -285,7 +287,7 @@ xlabel('Eb/N0 (dB)')
 ylabel('BER')
 legend('Theoretical (AWGN)', ['Simulation (', channelSpec, ') - Header Excluded']);
 title({['Baseband Simulation (', channelSpec, ') - Failures Excluded (Modulation Field Rep3 Coded) vs.'], ['Theoretical (Uncoded Coherent ' radixToModulationStr(radix) ' over AWGN)']})
-grid on;
+grid major;
 xlimits = xlim;
 
 fig2 = figure;
@@ -314,7 +316,7 @@ else
 end
 title({['Baseband Simulation (', channelSpec, ') - Failures Excluded (Modulation Field Rep3 Coded) vs.'], ['Theoretical (Uncoded Coherent ' radixToModulationStr(radix) ' over AWGN)']})
 xlim(xlimits);
-grid on;
+grid major;
 
 %% Cleanup
 %close_system('rev0BB');
@@ -324,8 +326,23 @@ rmpath(currDir);
 
 %% Save
 
-savefig(fig1, ['BERvsEbN0-fig1-',timestamp]);
-savefig(fig2, ['BERvsEbN0-fig2-',timestamp]);
-savefig(fig3, ['BERvsEbN0-fig3-',timestamp]);
-save(['BERvsEbN0-workspace-',timestamp]);
+%Make a directory for the results
+foldername = [reportName '_' timestamp];
+mkdir(foldername);
+cd(foldername);
+
+%Save matlab figs
+savefig(fig1, [reportName '_BER']);
+savefig(fig2, [reportName '_Failures']);
+savefig(fig3, [reportName '_EVM']);
+
+%Save png versions
+saveas(fig1, [reportName '_BER.png'])
+saveas(fig2, [reportName '_Failures.png'])
+saveas(fig3, [reportName '_EVM.png'])
+
+%Save workspace
+save([reportName '_workspace']);
+
+cd(currDir);
 
