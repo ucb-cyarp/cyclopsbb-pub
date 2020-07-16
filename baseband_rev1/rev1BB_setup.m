@@ -157,8 +157,9 @@ trLenToFSM = timing_differentiator_grpDelay_roundUp; %Omitted correlator delay a
 %filters.  Hence, the negative sign.
 trMatch = mod(-trLenToFSM, overSample);
 
-trEarlyLateAvgNumSamp = 256;
-trEarlyLatePGain = -0.0175;
+trEarlyLateAvgNumSamp = 32;
+trEarlyLatePGain = -0.0025;
+trEarlyLateIGain = -0.0000005;
 enableTRFreqCorrection = true;
 
 timing_p = -1/2^2 -1/2^3;
