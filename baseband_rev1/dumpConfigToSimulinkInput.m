@@ -120,6 +120,7 @@ simInputs(configInd) = simInputs(configInd).setVariable('trLenToFSM', trLenToFSM
 simInputs(configInd) = simInputs(configInd).setVariable('trMatch', trMatch);
 simInputs(configInd) = simInputs(configInd).setVariable('trEarlyLateAvgNumSamp', trEarlyLateAvgNumSamp);
 simInputs(configInd) = simInputs(configInd).setVariable('trEarlyLatePGain', trEarlyLatePGain);
+simInputs(configInd) = simInputs(configInd).setVariable('trEarlyLateIGain', trEarlyLateIGain);
 simInputs(configInd) = simInputs(configInd).setVariable('enableTRFreqCorrection', enableTRFreqCorrection);
 simInputs(configInd) = simInputs(configInd).setVariable('timing_p', timing_p);
 simInputs(configInd) = simInputs(configInd).setVariable('timingMaxSymbols', timingMaxSymbols);
