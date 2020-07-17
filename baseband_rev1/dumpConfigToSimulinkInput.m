@@ -87,7 +87,6 @@ simInputs(configInd) = simInputs(configInd).setVariable('crc_poly', crc_poly);
 simInputs(configInd) = simInputs(configInd).setVariable('crc_init', crc_init);
 simInputs(configInd) = simInputs(configInd).setVariable('crc_xor', crc_xor);
 simInputs(configInd) = simInputs(configInd).setVariable('corr_peak_trigger', corr_peak_trigger);
-simInputs(configInd) = simInputs(configInd).setVariable('corr_peak_trigger_tolerance', corr_peak_trigger_tolerance);
 simInputs(configInd) = simInputs(configInd).setVariable('corr_peak_exclude_trigger', corr_peak_exclude_trigger);
 simInputs(configInd) = simInputs(configInd).setVariable('rcFiltRolloffFactor', rcFiltRolloffFactor);
 simInputs(configInd) = simInputs(configInd).setVariable('rcFiltSpanSymbols', rcFiltSpanSymbols);

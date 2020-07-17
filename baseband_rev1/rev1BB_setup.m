@@ -97,8 +97,7 @@ crc_init =    [ 1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1
 crc_xor  =    [ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 ];
 
 %% Setup Correlator Peak Detect
-corr_peak_trigger = 0.40;
-corr_peak_trigger_tolerance = 0.35; %used after an initial peak has been detected to provide some degree of tolerance
+corr_peak_trigger = 0.50;
 corr_peak_exclude_trigger = 1+corr_peak_trigger; %Used to exclude false peaks when AGC still settling
 
 %% Setup Pulse Shaping Filter (Root Raised Cosine)
@@ -157,12 +156,12 @@ trLenToFSM = timing_differentiator_grpDelay_roundUp; %Omitted correlator delay a
 %filters.  Hence, the negative sign.
 trMatch = mod(-trLenToFSM, overSample);
 
-trEarlyLateAvgNumSamp = 32;
-trEarlyLatePGain = -0.0025;
+trEarlyLateAvgNumSamp = 64;
+trEarlyLatePGain = -0.005;
 trEarlyLateIGain = -0.0000005;
 enableTRFreqCorrection = true;
 
-timing_p = -1/2^2 -1/2^3;
+timing_p = -0.75;
 
 timingMaxSymbols = dataLenSymbols + length(x_CEF) + length(x_STF)/x_STFRepCount*2+100; %This is to catch any weird case where a reset is not recieved by the timing block.
 
