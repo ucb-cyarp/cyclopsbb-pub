@@ -97,12 +97,12 @@ crc_init =    [ 1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1
 crc_xor  =    [ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 ];
 
 %% Setup Correlator Peak Detect
-corr_peak_trigger = 0.50;
+corr_peak_trigger = 0.40;
 corr_peak_exclude_trigger = 1+corr_peak_trigger; %Used to exclude false peaks when AGC still settling
 
 %% Setup Pulse Shaping Filter (Root Raised Cosine)
 rcFiltRolloffFactor = 0.1;
-rcFiltSpanSymbols = 16;
+rcFiltSpanSymbols = 32;
 rcFileLinearAmpGain = 1;
 
 %Setup Root Raised Cosine Matched Filters
@@ -121,6 +121,13 @@ rcFiltGrpDelay = (rcFiltSpanSamp-1)/2;
 %Alternate derivation
 % rcNormalFilt = 0.5*conv(rcTxFilt, rcRxFilt);
 % rcNormalFilt = 0.5*conv(rcTxFilt, rcRxFilt, 'same');
+
+%% Setup Rx Pre-Filter
+% rxPreFiltOrder = 200;
+% rxPreFiltPass = 1/overSample*(1+rcFiltRolloffFactor);
+% rxPreFiltStop = 1/overSample*(1+3*rcFiltRolloffFactor);
+% 
+% rxPreFilt = firpm(rxPreFiltOrder, [0, rxPreFiltPass, rxPreFiltStop, 1], [1, 1, 0, 0]);
 
 %% Setup AGC
 agc_detector_taps = 16;
@@ -174,8 +181,8 @@ cfoNcoWordLen = 16;
 
 %% Setup EQ
 lmsEqDepth = 38;
-lmsStep_init =  0.012; %LMS
-lmsStep_final = 0.006;
+lmsStep_init =  0.02; %LMS
+lmsStep_final = 0.002;
 lmsStep_meta = (lmsStep_final - lmsStep_init)/cefLen;
 
 %% Setup Demod
