@@ -215,7 +215,15 @@ for chan=0:(numChannels-1)
             
             modulationRxDecoded = bitor(bitor(bitand(repA, repB), bitand(repA, repC)), bitand(repB, repC));
             
-            radixRx = modTypeToRadix(modulationRxDecoded);
+            %if radixRx is not one of the supported radicies, the
+            %length of the packet is taken by thresholding the index of
+            %the modualtion scheme.  The other blocks in the decoder also
+            %assume this modulation scheme
+            if modulationRxDecoded > maxModType()
+                modulationRxDecoded = maxModType(); 
+            end
+            
+            radixRx = modTypeToRadix(modulationRxDecoded); 
             
             %Get the uncoded BER for the header
             headerBitErrorsLocal = biterr(data_recieved_packed{chan+1}(cursor:(cursor+header_len_bytes*lengthMultiplier-1)), expected_packed_data{chan+1}(expectedCursor:(expectedCursor+header_len_bytes*lengthMultiplier-1)));
@@ -243,6 +251,7 @@ for chan=0:(numChannels-1)
                 
                 %Advance cursor based on what the reciever thought the
                 %radix was
+                
                 payloadLengthRx = fixedPayloadLength(radixRx);
                 frameLengthLengthRx = payloadLengthRx + crc_len_bytes;
                 cursor = cursor + frameLengthLengthRx*lengthMultiplier;
