@@ -168,7 +168,7 @@ trEarlyLatePGain = -0.005;
 trEarlyLateIGain = -0.0000005;
 enableTRFreqCorrection = true;
 
-timing_p = -0.75;
+timing_p = -0.35;
 
 timingMaxSymbols = dataLenSymbols + length(x_CEF) + length(x_STF)/x_STFRepCount*2+100; %This is to catch any weird case where a reset is not recieved by the timing block.
 
