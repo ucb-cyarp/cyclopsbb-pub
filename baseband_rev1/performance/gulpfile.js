@@ -35,7 +35,13 @@ gulp.task('replace-md-Links', gulp.series('convert-md', function() {
       .pipe(gulp.dest('build/'));
   }));
 
-gulp.task('insert-html-header', gulp.series('replace-md-Links', function() {
+gulp.task('link-images', gulp.series('replace-md-Links', function() {
+    return gulp.src(['build/*.html'])
+      .pipe(replace(/<img[ ]+src="([^"]*)"[^>]*>/g, '<a href="$1">$&</a>'))
+      .pipe(gulp.dest('build/'));
+}));
+
+gulp.task('insert-html-header', gulp.series('link-images', function() {
 return gulp.src(['build/*.html'])
     .pipe(header('<html>\n<head>\n<link rel="stylesheet" type="text/css" href="skeleton.css">\n</head>\n<body>'))
     .pipe(gulp.dest('build/'));
