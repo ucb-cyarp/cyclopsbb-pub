@@ -9,9 +9,9 @@ Note:
  - The after TR EVM is only valid when no CFO or phase offset is present.
  - The ideal EVM in these plots is a bit off at the moment, particularly for low SNR.
 
- The following plots are based on a BER sweep with 15 trials per point.  Each trial consisted of a packet being transmitted twice with a gap in between transmissions.
+ The following plots are based on a BER sweep with 30 trials per point.  Each trial consisted of a packet being transmitted twice with a gap in between transmissions.
 
- The runs were conducted between July 11 and July 14, 2020 with commit [2ce053330be6b412ac5f6afa005150617b5773c0](https://github.com/ucb-cyarp/cyclopsbb/commit/2ce053330be6b412ac5f6afa005150617b5773c0) modified to enable the different scenarios.
+ The runs were conducted between July 17 and July 19, 2020 with commit [9d2edf35377bb01e0cb2e092ba4feb91249e1ee0](https://github.com/ucb-cyarp/cyclopsbb/commit/9d2edf35377bb01e0cb2e092ba4feb91249e1ee0) modified to enable the different scenarios.
 
 ## Summaries:
 - [BER Plots](berPlots.md)

@@ -5,4 +5,4 @@ This uses a Docker Container initialized by Visual Studio Code with the dockerfi
 
 The config file is in `.devcontainer\Dockerfile`.
 
-To build the docs call gulp within the performance directory.
+To build the docs call `gulp` within the `performance` directory.
