@@ -21,45 +21,55 @@ pad_first = 1000;
 [simX_ch3, modX_ch3, zeroX_ch3] = createTestVectors(radix, testMsg_ch3, headerPayloadCRCSymbols_ch3, x_PRE, x_PRE_adj, header_len_bytes, bitsPerSymbolHeader, frame_len_bytes, bitsPerSymbol, after, pad_first);
 
 %% Imperfections
+
+manChan = true; %Used for AWGN and Manual channels
+
+%Declared so that rayleigh channel block is always happy even when not in
+%use
+channelMdl = stdchan(overSamplePer, maxDopplerHz, channelSpec);
+chanDelays = channelMdl.PathDelays;
+chanDelaysSymb = chanDelays/basePer;
+chanAvgPathGainsdB = channelMdl.AvgPathGaindB;
+chanPathGains = channelMdl.PathGains;
+
+%For AWGN, will be overwritten by manual if used
+manChanDelaysSymb = [0];
+manChanPathGains=[1];
+manChanDelays = manChanDelaysSymb*basePer;
+
 if(strcmp(channelSpec, 'AWGN'))
-    chanDelaysSymb = [0];
-    chanDelays = chanDelaysSymb*basePer;
-    chanPathGains=[0];
-    chanAvgPathGainsdB = [0];
     disp(['Channel: ', channelSpec]);
 elseif(strcmp(channelSpec, 'Manual'))
-    chanDelaysSymb = manualChanDelaysSymb;
-    chanDelays = chanDelaysSymb*basePer;
-    chanAvgPathGainsdB = manualChanPathGainDB;
-    chanPathGains = manualChanPathGain;
+    manChanDelaysSymb = manualChanDelaysSymb;
+    manChanDelays = manChanDelaysSymb*basePer;
+    manChanPathGains = manualChanPathGain;
     disp(['Channel: ', channelSpec]);
-    disp(['Channel Delays (Symbols): ' mat2str(chanDelaysSymb)]);
-    disp(['Average Path Gain (dB): ' mat2str(chanAvgPathGainsdB)]);
+    disp(['Channel Delays (Symbols): ' mat2str(manChanDelaysSymb)]);
+    disp(['Path Gains: ' mat2str(manChanPathGains)]);
 else
-    channelMdl = stdchan(overSamplePer, maxDopplerHz, channelSpec);
-    chanDelays = channelMdl.PathDelays;
-    chanDelaysSymb = chanDelays/basePer;
-    chanAvgPathGainsdB = channelMdl.AvgPathGaindB;
-    chanPathGains = channelMdl.PathGains;
     disp(['Channel: ' channelSpec]);
     disp(['Channel Delays (Symbols): ' mat2str(chanDelaysSymb)]);
     disp(['Average Path Gain (dB): ' mat2str(chanAvgPathGainsdB)]);
+    disp('Rayleigh Fading');
+    disp('Normalized Avg Total Path Gains = 0 dB');
+    disp(['Max Doppler (Hz): ' num2str(maxDopplerHz)]);
+    disp('Doppler Spectrum: Jakes');
+    manChan = false;
 end
 
 %Create Channel FIR Filter
 %Warning! Delays are rounded to sample periods.
-pathDelaysSamplePer = chanDelays*overSampleFreq;
+pathDelaysSamplePer = manChanDelays*overSampleFreq;
 maxSampleDelay = max(pathDelaysSamplePer);
-pathGains = 10.^(chanAvgPathGainsdB./20);
-pathPhase = exp(j.*chanDelays.*carrierFreq.*2.*pi);
+pathGains = abs(manChanPathGains);
 %Normalize Path Gains
-powerNorm = sum(pathGains.^2);
-pathGains = pathGains./sqrt(powerNorm);
+% powerNorm = sum(pathGains.^2);
+% pathGains = pathGains./sqrt(powerNorm);
 %Fill Filter
 channelFIR = zeros(1, round(maxSampleDelay)+1);
 for pathID = 1:length(pathDelaysSamplePer)
     delayIndex = round(pathDelaysSamplePer(pathID))+1;
-    pathTap = pathGains(pathID)*pathPhase(pathID);
+    pathTap = pathGains(pathID);
     channelFIR(delayIndex) = complex(pathTap);
 end
 
