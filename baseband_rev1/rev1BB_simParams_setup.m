@@ -26,11 +26,8 @@ manChan = true; %Used for AWGN and Manual channels
 
 %Declared so that rayleigh channel block is always happy even when not in
 %use
-channelMdl = stdchan(overSamplePer, maxDopplerHz, channelSpec);
-chanDelays = channelMdl.PathDelays;
-chanDelaysSymb = chanDelays/basePer;
-chanAvgPathGainsdB = channelMdl.AvgPathGaindB;
-chanPathGains = channelMdl.PathGains;
+chanDelays = [0];
+chanAvgPathGainsdB = [0];
 
 %For AWGN, will be overwritten by manual if used
 manChanDelaysSymb = [0];
@@ -47,6 +44,12 @@ elseif(strcmp(channelSpec, 'Manual'))
     disp(['Channel Delays (Symbols): ' mat2str(manChanDelaysSymb)]);
     disp(['Path Gains: ' mat2str(manChanPathGains)]);
 else
+    channelMdl = stdchan(overSamplePer, maxDopplerHz, channelSpec);
+    chanDelays = channelMdl.PathDelays;
+    chanDelaysSymb = chanDelays/basePer;
+    chanAvgPathGainsdB = channelMdl.AvgPathGaindB;
+    chanPathGains = channelMdl.PathGains;
+
     disp(['Channel: ' channelSpec]);
     disp(['Channel Delays (Symbols): ' mat2str(chanDelaysSymb)]);
     disp(['Average Path Gain (dB): ' mat2str(chanAvgPathGainsdB)]);
