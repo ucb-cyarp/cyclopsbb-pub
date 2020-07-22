@@ -3,6 +3,9 @@
 %% Init
 clear; close all; clc;
 
+%% Modulation
+radix = 16;
+
 %% Random Seeds
 %seed = 67;
 seed = 579;
