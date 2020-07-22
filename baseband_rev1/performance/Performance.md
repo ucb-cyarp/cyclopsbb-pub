@@ -50,4 +50,4 @@ lmsStep_meta = (lmsStep_final - lmsStep_init)/cefLen;
  - Channel Delays (Symbols): [0 4 8 12]
  - Average Path Gain (dB): [0 -2 -10 -20]
 
-A static FIR filter was derived from the average path gains.  It was then normalized so that the sum of the power of the different paths was 0 dB.
+A static FIR filter was derived from the average path gains.  It was then normalized so that the sum of the power of the different paths was 0 dB.  Delays were rounded to sample values.
