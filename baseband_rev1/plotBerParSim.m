@@ -39,6 +39,9 @@ for radInd = radixIndRange
     disp(['Radix: ' num2str(radix)]);
     disp(['Modulation Type: ' radixToModulationStr(radix)]);
     reportName = [reportNameBase '_' radixToModulationStr(radix)];
+
+    %For each radix need to re-do core setup as some constants are set based on it
+    rev1BB_startup_core;
     
     %Change to a temporary dir to perform the work
     addpath(pwd);
