@@ -125,6 +125,10 @@ for dBSnrInd = indRange
         simInputs(configInd) = simInputs(configInd).setVariable('freqOffsetHz', freqOffsetHz);
         simInputs(configInd) = simInputs(configInd).setVariable('channelFIR', channelFIR);
         simInputs(configInd) = simInputs(configInd).setVariable('awgnSNR', awgnSNR);
+        simInputs(configInd) = simInputs(configInd).setVariable('manChan', manChan);
+        simInputs(configInd) = simInputs(configInd).setVariable('chanDelays', chanDelays);
+        simInputs(configInd) = simInputs(configInd).setVariable('chanAvgPathGainsdB', chanAvgPathGainsdB);
+        simInputs(configInd) = simInputs(configInd).setVariable('maxDopplerHz', maxDopplerHz);
         
         %Set Radio setup parameters
         dumpConfigToSimulinkInput;
