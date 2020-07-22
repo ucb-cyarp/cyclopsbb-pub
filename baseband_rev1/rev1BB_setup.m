@@ -18,7 +18,6 @@ header_len_bytes = 8; %A 8 byte header of mod_type, type, src, dst, net_id (2 by
 mod_scheme_len_bytes = 1;
 crc_len_bytes = 4;
 
-radix = 16; %QAM16
 radixHeader = 2; %BPSK
 radixMax = 16;
 bitsPerSymbol = log2(radix);
