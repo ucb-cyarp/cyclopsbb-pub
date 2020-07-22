@@ -359,5 +359,7 @@ for radInd = radixIndRange
 
     %Save workspace
     save([reportName '_workspace']);
+
+    cd(currDir);
 end
 
