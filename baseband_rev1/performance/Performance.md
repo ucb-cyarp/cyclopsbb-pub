@@ -48,7 +48,6 @@ lmsStep_meta = (lmsStep_final - lmsStep_init)/cefLen;
 ## cost207RAx4 Model
  The cost207RAx4 realziation was the same in each case and was derived from the stdchan cost207RAx4 model built into Matlab.  The channel emulation filter has the following configuration:
  - Channel Delays (Symbols): [0 4 8 12]
-- Average Path Gain (dB): [0 -2 -10 -20]
+ - Average Path Gain (dB): [0 -2 -10 -20]
 
-The frequency Response of the cost207RAx4 channel is shown below:
-![cost207RAx4](cost207RAx4.png)
+A static FIR filter was derived from the average path gains.  It was then normalized so that the sum of the power of the different paths was 0 dB.
