@@ -131,6 +131,7 @@ simInputs(configInd) = simInputs(configInd).setVariable('lmsEqDepth', lmsEqDepth
 simInputs(configInd) = simInputs(configInd).setVariable('lmsStep_init', lmsStep_init);
 simInputs(configInd) = simInputs(configInd).setVariable('lmsStep_final', lmsStep_final);
 simInputs(configInd) = simInputs(configInd).setVariable('lmsStep_meta', lmsStep_meta);
+simInputs(configInd) = simInputs(configInd).setVariable('lmsStepDF', lmsStepDF);
 simInputs(configInd) = simInputs(configInd).setVariable('qam16Mod', qam16Mod);
 simInputs(configInd) = simInputs(configInd).setVariable('qam16_points', qam16_points);
 simInputs(configInd) = simInputs(configInd).setVariable('qam16_power_normalized_distance', qam16_power_normalized_distance);

@@ -179,10 +179,11 @@ cfoNcoQuantizedAccumBits = 12;
 cfoNcoWordLen = 16;
 
 %% Setup EQ
-lmsEqDepth = 16;
-lmsStep_init =  0.01; %LMS
-lmsStep_final = 0.001;
+lmsEqDepth = 50;
+lmsStep_init =  0.02; %LMS
+lmsStep_final = 0.01;
 lmsStep_meta = (lmsStep_final - lmsStep_init)/cefLen;
+lmsStepDF = 0.01;
 
 %% Setup Demod
 %For 16QAM
