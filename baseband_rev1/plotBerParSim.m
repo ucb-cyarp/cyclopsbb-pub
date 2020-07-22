@@ -37,8 +37,8 @@ for radInd = radixIndRange
     %%Set Radix
     radix = radixRange(radInd);
     disp(['Radix: ' num2str(radix)]);
-    disp(['Modulation Type: ' radixToModStr(radix)]);
-    reportName = [reportNameBase '_' radixToModStr(radix)];
+    disp(['Modulation Type: ' radixToModulationStr(radix)]);
+    reportName = [reportNameBase '_' radixToModulationStr(radix)];
     
     %Change to a temporary dir to perform the work
     addpath(pwd);

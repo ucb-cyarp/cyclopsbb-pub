@@ -1,4 +1,4 @@
-function str = radidToModulationStr(radix)
+function str = radixToModulationStr(radix)
 %UNTITLED5 Summary of this function goes here
 %   Detailed explanation goes here
 if radix == 2
