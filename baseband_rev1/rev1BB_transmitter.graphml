@@ -60,9 +60,6 @@
 	<key id="AccumDataTypeStr" for="node" attr.name="AccumDataTypeStr" attr.type="string">
 		<default>""</default>
 	</key>
-	<key id="AllPortsSameDT" for="node" attr.name="AllPortsSameDT" attr.type="string">
-		<default>""</default>
-	</key>
 	<key id="AllowDiffInputSizes" for="node" attr.name="AllowDiffInputSizes" attr.type="string">
 		<default>""</default>
 	</key>
@@ -82,6 +79,9 @@
 		<default>""</default>
 	</key>
 	<key id="BlockChoice" for="node" attr.name="BlockChoice" attr.type="string">
+		<default>""</default>
+	</key>
+	<key id="CodeGenStateStorageTypeQualifier" for="node" attr.name="CodeGenStateStorageTypeQualifier" attr.type="string">
 		<default>""</default>
 	</key>
 	<key id="CoefDataTypeStr" for="node" attr.name="CoefDataTypeStr" attr.type="string">
@@ -120,7 +120,19 @@
 	<key id="DataPortOrder" for="node" attr.name="DataPortOrder" attr.type="string">
 		<default>""</default>
 	</key>
+	<key id="DelayLength" for="node" attr.name="DelayLength" attr.type="string">
+		<default>""</default>
+	</key>
+	<key id="DelayLengthSource" for="node" attr.name="DelayLengthSource" attr.type="string">
+		<default>""</default>
+	</key>
+	<key id="DelayLengthUpperLimit" for="node" attr.name="DelayLengthUpperLimit" attr.type="string">
+		<default>""</default>
+	</key>
 	<key id="DiagnosticForDefault" for="node" attr.name="DiagnosticForDefault" attr.type="string">
+		<default>""</default>
+	</key>
+	<key id="DiagnosticForDelayLength" for="node" attr.name="DiagnosticForDelayLength" attr.type="string">
 		<default>""</default>
 	</key>
 	<key id="Enc" for="node" attr.name="Enc" attr.type="string">
@@ -150,10 +162,13 @@
 	<key id="GeneratePreprocessorConditionals" for="node" attr.name="GeneratePreprocessorConditionals" attr.type="string">
 		<default>""</default>
 	</key>
-	<key id="IconShape" for="node" attr.name="IconShape" attr.type="string">
+	<key id="InType" for="node" attr.name="InType" attr.type="string">
 		<default>""</default>
 	</key>
-	<key id="InType" for="node" attr.name="InType" attr.type="string">
+	<key id="InitialCondition" for="node" attr.name="InitialCondition" attr.type="string">
+		<default>""</default>
+	</key>
+	<key id="InitialConditionSource" for="node" attr.name="InitialConditionSource" attr.type="string">
 		<default>""</default>
 	</key>
 	<key id="InitialStates" for="node" attr.name="InitialStates" attr.type="string">
@@ -315,10 +330,13 @@
 	<key id="Numeric.Coefficients" for="node" attr.name="Numeric.Coefficients" attr.type="string">
 		<default>""</default>
 	</key>
-	<key id="Numeric.InitialStates" for="node" attr.name="Numeric.InitialStates" attr.type="string">
+	<key id="Numeric.DelayLength" for="node" attr.name="Numeric.DelayLength" attr.type="string">
 		<default>""</default>
 	</key>
-	<key id="Numeric.Inputs" for="node" attr.name="Numeric.Inputs" attr.type="string">
+	<key id="Numeric.InitialCondition" for="node" attr.name="Numeric.InitialCondition" attr.type="string">
+		<default>""</default>
+	</key>
+	<key id="Numeric.InitialStates" for="node" attr.name="Numeric.InitialStates" attr.type="string">
 		<default>""</default>
 	</key>
 	<key id="Numeric.M" for="node" attr.name="Numeric.M" attr.type="string">
@@ -354,9 +372,6 @@
 	<key id="Numeric.phase" for="node" attr.name="Numeric.phase" attr.type="string">
 		<default>""</default>
 	</key>
-	<key id="Operator" for="node" attr.name="Operator" attr.type="string">
-		<default>""</default>
-	</key>
 	<key id="OutDataTypeStr" for="node" attr.name="OutDataTypeStr" attr.type="string">
 		<default>""</default>
 	</key>
@@ -382,6 +397,9 @@
 		<default>""</default>
 	</key>
 	<key id="PowType" for="node" attr.name="PowType" attr.type="string">
+		<default>""</default>
+	</key>
+	<key id="PreventDirectFeedthrough" for="node" attr.name="PreventDirectFeedthrough" attr.type="string">
 		<default>""</default>
 	</key>
 	<key id="ProductDataTypeStr" for="node" attr.name="ProductDataTypeStr" attr.type="string">
@@ -427,6 +445,9 @@
 		<default>""</default>
 	</key>
 	<key id="ReferencedSubsystem" for="node" attr.name="ReferencedSubsystem" attr.type="string">
+		<default>""</default>
+	</key>
+	<key id="RemoveDelayLengthCheckInGeneratedCode" for="node" attr.name="RemoveDelayLengthCheckInGeneratedCode" attr.type="string">
 		<default>""</default>
 	</key>
 	<key id="RndMeth" for="node" attr.name="RndMeth" attr.type="string">
@@ -484,6 +505,9 @@
 		<default>""</default>
 	</key>
 	<key id="UseBitMask" for="node" attr.name="UseBitMask" attr.type="string">
+		<default>""</default>
+	</key>
+	<key id="UseCircularBuffer" for="node" attr.name="UseCircularBuffer" attr.type="string">
 		<default>""</default>
 	</key>
 	<key id="Value" for="node" attr.name="Value" attr.type="string">
@@ -1219,12 +1243,12 @@ Ph: 0</data>
 									<data key="Numeric.PeakPow">1</data>
 									<data key="Numeric.Ph">0</data>
 								</node>
-								<node id="n6::n7::n8::n27">
+								<node id="n6::n7::n8::n25">
 									<data key="instance_name">Constant2</data>
 									<data key="block_node_type">Standard</data>
 									<data key="block_function">Constant</data>
 									<data key="block_label">Constant2
-ID: n6::n7::n8::n27
+ID: n6::n7::n8::n25
 Function: Constant
 SampleTime: Inf
 Value: 1</data>
@@ -1241,12 +1265,12 @@ Value: 1</data>
 									<data key="Numeric.SampleTime">Inf</data>
 									<data key="Numeric.Value">1</data>
 								</node>
-								<node id="n6::n7::n8::n28">
+								<node id="n6::n7::n8::n26">
 									<data key="instance_name">Constant3</data>
 									<data key="block_node_type">Standard</data>
 									<data key="block_function">Constant</data>
 									<data key="block_label">Constant3
-ID: n6::n7::n8::n28
+ID: n6::n7::n8::n26
 Function: Constant
 SampleTime: Inf
 Value: 3</data>
@@ -1263,12 +1287,12 @@ Value: 3</data>
 									<data key="Numeric.SampleTime">Inf</data>
 									<data key="Numeric.Value">3</data>
 								</node>
-								<node id="n6::n7::n8::n29">
+								<node id="n6::n7::n8::n27">
 									<data key="instance_name">Constant4</data>
 									<data key="block_node_type">Standard</data>
 									<data key="block_function">Constant</data>
 									<data key="block_label">Constant4
-ID: n6::n7::n8::n29
+ID: n6::n7::n8::n27
 Function: Constant
 SampleTime: Inf
 Value: 15</data>
@@ -1321,105 +1345,47 @@ phase: 0</data>
 							<data key="Numeric.phase">0</data>
 						</node>
 						<node id="n6::n7::n20">
-							<data key="instance_name">dummyNodeForClkDomainDiscoveryLogic</data>
-							<data key="block_node_type">Subsystem</data>
-							<data key="block_function">SubSystem</data>
-							<data key="block_label">dummyNodeForClkDomainDiscoveryLogic
+							<data key="instance_name">ClockDomainDummy_Bugfix</data>
+							<data key="block_node_type">Standard</data>
+							<data key="block_function">Delay</data>
+							<data key="block_label">ClockDomainDummy_Bugfix
 ID: n6::n7::n20
-Function: SubSystem</data>
+Function: Delay
+DelayLengthSource: Dialog
+InitialConditionSource: Dialog
+DelayLength: 0
+InitialCondition: 0
+SampleTime: -1</data>
 							<data key="named_input_ports">0</data>
 							<data key="named_output_ports">0</data>
-							<data key="AllowZeroVariantControls">off</data>
-							<data key="AutoFrameSizeCalculation">off</data>
-							<data key="BlockChoice">[]</data>
-							<data key="CompiledActiveChoiceBlock">[]</data>
-							<data key="CompiledActiveChoiceControl">[]</data>
-							<data key="ErrorFcn">[]</data>
-							<data key="ExecutionDomainType">Deduce</data>
-							<data key="FunctionInterfaceSpec">void_void</data>
-							<data key="FunctionWithSeparateData">off</data>
-							<data key="GeneratePreprocessorConditionals">off</data>
-							<data key="IsSubsystemVirtual">on</data>
-							<data key="LabelModeActiveChoice">[]</data>
-							<data key="Latency">0</data>
-							<data key="MemberBlocks">[]</data>
-							<data key="MinAlgLoopOccurrences">off</data>
-							<data key="PartitionName">[]</data>
-							<data key="Permissions">ReadWrite</data>
-							<data key="PermitHierarchicalResolution">All</data>
-							<data key="PropagateVariantConditions">off</data>
-							<data key="RTWFcnName">[]</data>
-							<data key="RTWFcnNameOpts">Auto</data>
-							<data key="RTWFileName">[]</data>
-							<data key="RTWFileNameOpts">Auto</data>
-							<data key="RTWMemSecDataConstants">Inherit from model</data>
-							<data key="RTWMemSecDataInternal">Inherit from model</data>
-							<data key="RTWMemSecDataParameters">Inherit from model</data>
-							<data key="RTWMemSecFuncExecute">Inherit from model</data>
-							<data key="RTWMemSecFuncInitTerm">Inherit from model</data>
-							<data key="RTWSystemCode">Auto</data>
-							<data key="ReferencedSubsystem">[]</data>
-							<data key="ScheduleAs">Sample time</data>
-							<data key="SetExecutionDomain">off</data>
-							<data key="ShowPortLabels">FromPortIcon</data>
-							<data key="SystemSampleTime">-1</data>
-							<data key="TemplateBlock">[]</data>
-							<data key="TreatAsAtomicUnit">off</data>
-							<data key="TreatAsGroupedWhenPropagatingVariantConditions">on</data>
-							<data key="Variant">off</data>
-							<data key="VariantControl">[]</data>
-							<data key="VariantControlMode">Expression</data>
-							<graph id="n6::n7::n20:" edgedefault="directed">
-								<node id="n6::n7::n20::n21">
-									<data key="instance_name">AND</data>
-									<data key="block_node_type">Standard</data>
-									<data key="block_function">Logic</data>
-									<data key="block_label">AND
-ID: n6::n7::n20::n21
-Function: Logic
-Inputs: 2
-SampleTime: -1</data>
-									<data key="named_input_ports">0</data>
-									<data key="named_output_ports">0</data>
-									<data key="AllPortsSameDT">off</data>
-									<data key="IconShape">distinctive</data>
-									<data key="Inputs">2</data>
-									<data key="Operator">AND</data>
-									<data key="OutDataTypeStr">boolean</data>
-									<data key="SampleTime">-1</data>
-									<data key="Numeric.Inputs">2</data>
-									<data key="Numeric.SampleTime">-1</data>
-								</node>
-								<node id="n6::n7::n20::n26">
-									<data key="instance_name">Constant</data>
-									<data key="block_node_type">Standard</data>
-									<data key="block_function">Constant</data>
-									<data key="block_label">Constant
-ID: n6::n7::n20::n26
-Function: Constant
-SampleTime: Inf
-Value: true</data>
-									<data key="named_input_ports">0</data>
-									<data key="named_output_ports">0</data>
-									<data key="FramePeriod">inf</data>
-									<data key="LockScale">off</data>
-									<data key="OutDataTypeStr">boolean</data>
-									<data key="OutMax">[]</data>
-									<data key="OutMin">[]</data>
-									<data key="SampleTime">inf</data>
-									<data key="Value">true</data>
-									<data key="VectorParams1D">on</data>
-									<data key="Numeric.SampleTime">Inf</data>
-									<data key="Numeric.Value">true</data>
-								</node>
-							</graph>
+							<data key="CodeGenStateStorageTypeQualifier">[]</data>
+							<data key="DelayLength">0</data>
+							<data key="DelayLengthSource">Dialog</data>
+							<data key="DelayLengthUpperLimit">100</data>
+							<data key="DiagnosticForDelayLength">None</data>
+							<data key="ExternalReset">None</data>
+							<data key="InitialCondition">0.0</data>
+							<data key="InitialConditionSource">Dialog</data>
+							<data key="InputProcessing">Elements as channels (sample based)</data>
+							<data key="PreventDirectFeedthrough">off</data>
+							<data key="RemoveDelayLengthCheckInGeneratedCode">off</data>
+							<data key="SampleTime">-1</data>
+							<data key="ShowEnablePort">off</data>
+							<data key="StateMustResolveToSignalObject">off</data>
+							<data key="StateName">[]</data>
+							<data key="StateSignalObject">[]</data>
+							<data key="StateStorageClass">Auto</data>
+							<data key="UseCircularBuffer">off</data>
+							<data key="Numeric.DelayLength">0</data>
+							<data key="Numeric.InitialCondition">0</data>
+							<data key="Numeric.SampleTime">-1</data>
 						</node>
-						<node id="n6::n7::n22">
+						<node id="n6::n7::n21">
 							<data key="instance_name">Upsample2</data>
 							<data key="block_node_type">RateChange</data>
 							<data key="block_function">UpSample</data>
 							<data key="block_label">Upsample2
-ID: n6::n7::n22
+ID: n6::n7::n21
 Type: RateChange
 Function: UpSample
 N: 4
@@ -1570,12 +1536,12 @@ SampleTime: -1</data>
 							<data key="Numeric.InitialStates">0</data>
 							<data key="Numeric.SampleTime">-1</data>
 						</node>
-						<node id="n6::n14::n31">
+						<node id="n6::n14::n29">
 							<data key="instance_name">VITIS_PARTITION</data>
 							<data key="block_node_type">Standard</data>
 							<data key="block_function">Constant</data>
 							<data key="block_label">VITIS_PARTITION
-ID: n6::n14::n31
+ID: n6::n14::n29
 Function: Constant
 SampleTime: Inf
 Value: 1</data>
@@ -1594,12 +1560,12 @@ Value: 1</data>
 						</node>
 					</graph>
 				</node>
-				<node id="n6::n23">
+				<node id="n6::n22">
 					<data key="instance_name">Constant</data>
 					<data key="block_node_type">Standard</data>
 					<data key="block_function">Constant</data>
 					<data key="block_label">Constant
-ID: n6::n23
+ID: n6::n22
 Function: Constant
 SampleTime: -1
 Value: 0</data>
@@ -1616,14 +1582,14 @@ Value: 0</data>
 					<data key="Numeric.SampleTime">-1</data>
 					<data key="Numeric.Value">0</data>
 				</node>
-				<node id="n6::n24">
+				<node id="n6::n23">
 					<data key="instance_name">Real-Imag to
 Complex</data>
 					<data key="block_node_type">Standard</data>
 					<data key="block_function">RealImagToComplex</data>
 					<data key="block_label">Real-Imag to
 Complex
-ID: n6::n24
+ID: n6::n23
 Function: RealImagToComplex</data>
 					<data key="named_input_ports">0</data>
 					<data key="named_output_ports">0</data>
@@ -1631,12 +1597,12 @@ Function: RealImagToComplex</data>
 					<data key="Input">Real and imag</data>
 					<data key="SampleTime">-1</data>
 				</node>
-				<node id="n6::n25">
+				<node id="n6::n24">
 					<data key="instance_name">Constant1</data>
 					<data key="block_node_type">Standard</data>
 					<data key="block_function">Constant</data>
 					<data key="block_label">Constant1
-ID: n6::n25
+ID: n6::n24
 Function: Constant
 SampleTime: -1
 Value: 0</data>
@@ -1653,12 +1619,12 @@ Value: 0</data>
 					<data key="Numeric.SampleTime">-1</data>
 					<data key="Numeric.Value">0</data>
 				</node>
-				<node id="n6::n30">
+				<node id="n6::n28">
 					<data key="instance_name">VITIS_PARTITION</data>
 					<data key="block_node_type">Standard</data>
 					<data key="block_function">Constant</data>
 					<data key="block_label">VITIS_PARTITION
-ID: n6::n30
+ID: n6::n28
 Function: Constant
 SampleTime: Inf
 Value: 1</data>
@@ -1901,7 +1867,7 @@ Width: 1</data>
 			<data key="arc_dimension">[1, 1]</data>
 			<data key="arc_width">1</data>
 		</edge>
-		<edge id="e15" source="n6::n7::n22" target="n6::n13">
+		<edge id="e15" source="n6::n7::n21" target="n6::n13">
 			<data key="arc_src_port">1</data>
 			<data key="arc_dst_port">2</data>
 			<data key="arc_dst_port_type">Standard</data>
@@ -1917,7 +1883,7 @@ Width: 1</data>
 			<data key="arc_dimension">[1, 1]</data>
 			<data key="arc_width">1</data>
 		</edge>
-		<edge id="e16" source="n6::n7::n20::n21" target="n6::n7::n22">
+		<edge id="e16" source="n6::n7::n20" target="n6::n7::n21">
 			<data key="arc_src_port">1</data>
 			<data key="arc_dst_port">1</data>
 			<data key="arc_dst_port_type">Standard</data>
@@ -1933,7 +1899,7 @@ Width: 1</data>
 			<data key="arc_dimension">[1, 1]</data>
 			<data key="arc_width">1</data>
 		</edge>
-		<edge id="e17" source="n1" target="n6::n7::n20::n21">
+		<edge id="e17" source="n1" target="n6::n7::n20">
 			<data key="arc_src_port">3</data>
 			<data key="arc_dst_port">1</data>
 			<data key="arc_dst_port_type">Standard</data>
@@ -1949,7 +1915,7 @@ Width: 1</data>
 			<data key="arc_dimension">[1, 1]</data>
 			<data key="arc_width">1</data>
 		</edge>
-		<edge id="e18" source="n6::n24" target="n6::n13">
+		<edge id="e18" source="n6::n23" target="n6::n13">
 			<data key="arc_src_port">1</data>
 			<data key="arc_dst_port">3</data>
 			<data key="arc_dst_port_type">Standard</data>
@@ -1965,7 +1931,7 @@ Width: 1</data>
 			<data key="arc_dimension">[1, 1]</data>
 			<data key="arc_width">1</data>
 		</edge>
-		<edge id="e19" source="n6::n23" target="n6::n24">
+		<edge id="e19" source="n6::n22" target="n6::n23">
 			<data key="arc_src_port">1</data>
 			<data key="arc_dst_port">1</data>
 			<data key="arc_dst_port_type">Standard</data>
@@ -1981,7 +1947,7 @@ Width: 1</data>
 			<data key="arc_dimension">[1, 1]</data>
 			<data key="arc_width">1</data>
 		</edge>
-		<edge id="e20" source="n6::n25" target="n6::n24">
+		<edge id="e20" source="n6::n24" target="n6::n23">
 			<data key="arc_src_port">1</data>
 			<data key="arc_dst_port">2</data>
 			<data key="arc_dst_port_type">Standard</data>
@@ -1997,23 +1963,7 @@ Width: 1</data>
 			<data key="arc_dimension">[1, 1]</data>
 			<data key="arc_width">1</data>
 		</edge>
-		<edge id="e21" source="n6::n7::n20::n26" target="n6::n7::n20::n21">
-			<data key="arc_src_port">1</data>
-			<data key="arc_dst_port">2</data>
-			<data key="arc_dst_port_type">Standard</data>
-			<data key="arc_disp_label">Src Port Num: 1
-Dst Port Num: 2
-Dst Port Type: Standard
-Datatype: boolean
-Complex: 0
-Dimension: [1, 1]
-Width: 1</data>
-			<data key="arc_datatype">boolean</data>
-			<data key="arc_complex">0</data>
-			<data key="arc_dimension">[1, 1]</data>
-			<data key="arc_width">1</data>
-		</edge>
-		<edge id="e22" source="n6::n7::n8::n27" target="n6::n7::n8::n9">
+		<edge id="e21" source="n6::n7::n8::n25" target="n6::n7::n8::n9">
 			<data key="arc_src_port">1</data>
 			<data key="arc_dst_port">2</data>
 			<data key="arc_dst_port_type">Standard</data>
@@ -2029,7 +1979,7 @@ Width: 1</data>
 			<data key="arc_dimension">[1, 1]</data>
 			<data key="arc_width">1</data>
 		</edge>
-		<edge id="e23" source="n6::n7::n8::n28" target="n6::n7::n8::n16">
+		<edge id="e22" source="n6::n7::n8::n26" target="n6::n7::n8::n16">
 			<data key="arc_src_port">1</data>
 			<data key="arc_dst_port">2</data>
 			<data key="arc_dst_port_type">Standard</data>
@@ -2045,7 +1995,7 @@ Width: 1</data>
 			<data key="arc_dimension">[1, 1]</data>
 			<data key="arc_width">1</data>
 		</edge>
-		<edge id="e24" source="n6::n7::n8::n29" target="n6::n7::n8::n18">
+		<edge id="e23" source="n6::n7::n8::n27" target="n6::n7::n8::n18">
 			<data key="arc_src_port">1</data>
 			<data key="arc_dst_port">2</data>
 			<data key="arc_dst_port_type">Standard</data>
@@ -2061,7 +2011,7 @@ Width: 1</data>
 			<data key="arc_dimension">[1, 1]</data>
 			<data key="arc_width">1</data>
 		</edge>
-		<edge id="e25" source="n6::n30" target="n5">
+		<edge id="e24" source="n6::n28" target="n5">
 			<data key="arc_src_port">1</data>
 			<data key="arc_dst_port">1</data>
 			<data key="arc_dst_port_type">Standard</data>
@@ -2077,7 +2027,7 @@ Width: 1</data>
 			<data key="arc_dimension">[1, 1]</data>
 			<data key="arc_width">1</data>
 		</edge>
-		<edge id="e26" source="n6::n14::n31" target="n5">
+		<edge id="e25" source="n6::n14::n29" target="n5">
 			<data key="arc_src_port">1</data>
 			<data key="arc_dst_port">1</data>
 			<data key="arc_dst_port_type">Standard</data>
