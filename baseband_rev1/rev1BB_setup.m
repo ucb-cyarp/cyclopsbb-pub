@@ -1,33 +1,32 @@
 %% Temporary Assignment of Partitions
-% TxResampleModulatorPartition = 1;
-% TxRRCFilterPartition = 2;
-% RxRRCPartition = 3;
-% RxAGCPartition = 4;
-% RxTimingRecoveryPartition = 5;
-% RxCoarseCFOPartition = 6;
-% RxEQPartition = 7;
-% RxFineCFOPartition = 8;
-% RxDemodPartition = 9;
-% RxPackerPartition = 9;
-% RxHeaderParsePartition = 9;
-% RxPacketControllerPartition = 10;
-% RxFreezeControllerPartition = 10;
-% RxSymbolDomainIOPartition = 6;
-
 TxResampleModulatorPartition = 1;
-TxRRCFilterPartition = 1;
+TxRRCFilterPartition = 2;
 RxRRCPartition = 1;
-RxAGCPartition = 1;
-RxTimingRecoveryPartition = 1;
-RxCoarseCFOPartition = 1;
-RxEQPartition = 1;
-RxFineCFOPartition = 1;
-RxDemodPartition = 1;
-RxPackerPartition = 1;
-RxHeaderParsePartition = 1;
-RxPacketControllerPartition = 1;
-RxFreezeControllerPartition = 1;
-RxSymbolDomainIOPartition = 1;
+RxAGCPartition = 2;
+RxTimingRecoveryPartition = 3;
+RxCoarseCFOPartition = 4;
+RxEQPartition = 5;
+RxFineCFOPartition = 6;     % - Needs to be in the same partition due to cycle. 
+RxDemodPartition = 6;       % | Can pipelined slightly due to modulation field being one of the first.
+RxHeaderParsePartition = 6; % - However, this is a relativly tight loop.
+RxPackerPartition = 7;  
+
+RxPacketControllerPartition = 8;
+RxFreezeControllerPartition = 8;
+
+% TxResampleModulatorPartition = 1;
+% TxRRCFilterPartition = 1;
+% RxRRCPartition = 1;
+% RxAGCPartition = 1;
+% RxTimingRecoveryPartition = 1;
+% RxCoarseCFOPartition = 1;
+% RxEQPartition = 1;
+% RxFineCFOPartition = 1;
+% RxDemodPartition = 1;
+% RxPackerPartition = 1;
+% RxHeaderParsePartition = 1;
+% RxPacketControllerPartition = 1;
+% RxFreezeControllerPartition = 1;
 
 %% Setup Packet Format
 header_len_bytes = 8; %A 8 byte header of mod_type, type, src, dst, net_id (2 bytes), len (2 bytes).  The 4 byte CRC will be appended to the end of the frame
