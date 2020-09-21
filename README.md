@@ -10,7 +10,7 @@ Note: A license to CommsToolbox is required to run this design.
 The design is compatible with HDL Coder and has been deployed to 7 Series Xilinx FPGAs
 
 ## Opening the Design
-1. Set the Matlab Path to the `baseband` directory
+1. Set the Matlab Path to the `baseband_rev1` directory
 2. Run `rev0BB_startup.m`
 
 ## Changing Parameters
@@ -18,4 +18,4 @@ Parameters for the design are primarily set in `baseband/rev0BB_setup.m` with so
 
 ## Editing the Design
 1. Follow the directions in [Opening the Design](#opening-the-design)
-2. Edit `rev0BB.slx`
+2. Edit `rev1BB.slx`
