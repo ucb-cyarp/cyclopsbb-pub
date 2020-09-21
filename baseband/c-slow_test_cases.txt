@@ -1,0 +1,15 @@
+C-Slow Test Cases
+
+Simple Subsystem (not enabled)
+	Delays multiplied by share factor and not rewired.  No Rewireing
+
+Simple System including Enabled Subsystem
+	Delays not in enabled subsystem multiplied by share_factor and not re-wired.
+	Enable line re-wired to new en input
+	Delays inside of enabled subsystem = 0, removed
+	Delays inside of enabled subsystem > 1, replaced with c-slow shift register
+		Replaced block properly wired
+		Enable wired to en port.
+
+Simple Enabled Subsystem multiple blocks connected to delay ouput
+    Ensure all block are connected to replacement (if delay >0) or source (if delay == 0)
