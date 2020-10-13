@@ -12,9 +12,10 @@ reportNameBase = 'BERvsEbN0';
 timestamp = strrep(datestr(now,'ddmmmyyyy-HH_MM_SSAM'), ' ', '');
 
 %% Sweep Parameters
-trials = 30;
-dBSnrRange = -2:1:18;
+trials = 10;
+dBSnrRange = 0:2:18;
 radixRange = [16, 4, 2];
+% radixRange = [16, 4, 2];
 % dBSnrRange = [-3, 0, 3, 6, 10, 12, 15, 18, 21];
 % dBSnrRange = [12, 15];
 % dBSnrRange = [18];

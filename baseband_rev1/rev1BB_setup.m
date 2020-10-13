@@ -4,15 +4,17 @@ TxRRCFilterPartition = 2;
 RxRRCPartition = 1;
 RxAGCPartition = 2;
 RxTimingRecoveryPartition = 3;
-RxCoarseCFOPartition = 4;
-RxEQPartition = 5;
-RxFineCFOPartition = 6;     % - Needs to be in the same partition due to cycle. 
-RxDemodPartition = 6;       % | Can pipelined slightly due to modulation field being one of the first.
-RxHeaderParsePartition = 6; % - However, this is a relativly tight loop.
-RxPackerPartition = 7;  
+RxTimingRecoveryVariableDelayPartition = 4;
+RxTimingRecoveryGolayPeakDetectPartition = 5;
+RxCoarseCFOPartition = 6;
+RxEQPartition = 7;
+RxFineCFOPartition = 8;     % - Needs to be in the same partition due to cycle. 
+RxDemodPartition = 8;       % | Can pipelined slightly due to modulation field being one of the first.
+RxHeaderParsePartition = 8; % - However, this is a relativly tight loop.
+RxPackerPartition = 9;  
 
-RxPacketControllerPartition = 8;
-RxFreezeControllerPartition = 8;
+RxPacketControllerPartition = 10;
+RxFreezeControllerPartition = 10;
 
 % TxResampleModulatorPartition = 1;
 % TxRRCFilterPartition = 1;
@@ -178,7 +180,9 @@ trLenToFSM = timing_differentiator_grpDelay_roundUp; %Omitted correlator delay a
 trMatch = mod(-trLenToFSM, overSample);
 
 trEarlyLateAvgNumSamp = 64;
-trEarlyLatePGain = -0.005;
+% trEarlyLatePGain = -0.005;
+% trEarlyLateIGain = -0.0000005;
+trEarlyLatePGain = -0.0005;
 trEarlyLateIGain = -0.0000005;
 enableTRFreqCorrection = true;
 
