@@ -62,7 +62,8 @@ awgnSNR = 30;
 freqOffsetHz = 20000;
 % freqOffsetHz = 100000;
 
-txTimingOffset = 0.0002;
+txTimingOffset = 0.00002;
+% txTimingOffset = 0.0002;
 % txTimingOffset = -0.0001;
 % txTimingOffset = 0.00001;
 % txTimingOffset = 0;
