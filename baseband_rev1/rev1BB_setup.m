@@ -22,22 +22,25 @@
 TxResampleModulatorPartition = 1;
 TxRRCFilterPartition = 2;
 RxRRCPartition = 1;
-RxAGCPartition = 2;
-RxTimingRecoveryPartition = 3;
-RxTimingRecoveryVariableDelayPartition = 4;
-RxTimingRecoveryGolayCorrelatorPartition = 5;
-RxTimingRecoveryGolayPeakDetectPartition = 6;
-RxTimingRecoveryEarlyLatePartition = 7;
-RxTimingRecoveryFreqEstPartition = 8;
-RxTimingRecoveryDelayAccumPartition = 8;
-RxCoarseCFOPartition = 9;
-RxEQPartition = 10;
-RxFineCFOPartition = 11;     % - Needs to be in the same partition due to cycle. 
-RxDemodPartition = 11;       % | Can pipelined slightly due to modulation field being one of the first.
-RxHeaderParsePartition = 11; % - However, this is a relativly tight loop.
-RxPackerPartition = 12;  
-RxPacketControllerPartition = 13;
-RxFreezeControllerPartition = 13;
+RxAGCPwrAvgPartition = 2;
+RxAGCCorrectionLoopPartition = 3;
+RxAGCSettledCalcPartition = 4;
+RxTimingRecoveryVariableDelayPartition = 5;
+RxTimingRecoveryGolayCorrelatorPartition = 6;
+RxTimingRecoveryGolayPeakDetectPartition = 7;
+RxTimingRecoveryControlPartition = 8;
+RxTimingRecoverySymbolClockPartition = 9;
+RxTimingRecoveryEarlyLatePartition = 10;
+RxTimingRecoveryFreqEstPartition = 11;
+RxTimingRecoveryDelayAccumPartition = 12;
+RxCoarseCFOPartition = 13;
+RxEQPartition = 14;
+RxFineCFOPartition = 15;     % - Needs to be in the same partition due to cycle. 
+RxDemodPartition = 15;       % | Can pipelined slightly due to modulation field being one of the first.
+RxHeaderParsePartition = 15; % - However, this is a relativly tight loop.
+RxPackerPartition = 16;  
+RxPacketControllerPartition = 17;
+RxFreezeControllerPartition = 17;
 
 % TxResampleModulatorPartition = 1;
 % TxRRCFilterPartition = 2;
@@ -314,7 +317,7 @@ cr_sat2_low = -cr_saturation2;
 
 %% Setup Rx Controller
 cefEarlyWarning = 256;
-RxFeedbackPipelining = 128*3; %This is in samples
+RxFeedbackPipelining = 128*6; %This is in samples
 feedbackResetBuffer = 4; 
 
 delayToOutputFromDataFSM = lmsEqDepth/2-1;
