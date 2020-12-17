@@ -249,7 +249,11 @@ agcSettleThresh = 0.65;
 
 %% Setup Timing Recovery
 timing_differentiator_len = 15; %The block adds 1
-timing_differentiator_grpDelay_roundUp = ceil((timing_differentiator_len)/2); %The block adds one which is subtracted again here.  The group delay is rounded up to a full sample
+
+timing_correlator_pipeline = 1;
+timing_differentiator_pipeline = 1;
+
+timing_differentiator_grpDelay_roundUp = ceil((timing_differentiator_len)/2+timing_differentiator_pipeline); %The block adds one which is subtracted again here.  The group delay is rounded up to a full sample
 
 timingDifferentiatorFiltObj =  designfilt('differentiatorfir','FilterOrder',timing_differentiator_len);
 timingDifferentiatorFilt = timingDifferentiatorFiltObj.Coefficients;
@@ -262,7 +266,7 @@ trFarrowTaps = 4;
 trTappedDelayLen = trTappedDelayBase+trFarrowTaps; %Include samples for the interpolator
 trInitialDelay = round((trTappedDelayLen+1-trFarrowTaps)/2+1);
 
-trLenToFSM = timing_differentiator_grpDelay_roundUp; %Omitted correlator delay as the peak will occure immediatly the last symbol in the correlated sequence enters the correlator.  However, the differentiator does introduce additional group delay
+trLenToFSM = timing_differentiator_grpDelay_roundUp+timing_correlator_pipeline; %Omitted correlator delay as the peak will occure immediatly the last symbol in the correlated sequence enters the correlator.  However, the differentiator does introduce additional group delay
 %The ideal match would be to bring the symbol clock / strobe into the 
 %future (from it's standpoint) to align with the samples before all the 
 %filters.  Hence, the negative sign.
