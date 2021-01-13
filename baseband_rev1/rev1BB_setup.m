@@ -275,11 +275,13 @@ trMatch = mod(-trLenToFSM, overSample);
 trEarlyLateAvgNumSamp = 64;
 % trEarlyLatePGain = -0.005;
 % trEarlyLateIGain = -0.0000005;
-trEarlyLatePGain = -0.0005;
-trEarlyLateIGain = -0.0000005;
+trEarlyLatePGain = -0.00225;
+trEarlyLateIGain = -0.000000050;
 enableTRFreqCorrection = true;
 
-timing_p = -0.35;
+timing_p = -0.215;
+
+trFeedbackPipelining = 64*8;
 
 timingMaxSymbols = dataLenSymbols + length(x_CEF) + length(x_STF)/x_STFRepCount*2+100; %This is to catch any weird case where a reset is not recieved by the timing block.
 
@@ -321,7 +323,7 @@ cr_sat2_low = -cr_saturation2;
 
 %% Setup Rx Controller
 cefEarlyWarning = 256;
-RxFeedbackPipelining = 128*6; %This is in samples
+RxFeedbackPipelining = 64*16; %This is in samples
 feedbackResetBuffer = 4; 
 
 delayToOutputFromDataFSM = lmsEqDepth/2-1;
