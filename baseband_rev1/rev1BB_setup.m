@@ -6,27 +6,27 @@ TxRRCFilterPartition = 2;
 % Rx Partitions
 
 % -Fine Grain Partitioning (16 Cores)
-RxRRCPartition = 1;
-RxAGCPwrAvgPartition = 2;
-RxAGCCorrectionLoopPartition = 3;
-RxAGCSettledCalcPartition = 4;
-RxTimingRecoveryVariableDelayPartition = 4;
-RxTimingRecoveryVariableDelayPart2Partition = 5;
-RxTimingRecoveryGolayCorrelatorPartition = 6;
-RxTimingRecoveryGolayPeakDetectPartition = 7;
-RxTimingRecoveryControlPartition = 8;
-RxTimingRecoverySymbolClockPartition = 9;
-RxTimingRecoveryEarlyLatePartition = 10;
-RxTimingRecoveryFreqEstPartition = 11;
-RxTimingRecoveryDelayAccumPartition = 12;
-RxCoarseCFOPartition = 13;
-RxEQPartition = 14;
-RxFineCFOPartition = 15;     % - Needs to be in the same partition due to cycle. 
-RxDemodPartition = 15;       % | Can pipelined slightly due to modulation field being one of the first.
-RxHeaderParsePartition = 15; % - However, this is a relativly tight loop.
-RxPackerPartition = 16;  
-RxPacketControllerPartition = 17;
-RxFreezeControllerPartition = 17;
+% RxRRCPartition = 1;
+% RxAGCPwrAvgPartition = 2;
+% RxAGCCorrectionLoopPartition = 3;
+% RxAGCSettledCalcPartition = 4;
+% RxTimingRecoveryVariableDelayPartition = 4;
+% RxTimingRecoveryVariableDelayPart2Partition = 5;
+% RxTimingRecoveryGolayCorrelatorPartition = 6;
+% RxTimingRecoveryGolayPeakDetectPartition = 7;
+% RxTimingRecoveryControlPartition = 8;
+% RxTimingRecoverySymbolClockPartition = 9;
+% RxTimingRecoveryEarlyLatePartition = 10;
+% RxTimingRecoveryFreqEstPartition = 11;
+% RxTimingRecoveryDelayAccumPartition = 12;
+% RxCoarseCFOPartition = 13;
+% RxEQPartition = 14;
+% RxFineCFOPartition = 15;     % - Needs to be in the same partition due to cycle. 
+% RxDemodPartition = 15;       % | Can pipelined slightly due to modulation field being one of the first.
+% RxHeaderParsePartition = 15; % - However, this is a relativly tight loop.
+% RxPackerPartition = 16;  
+% RxPacketControllerPartition = 17;
+% RxFreezeControllerPartition = 17;
 
 % - Single Parition
 % RxRRCPartition = 1;
@@ -77,7 +77,7 @@ RxFreezeControllerPartition = 17;
 % RxFreezeControllerPartition = 2;
 
 % - 2 Partitions Approx Equal Partitioning (based on estimate) - Pipleine
-% Split 7
+% Split 8
 % RxRRCPartition = 1;
 % RxAGCPwrAvgPartition = 1;
 % RxAGCCorrectionLoopPartition = 1;
@@ -125,7 +125,7 @@ RxFreezeControllerPartition = 17;
 % RxFreezeControllerPartition = 3;
 
 % - 3 Partitions Approx Equal Partitioning (based on estimate) - Pipleine
-% Split 5, 11
+% Split 6, 12
 % RxRRCPartition = 1;
 % RxAGCPwrAvgPartition = 1;
 % RxAGCCorrectionLoopPartition = 1;
@@ -149,7 +149,7 @@ RxFreezeControllerPartition = 17;
 % RxFreezeControllerPartition = 3;
 
 % - 3 Partitions Approx Equal Partitioning (based on estimate) - Pipleine
-% Split 4, 11 - Worse version
+% Split 5, 12 - Worse version
 % RxRRCPartition = 1;
 % RxAGCPwrAvgPartition = 1;
 % RxAGCCorrectionLoopPartition = 1;
@@ -173,7 +173,7 @@ RxFreezeControllerPartition = 17;
 % RxFreezeControllerPartition = 3;
 
 % - 4 Partitions Approx Equal Partitioning (based on estimate) - Pipleine
-% Split 4, 7, 12.15
+% Split 5, 8, 13.16
 % RxRRCPartition = 1;
 % RxAGCPwrAvgPartition = 1;
 % RxAGCCorrectionLoopPartition = 1;
@@ -195,6 +195,102 @@ RxFreezeControllerPartition = 17;
 % RxPackerPartition = 4;  
 % RxPacketControllerPartition = 3;
 % RxFreezeControllerPartition = 3;
+
+% - 4 Partitions Approx Equal Partitioning (based on estimate) - Pipleine
+% Split 4, 8, 13.16
+% RxRRCPartition = 1;
+% RxAGCPwrAvgPartition = 1;
+% RxAGCCorrectionLoopPartition = 1;
+% RxAGCSettledCalcPartition = 1;
+% RxTimingRecoveryVariableDelayPartition = 1;
+% RxTimingRecoveryVariableDelayPart2Partition = 2;
+% RxTimingRecoveryGolayCorrelatorPartition = 2;
+% RxTimingRecoveryGolayPeakDetectPartition = 2;
+% RxTimingRecoveryControlPartition = 2;
+% RxTimingRecoverySymbolClockPartition = 3;
+% RxTimingRecoveryEarlyLatePartition = 3;
+% RxTimingRecoveryFreqEstPartition = 3;
+% RxTimingRecoveryDelayAccumPartition = 3;
+% RxCoarseCFOPartition = 3;
+% RxEQPartition = 4;
+% RxFineCFOPartition = 4;     % - Needs to be in the same partition due to cycle. 
+% RxDemodPartition = 4;       % | Can pipelined slightly due to modulation field being one of the first.
+% RxHeaderParsePartition = 4; % - However, this is a relativly tight loop.
+% RxPackerPartition = 4;  
+% RxPacketControllerPartition = 3;
+% RxFreezeControllerPartition = 3;
+
+% - 4 Partitions Approx Equal Partitioning (based on estimate) - Pipleine
+% Split 4 7 12.16
+% RxRRCPartition = 1;
+% RxAGCPwrAvgPartition = 1;
+% RxAGCCorrectionLoopPartition = 1;
+% RxAGCSettledCalcPartition = 1;
+% RxTimingRecoveryVariableDelayPartition = 1;
+% RxTimingRecoveryVariableDelayPart2Partition = 2;
+% RxTimingRecoveryGolayCorrelatorPartition = 2;
+% RxTimingRecoveryGolayPeakDetectPartition = 2;
+% RxTimingRecoveryControlPartition = 3;
+% RxTimingRecoverySymbolClockPartition = 3;
+% RxTimingRecoveryEarlyLatePartition = 3;
+% RxTimingRecoveryFreqEstPartition = 3;
+% RxTimingRecoveryDelayAccumPartition = 3;
+% RxCoarseCFOPartition = 4;
+% RxEQPartition = 4;
+% RxFineCFOPartition = 4;     % - Needs to be in the same partition due to cycle. 
+% RxDemodPartition = 4;       % | Can pipelined slightly due to modulation field being one of the first.
+% RxHeaderParsePartition = 4; % - However, this is a relativly tight loop.
+% RxPackerPartition = 4;  
+% RxPacketControllerPartition = 3;
+% RxFreezeControllerPartition = 3;
+
+% - 5 Partitions Approx Equal Partitioning (based on estimate) - Pipleine
+% Split 3, 6, 9, 13.16
+% RxRRCPartition = 1;
+% RxAGCPwrAvgPartition = 1;
+% RxAGCCorrectionLoopPartition = 1;
+% RxAGCSettledCalcPartition = 1;
+% RxTimingRecoveryVariableDelayPartition = 2;
+% RxTimingRecoveryVariableDelayPart2Partition = 2;
+% RxTimingRecoveryGolayCorrelatorPartition = 2;
+% RxTimingRecoveryGolayPeakDetectPartition = 3;
+% RxTimingRecoveryControlPartition = 3;
+% RxTimingRecoverySymbolClockPartition = 3;
+% RxTimingRecoveryEarlyLatePartition = 4;
+% RxTimingRecoveryFreqEstPartition = 4;
+% RxTimingRecoveryDelayAccumPartition = 4;
+% RxCoarseCFOPartition = 4;
+% RxEQPartition = 5;
+% RxFineCFOPartition = 5;     % - Needs to be in the same partition due to cycle. 
+% RxDemodPartition = 5;       % | Can pipelined slightly due to modulation field being one of the first.
+% RxHeaderParsePartition = 5; % - However, this is a relativly tight loop.
+% RxPackerPartition = 5;  
+% RxPacketControllerPartition = 4;
+% RxFreezeControllerPartition = 4;
+
+% - 5 Partitions Approx Equal Partitioning (based on estimate) - Pipleine
+% Split 4, 7, 12, 14.16
+RxRRCPartition = 1;
+RxAGCPwrAvgPartition = 1;
+RxAGCCorrectionLoopPartition = 1;
+RxAGCSettledCalcPartition = 1;
+RxTimingRecoveryVariableDelayPartition = 1;
+RxTimingRecoveryVariableDelayPart2Partition = 2;
+RxTimingRecoveryGolayCorrelatorPartition = 2;
+RxTimingRecoveryGolayPeakDetectPartition = 2;
+RxTimingRecoveryControlPartition = 3;
+RxTimingRecoverySymbolClockPartition = 3;
+RxTimingRecoveryEarlyLatePartition = 3;
+RxTimingRecoveryFreqEstPartition = 3;
+RxTimingRecoveryDelayAccumPartition = 3;
+RxCoarseCFOPartition = 4;
+RxEQPartition = 4;
+RxFineCFOPartition = 5;     % - Needs to be in the same partition due to cycle. 
+RxDemodPartition = 5;       % | Can pipelined slightly due to modulation field being one of the first.
+RxHeaderParsePartition = 5; % - However, this is a relativly tight loop.
+RxPackerPartition = 5;  
+RxPacketControllerPartition = 4;
+RxFreezeControllerPartition = 4;
 
 %% Setup Packet Format
 header_len_bytes = 8; %A 8 byte header of mod_type, type, src, dst, net_id (2 bytes), len (2 bytes).  The 4 byte CRC will be appended to the end of the frame
