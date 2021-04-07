@@ -96,7 +96,7 @@ SymbolFreqOffsetHz = 1/((1+txTimingOffset)*overSamplePer) - 1/overSamplePer;
 disp(['SymbolFreqOffsetHz = ', num2str(SymbolFreqOffsetHz)])
 
 rng(awgnSeed);
-txTimingPhase = rand(1)*channelizerUpDownSampling + 500;
+txTimingPhase = rand(1)*channelizerUpDownSampling*overSample + 500;
 rxPhaseOffset = rand(1)*360; %Random
 
 if rxPhaseFixed
