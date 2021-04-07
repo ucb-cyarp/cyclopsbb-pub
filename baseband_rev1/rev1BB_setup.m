@@ -218,7 +218,7 @@ payload_len_symbols = payload_len_bytes*8/bitsPerSymbol; %/2 for QPSK
 %% Setup Frequencies
 carrierFreq = 1e6+.1; %This is the carrier frequency of the mixer
 overSampleFreq = 80e6; %This is the sampling frequency of the ADC/DAC.  This includes the oversampling factor
-overSample = 4; %Number of (complex) samples per symbol
+overSample = 3; %Number of (complex) samples per symbol
 
 baseFreq = overSampleFreq/overSample; %The symbol rate
 basePer = 1/baseFreq;
@@ -344,11 +344,13 @@ trMatch = mod(-trLenToFSM, overSample);
 trEarlyLateAvgNumSamp = 64;
 % trEarlyLatePGain = -0.005;
 % trEarlyLateIGain = -0.0000005;
-trEarlyLatePGain = -0.00225;
-trEarlyLateIGain = -0.000000050;
+% trEarlyLatePGain = -0.00225;
+% trEarlyLateIGain = -0.000000050;
+trEarlyLatePGain = -0.005;
+trEarlyLateIGain = -0.000000030;
 enableTRFreqCorrection = true;
 
-timing_p = -0.215;
+timing_p = -0.08;
 
 trFeedbackPipelining = 64*8;
 
