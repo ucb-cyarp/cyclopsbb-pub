@@ -352,6 +352,8 @@ timing_p = -0.215;
 
 trFeedbackPipelining = 64*8;
 
+trIntPhaseFeedbackPipeline = 64*2; %This many samples after
+
 timingMaxSymbols = dataLenSymbols + length(x_CEF) + length(x_STF)/x_STFRepCount*2+100; %This is to catch any weird case where a reset is not recieved by the timing block.
 
 timing_tolerance = 4; %This is used to allow a shift of the peak by +- 1 sample per period as the fractional delay is adjusted
@@ -392,7 +394,7 @@ cr_sat2_low = -cr_saturation2;
 
 %% Setup Rx Controller
 cefEarlyWarning = 256;
-RxFeedbackPipelining = 64*16; %This is in samples
+RxFeedbackPipelining = 64*16; %This is in symbols
 feedbackResetBuffer = 4; 
 
 delayToOutputFromDataFSM = lmsEqDepth/2-1;
