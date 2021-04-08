@@ -351,8 +351,15 @@ enableTRFreqCorrection = true;
 timing_p = -0.215;
 
 trFeedbackPipelining = 64*8;
-
-trIntPhaseFeedbackPipeline = 64*2; %This many samples after
+ 
+trIntPhaseFeedbackPipeline = trFeedbackPipelining; %This many samples will not be forwarded properly to the symbol domain  This selects the 
+ 
+trIntPhaseCounterInit = mod(timing_differentiator_grpDelay_roundUp+trIntPhaseFeedbackPipeline, overSample);
+ 
+%Will also delay the line being decimated (going into the selector) so that
+%the feedback path of the integer phase when the packet is first detected
+%does not cause samples to be lost.  This allows us to add more pipeline
+%state.
 
 timingMaxSymbols = dataLenSymbols + length(x_CEF) + length(x_STF)/x_STFRepCount*2+100; %This is to catch any weird case where a reset is not recieved by the timing block.
 
