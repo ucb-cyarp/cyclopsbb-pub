@@ -212,6 +212,7 @@ RxFreezeControllerPartition = 17;
 
 %% Setup Packet Format
 header_len_bytes = 8; %A 8 byte header of mod_type, type, src, dst, net_id (2 bytes), len (2 bytes).  The 4 byte CRC will be appended to the end of the frame
+modTypeBits = 8; %Number of bits to communicate the modulation scheme.  Part of the header
 mod_scheme_len_bytes = 1;
 crc_len_bytes = 4;
 
@@ -234,7 +235,9 @@ modBPS  = [1, 2, 4];
 payload_len_bytes = fixedPayloadLength(radix);
 
 frame_len_bytes = payload_len_bytes + crc_len_bytes;
-dataLenSymbols = header_len_bytes*8/bitsPerSymbolHeader + frame_len_bytes*8/bitsPerSymbol; %/2 for QPSK
+headerLenSymbols = header_len_bytes*8/bitsPerSymbolHeader;
+modTypeSymbols = modTypeBits/bitsPerSymbolHeader; %Number of symbols to communicate the modulation scheme
+dataLenSymbols = headerLenSymbols + frame_len_bytes*8/bitsPerSymbol; %/2 for QPSK
 payload_len_symbols = payload_len_bytes*8/bitsPerSymbol; %/2 for QPSK
 
 %% Setup Frequencies
