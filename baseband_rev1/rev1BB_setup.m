@@ -351,9 +351,6 @@ enableTRFreqCorrection = true;
 timing_p = -0.215;
 
 trFeedbackPipelining = 64*8;
- 
-% trIntPhaseFeedbackPipeline = 64*6;
-% trIntPhaseCounterInit = mod(timing_differentiator_grpDelay_roundUp+trIntPhaseFeedbackPipeline, overSample);
 
 trIntPhaseCounterInit = mod(timing_differentiator_grpDelay_roundUp, overSample);
  
