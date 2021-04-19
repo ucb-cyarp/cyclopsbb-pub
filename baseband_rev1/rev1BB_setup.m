@@ -352,9 +352,10 @@ timing_p = -0.215;
 
 trFeedbackPipelining = 64*8;
  
-trIntPhaseFeedbackPipeline = trFeedbackPipelining; %This many samples will not be forwarded properly to the symbol domain  This selects the 
- 
-trIntPhaseCounterInit = mod(timing_differentiator_grpDelay_roundUp+trIntPhaseFeedbackPipeline, overSample);
+% trIntPhaseFeedbackPipeline = 64*6;
+% trIntPhaseCounterInit = mod(timing_differentiator_grpDelay_roundUp+trIntPhaseFeedbackPipeline, overSample);
+
+trIntPhaseCounterInit = mod(timing_differentiator_grpDelay_roundUp, overSample);
  
 %Will also delay the line being decimated (going into the selector) so that
 %the feedback path of the integer phase when the packet is first detected
