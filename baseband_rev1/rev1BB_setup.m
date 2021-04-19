@@ -6,6 +6,28 @@ TxRRCFilterPartition = 2;
 % Rx Partitions
 
 % -Fine Grain Partitioning (16 Cores)
+% RxRRCPartition = 1;
+% RxAGCPwrAvgPartition = 2;
+% RxAGCCorrectionLoopPartition = 3;
+% RxAGCSettledCalcPartition = 4;
+% RxTimingRecoveryVariableDelayPartition = 5;
+% RxTimingRecoveryGolayCorrelatorPartition = 6;
+% RxTimingRecoveryGolayPeakDetectPartition = 7;
+% RxTimingRecoveryControlPartition = 8;
+% RxTimingRecoverySymbolClockPartition = 9;
+% RxTimingRecoveryEarlyLatePartition = 10;
+% RxTimingRecoveryFreqEstPartition = 11;
+% RxTimingRecoveryDelayAccumPartition = 12;
+% RxCoarseCFOPartition = 13;
+% RxEQPartition = 14;
+% RxFineCFOPartition = 15;     % - Needs to be in the same partition due to cycle. 
+% RxDemodPartition = 15;       % | Can pipelined slightly due to modulation field being one of the first.
+% RxHeaderParsePartition = 15; % - However, this is a relativly tight loop.
+% RxPackerPartition = 16;  
+% RxPacketControllerPartition = 17;
+% RxFreezeControllerPartition = 17;
+
+% -Repartitioned (14 Cores)
 RxRRCPartition = 1;
 RxAGCPwrAvgPartition = 2;
 RxAGCCorrectionLoopPartition = 3;
@@ -16,8 +38,8 @@ RxTimingRecoveryGolayPeakDetectPartition = 7;
 RxTimingRecoveryControlPartition = 8;
 RxTimingRecoverySymbolClockPartition = 9;
 RxTimingRecoveryEarlyLatePartition = 10;
-RxTimingRecoveryFreqEstPartition = 11;
-RxTimingRecoveryDelayAccumPartition = 12;
+RxTimingRecoveryFreqEstPartition = 10;
+RxTimingRecoveryDelayAccumPartition = 10;
 RxCoarseCFOPartition = 13;
 RxEQPartition = 14;
 RxFineCFOPartition = 15;     % - Needs to be in the same partition due to cycle. 
