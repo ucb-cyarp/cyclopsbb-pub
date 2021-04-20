@@ -27,7 +27,7 @@ TxRRCFilterPartition = 2;
 % RxPacketControllerPartition = 17;
 % RxFreezeControllerPartition = 17;
 
-% -Repartitioned (14 Cores)
+% -Repartitioned (15 Cores)
 RxRRCPartition = 1;
 RxAGCPwrAvgPartition = 2;
 RxAGCCorrectionLoopPartition = 3;
@@ -40,11 +40,11 @@ RxTimingRecoverySymbolClockPartition = 9;
 RxTimingRecoveryEarlyLatePartition = 10;
 RxTimingRecoveryFreqEstPartition = 10;
 RxTimingRecoveryDelayAccumPartition = 10;
-RxCoarseCFOPartition = 13;
-RxEQPartition = 14;
-RxFineCFOPartition = 15;     % - Needs to be in the same partition due to cycle. 
-RxDemodPartition = 15;       % | Can pipelined slightly due to modulation field being one of the first.
-RxHeaderParsePartition = 15; % - However, this is a relativly tight loop.
+RxCoarseCFOPartition = 11;
+RxEQPartition = 12;
+RxFineCFOPartition = 13;
+RxDemodPartition = 14;
+RxHeaderParsePartition = 14;
 RxPackerPartition = 16;  
 RxPacketControllerPartition = 17;
 RxFreezeControllerPartition = 17;
