@@ -6,6 +6,31 @@ TxRRCFilterPartition = 2;
 % Rx Partitions
 
 % -Fine Grain Partitioning (16 Cores)
+RxRRCPartition = 1;
+RxAGCPwrAvgPartition = 2;
+RxAGCCorrectionLoopPartition = 3;
+RxTimingRecoveryGolayCorrelatorPartition = 4;
+RxTimingRecoveryGolayPeakDetectPartition = 5;
+RxTimingRecoveryControlPartition = 6;
+RxTimingRecoveryCalcDelayError = 7;
+RxTimingRecoveryFreqEstPartition = 8;
+RxTimingRecoveryDelayAccumPartition = 9;
+RxTimingRecoveryVariableDelayPartition = 10;
+RxTimingRecoverySymbolClockPartition = 11;
+RxTimingRecoveryEarlyLatePartition = 12;
+RxSymbGolayCorrelatorPartition = 13;
+RxSymbGolayPeakDetectPartition = 14;
+RxCoarseCFOPartition = 15;
+RxEQPartition = 16;
+RxFineCFOPartition = 17;
+RxDemodPartition = 18;
+RxHeaderDemodPartition = 19;
+RxHeaderParsePartition = 20;
+RxPackerPartition = 21;
+RxPacketControllerPartition = 22;
+RxFreezeControllerPartition = 22;
+
+% -Repartitioned (14 Cores)
 % RxRRCPartition = 1;
 % RxAGCPwrAvgPartition = 2;
 % RxAGCCorrectionLoopPartition = 3;
@@ -16,200 +41,19 @@ TxRRCFilterPartition = 2;
 % RxTimingRecoveryControlPartition = 8;
 % RxTimingRecoverySymbolClockPartition = 9;
 % RxTimingRecoveryEarlyLatePartition = 10;
-% RxTimingRecoveryFreqEstPartition = 11;
-% RxTimingRecoveryDelayAccumPartition = 12;
+% RxTimingRecoveryFreqEstPartition = 10;
+% RxTimingRecoveryDelayAccumPartition = 10;
+% RxSymbDomainGolayCorrelatorPartition = 11;
+% RxSymbDomainGolayPeakDetectPartition = 12;
 % RxCoarseCFOPartition = 13;
 % RxEQPartition = 14;
-% RxFineCFOPartition = 15;     % - Needs to be in the same partition due to cycle. 
-% RxDemodPartition = 15;       % | Can pipelined slightly due to modulation field being one of the first.
-% RxHeaderParsePartition = 15; % - However, this is a relativly tight loop.
+% RxHeaderDemodPartition = 15;
+% RxHeaderParsePartition = 15;
+% RxFineCFOPartition = 15;
+% RxDemodPartition = 15;
 % RxPackerPartition = 16;  
 % RxPacketControllerPartition = 17;
 % RxFreezeControllerPartition = 17;
-
-% -Repartitioned (14 Cores)
-RxRRCPartition = 1;
-RxAGCPwrAvgPartition = 2;
-RxAGCCorrectionLoopPartition = 3;
-RxAGCSettledCalcPartition = 4;
-RxTimingRecoveryVariableDelayPartition = 5;
-RxTimingRecoveryGolayCorrelatorPartition = 6;
-RxTimingRecoveryGolayPeakDetectPartition = 7;
-RxTimingRecoveryControlPartition = 8;
-RxTimingRecoverySymbolClockPartition = 9;
-RxTimingRecoveryEarlyLatePartition = 10;
-RxTimingRecoveryFreqEstPartition = 10;
-RxTimingRecoveryDelayAccumPartition = 10;
-RxCoarseCFOPartition = 13;
-RxEQPartition = 14;
-RxHeaderDemodPartition = 15;
-RxHeaderParsePartition = 15;
-RxFineCFOPartition = 15;
-RxDemodPartition = 15;
-RxPackerPartition = 16;  
-RxPacketControllerPartition = 17;
-RxFreezeControllerPartition = 17;
-
-% - Single Parition
-% RxRRCPartition = 1;
-% RxAGCPwrAvgPartition = 1;
-% RxAGCCorrectionLoopPartition = 1;
-% RxAGCSettledCalcPartition = 1;
-% RxTimingRecoveryVariableDelayPartition = 1;
-% RxTimingRecoveryGolayCorrelatorPartition = 1;
-% RxTimingRecoveryGolayPeakDetectPartition = 1;
-% RxTimingRecoveryControlPartition = 1;
-% RxTimingRecoverySymbolClockPartition = 1;
-% RxTimingRecoveryEarlyLatePartition = 1;
-% RxTimingRecoveryFreqEstPartition = 1;
-% RxTimingRecoveryDelayAccumPartition = 1;
-% RxCoarseCFOPartition = 1;
-% RxEQPartition = 1;
-% RxFineCFOPartition = 1;     % - Needs to be in the same partition due to cycle. 
-% RxDemodPartition = 1;       % | Can pipelined slightly due to modulation field being one of the first.
-% RxHeaderParsePartition = 1; % - However, this is a relativly tight loop.
-% RxPackerPartition = 1;  
-% RxPacketControllerPartition = 1;
-% RxFreezeControllerPartition = 1;
-
-% - 2 Partitions Sample/Symbol Domain
-%   Sample Domain is a little less than double the workload of the symbol
-%   domain
-% RxRRCPartition = 1;
-% RxAGCPwrAvgPartition = 1;
-% RxAGCCorrectionLoopPartition = 1;
-% RxAGCSettledCalcPartition = 1;
-% RxTimingRecoveryVariableDelayPartition = 1;
-% RxTimingRecoveryGolayCorrelatorPartition = 1;
-% RxTimingRecoveryGolayPeakDetectPartition = 1;
-% RxTimingRecoveryControlPartition = 1;
-% RxTimingRecoverySymbolClockPartition = 1;
-% RxTimingRecoveryEarlyLatePartition = 1;
-% RxTimingRecoveryFreqEstPartition = 1;
-% RxTimingRecoveryDelayAccumPartition = 1;
-% RxCoarseCFOPartition = 2;
-% RxEQPartition = 2;
-% RxFineCFOPartition = 2;     % - Needs to be in the same partition due to cycle. 
-% RxDemodPartition = 2;       % | Can pipelined slightly due to modulation field being one of the first.
-% RxHeaderParsePartition = 2; % - However, this is a relativly tight loop.
-% RxPackerPartition = 2;  
-% RxPacketControllerPartition = 2;
-% RxFreezeControllerPartition = 2;
-
-% - 2 Partitions Approx Equal Partitioning (based on estimate) - Pipleine
-% Split 7
-% RxRRCPartition = 1;
-% RxAGCPwrAvgPartition = 1;
-% RxAGCCorrectionLoopPartition = 1;
-% RxAGCSettledCalcPartition = 1;
-% RxTimingRecoveryVariableDelayPartition = 1;
-% RxTimingRecoveryGolayCorrelatorPartition = 1;
-% RxTimingRecoveryGolayPeakDetectPartition = 1;
-% RxTimingRecoveryControlPartition = 1;
-% RxTimingRecoverySymbolClockPartition = 2;
-% RxTimingRecoveryEarlyLatePartition = 2;
-% RxTimingRecoveryFreqEstPartition = 2;
-% RxTimingRecoveryDelayAccumPartition = 2;
-% RxCoarseCFOPartition = 2;
-% RxEQPartition = 2;
-% RxFineCFOPartition = 2;     % - Needs to be in the same partition due to cycle. 
-% RxDemodPartition = 2;       % | Can pipelined slightly due to modulation field being one of the first.
-% RxHeaderParsePartition = 2; % - However, this is a relativly tight loop.
-% RxPackerPartition = 2;  
-% RxPacketControllerPartition = 2;
-% RxFreezeControllerPartition = 2;
-
-% - 3 Partitions Approx Equal Partitioning (based on estimate) - Pipleine
-% Split 5, 12 - DEADLOCKS due to communication cycle
-% RxRRCPartition = 1;
-% RxAGCPwrAvgPartition = 1;
-% RxAGCCorrectionLoopPartition = 1;
-% RxAGCSettledCalcPartition = 1;
-% RxTimingRecoveryVariableDelayPartition = 1;
-% RxTimingRecoveryGolayCorrelatorPartition = 1;
-% RxTimingRecoveryGolayPeakDetectPartition = 2;
-% RxTimingRecoveryControlPartition = 2;
-% RxTimingRecoverySymbolClockPartition = 2;
-% RxTimingRecoveryEarlyLatePartition = 2;
-% RxTimingRecoveryFreqEstPartition = 2;
-% RxTimingRecoveryDelayAccumPartition = 2;
-% RxCoarseCFOPartition = 2;
-% RxEQPartition = 3;
-% RxFineCFOPartition = 3;     % - Needs to be in the same partition due to cycle. 
-% RxDemodPartition = 3;       % | Can pipelined slightly due to modulation field being one of the first.
-% RxHeaderParsePartition = 3; % - However, this is a relativly tight loop.
-% RxPackerPartition = 3;  
-% RxPacketControllerPartition = 3;
-% RxFreezeControllerPartition = 3;
-
-% - 3 Partitions Approx Equal Partitioning (based on estimate) - Pipleine
-% Split 5, 11
-% RxRRCPartition = 1;
-% RxAGCPwrAvgPartition = 1;
-% RxAGCCorrectionLoopPartition = 1;
-% RxAGCSettledCalcPartition = 1;
-% RxTimingRecoveryVariableDelayPartition = 1;
-% RxTimingRecoveryGolayCorrelatorPartition = 1;
-% RxTimingRecoveryGolayPeakDetectPartition = 2;
-% RxTimingRecoveryControlPartition = 2;
-% RxTimingRecoverySymbolClockPartition = 2;
-% RxTimingRecoveryEarlyLatePartition = 2;
-% RxTimingRecoveryFreqEstPartition = 2;
-% RxTimingRecoveryDelayAccumPartition = 2;
-% RxCoarseCFOPartition = 3;
-% RxEQPartition = 3;
-% RxFineCFOPartition = 3;     % - Needs to be in the same partition due to cycle. 
-% RxDemodPartition = 3;       % | Can pipelined slightly due to modulation field being one of the first.
-% RxHeaderParsePartition = 3; % - However, this is a relativly tight loop.
-% RxPackerPartition = 3;  
-% RxPacketControllerPartition = 3;
-% RxFreezeControllerPartition = 3;
-
-% - 3 Partitions Approx Equal Partitioning (based on estimate) - Pipleine
-% Split 4, 11 - Worse version
-% RxRRCPartition = 1;
-% RxAGCPwrAvgPartition = 1;
-% RxAGCCorrectionLoopPartition = 1;
-% RxAGCSettledCalcPartition = 1;
-% RxTimingRecoveryVariableDelayPartition = 1;
-% RxTimingRecoveryGolayCorrelatorPartition = 2;
-% RxTimingRecoveryGolayPeakDetectPartition = 2;
-% RxTimingRecoveryControlPartition = 2;
-% RxTimingRecoverySymbolClockPartition = 2;
-% RxTimingRecoveryEarlyLatePartition = 2;
-% RxTimingRecoveryFreqEstPartition = 2;
-% RxTimingRecoveryDelayAccumPartition = 2;
-% RxCoarseCFOPartition = 3;
-% RxEQPartition = 3;
-% RxFineCFOPartition = 3;     % - Needs to be in the same partition due to cycle. 
-% RxDemodPartition = 3;       % | Can pipelined slightly due to modulation field being one of the first.
-% RxHeaderParsePartition = 3; % - However, this is a relativly tight loop.
-% RxPackerPartition = 3;  
-% RxPacketControllerPartition = 3;
-% RxFreezeControllerPartition = 3;
-
-% - 4 Partitions Approx Equal Partitioning (based on estimate) - Pipleine
-% Split 4, 7, 12.15
-% RxRRCPartition = 1;
-% RxAGCPwrAvgPartition = 1;
-% RxAGCCorrectionLoopPartition = 1;
-% RxAGCSettledCalcPartition = 1;
-% RxTimingRecoveryVariableDelayPartition = 1;
-% RxTimingRecoveryGolayCorrelatorPartition = 2;
-% RxTimingRecoveryGolayPeakDetectPartition = 2;
-% RxTimingRecoveryControlPartition = 2;
-% RxTimingRecoverySymbolClockPartition = 3;
-% RxTimingRecoveryEarlyLatePartition = 3;
-% RxTimingRecoveryFreqEstPartition = 3;
-% RxTimingRecoveryDelayAccumPartition = 3;
-% RxCoarseCFOPartition = 3;
-% RxEQPartition = 4;
-% RxFineCFOPartition = 4;     % - Needs to be in the same partition due to cycle. 
-% RxDemodPartition = 4;       % | Can pipelined slightly due to modulation field being one of the first.
-% RxHeaderParsePartition = 4; % - However, this is a relativly tight loop.
-% RxPackerPartition = 4;  
-% RxPacketControllerPartition = 3;
-% RxFreezeControllerPartition = 3;
 
 %% Setup Packet Format
 header_len_bytes = 8; %A 8 byte header of mod_type, type, src, dst, net_id (2 bytes), len (2 bytes).  The 4 byte CRC will be appended to the end of the frame
@@ -342,8 +186,11 @@ agcSettleThresh = 0.65;
 %% Setup Timing Recovery
 timing_differentiator_len = 15; %The block adds 1
 
+%Add 
 timing_correlator_pipeline = 1;
 timing_differentiator_pipeline = 1;
+timing_phase_detect_delay = 1;
+timing_var_delay_out_pipeline = 2;
 
 timing_differentiator_grpDelay_roundUp = ceil((timing_differentiator_len)/2+timing_differentiator_pipeline); %The block adds one which is subtracted again here.  The group delay is rounded up to a full sample
 
@@ -351,7 +198,7 @@ timingDifferentiatorFiltObj =  designfilt('differentiatorfir','FilterOrder',timi
 timingDifferentiatorFilt = timingDifferentiatorFiltObj.Coefficients;
 
 timingRecoveryFreqCorrectionAvgLen = 32;
-timingRecoveryFreqCorrectionDiscardLastN = 2; %Discard the last 2 peaks before the CFO due to changing signal changing the shape of the correlation
+timingRecoveryFreqCorrectionDiscardLastN = 3; %Discard the last 2 peaks before the CFO due to changing signal changing the shape of the correlation
 
 trTappedDelayBase = 40;
 trFarrowTaps = 4;
@@ -371,11 +218,22 @@ trEarlyLatePGain = -0.00225;
 trEarlyLateIGain = -0.000000050;
 enableTRFreqCorrection = true;
 
+if overSample == 4
+    trCorrScaleFactor = 0.347; %From simulation for using magnitude square correlation
+elseif overSample == 3
+    trCorrScaleFactor = 0.55; %From simulation for using magnitude square correlation
+else
+    error('TR Scale Factor Not entered for given over sample rate');
+end
+    
+trCorrTargetScaleFactor = 0.5;
+
 timing_p = -0.215;
 
-trFeedbackPipelining = 64*8;
+trFeedbackPipelining = 128*4;
 
-trIntPhaseCounterInit = mod(timing_differentiator_grpDelay_roundUp, overSample);
+trDelayThroughCorrAndPeakDetect = golayType*overSample+timing_differentiator_grpDelay_roundUp+timing_correlator_pipeline+timing_phase_detect_delay;
+trIntPhaseCounterInit = mod(-trDelayThroughCorrAndPeakDetect+timing_var_delay_out_pipeline+trTappedDelayLen/2, overSample); %The plus 1 is for the peak detect
  
 %Will also delay the line being decimated (going into the selector) so that
 %the feedback path of the integer phase when the packet is first detected
@@ -384,8 +242,10 @@ trIntPhaseCounterInit = mod(timing_differentiator_grpDelay_roundUp, overSample);
 
 timingMaxSymbols = dataLenSymbols + length(x_CEF) + length(x_STF)/x_STFRepCount*2+100; %This is to catch any weird case where a reset is not recieved by the timing block.
 
-timing_tolerance = 4; %This is used to allow a shift of the peak by +- 1 sample per period as the fractional delay is adjusted
+timing_tolerance = 4; %This is used to allow a shift of the peak by +- 1 sample per period
 timing_cefEarlyWarningTollerance = 5; %This is because CEF early warning does not have its delay corrected.  As a result, extra tollerance is needed to account for any integer delay changes that occur durring the STF and should be based on the expected maximum timing frequency offset
+
+timingControlToGolay = 128*2; %This many sample can be missed if packets are back to back
 
 %% Setup Coarse CFO
 cfoNcoQuantizedAccumBits = 12;
