@@ -5,6 +5,31 @@ TxRRCFilterPartition = 2;
 
 % Rx Partitions
 
+% -Fine Grain Partitioning
+% RxRRCPartition = 1;
+% RxAGCPwrAvgPartition = 2;
+% RxAGCCorrectionLoopPartition = 2;
+% RxTimingRecoveryGolayCorrelatorPartition = 3;
+% RxTimingRecoveryGolayPeakDetectPartition = 4;
+% RxTimingRecoveryControlPartition = 5;
+% RxTimingRecoveryCalcDelayError = 6;
+% RxTimingRecoveryFreqEstPartition = 6;
+% RxTimingRecoveryDelayAccumPartition = 7;
+% RxTimingRecoveryVariableDelayPartition = 8;
+% RxTimingRecoverySymbolClockPartition = 8;
+% RxTimingRecoveryEarlyLatePartition = 9;
+% RxSymbGolayCorrelatorPartition = 10;
+% RxSymbGolayPeakDetectPartition = 11;
+% RxCoarseCFOPartition = 12;
+% RxEQPartition = 13;
+% RxFineCFOPartition = 14;
+% RxDemodPartition = 15;
+% RxHeaderDemodPartition = 16;
+% RxHeaderParsePartition = 17;
+% RxPackerPartition = 18;
+% RxPacketControllerPartition = 19;
+% RxFreezeControllerPartition = 19;
+
 % -Fine Grain Partitioning (16 Cores)
 RxRRCPartition = 1;
 RxAGCPwrAvgPartition = 2;
@@ -14,46 +39,21 @@ RxTimingRecoveryGolayPeakDetectPartition = 4;
 RxTimingRecoveryControlPartition = 5;
 RxTimingRecoveryCalcDelayError = 6;
 RxTimingRecoveryFreqEstPartition = 6;
-RxTimingRecoveryDelayAccumPartition = 7;
-RxTimingRecoveryVariableDelayPartition = 8;
+RxTimingRecoveryDelayAccumPartition = 6;
+RxTimingRecoveryVariableDelayPartition = 7;
 RxTimingRecoverySymbolClockPartition = 8;
 RxTimingRecoveryEarlyLatePartition = 9;
-RxSymbGolayCorrelatorPartition = 10;
-RxSymbGolayPeakDetectPartition = 11;
-RxCoarseCFOPartition = 12;
-RxEQPartition = 13;
-RxFineCFOPartition = 14;
-RxDemodPartition = 15;
-RxHeaderDemodPartition = 16;
-RxHeaderParsePartition = 17;
-RxPackerPartition = 18;
-RxPacketControllerPartition = 19;
-RxFreezeControllerPartition = 19;
-
-% -Repartitioned (14 Cores)
-% RxRRCPartition = 1;
-% RxAGCPwrAvgPartition = 2;
-% RxAGCCorrectionLoopPartition = 3;
-% RxAGCSettledCalcPartition = 4;
-% RxTimingRecoveryVariableDelayPartition = 5;
-% RxTimingRecoveryGolayCorrelatorPartition = 6;
-% RxTimingRecoveryGolayPeakDetectPartition = 7;
-% RxTimingRecoveryControlPartition = 8;
-% RxTimingRecoverySymbolClockPartition = 9;
-% RxTimingRecoveryEarlyLatePartition = 10;
-% RxTimingRecoveryFreqEstPartition = 10;
-% RxTimingRecoveryDelayAccumPartition = 10;
-% RxSymbDomainGolayCorrelatorPartition = 11;
-% RxSymbDomainGolayPeakDetectPartition = 12;
-% RxCoarseCFOPartition = 13;
-% RxEQPartition = 14;
-% RxHeaderDemodPartition = 15;
-% RxHeaderParsePartition = 15;
-% RxFineCFOPartition = 15;
-% RxDemodPartition = 15;
-% RxPackerPartition = 16;  
-% RxPacketControllerPartition = 17;
-% RxFreezeControllerPartition = 17;
+RxSymbGolayCorrelatorPartition = 10; % * Want to merge these due to workload but need multiple execution domains in a single partition to avoid deadlock
+RxSymbGolayPeakDetectPartition = 10; % *
+RxCoarseCFOPartition = 11;           % *
+RxEQPartition = 12;
+RxFineCFOPartition = 13; % -- Need to Partition
+RxHeaderDemodPartition = 14; % * Want to merge these due to workload but need multiple execution domains in a single partition to avoid deadlock
+RxHeaderParsePartition = 14; % *
+RxDemodPartition = 15;       % *
+RxPackerPartition = 15;      % *
+RxPacketControllerPartition = 16;
+RxFreezeControllerPartition = 16;
 
 %% Setup Packet Format
 header_len_bytes = 8; %A 8 byte header of mod_type, type, src, dst, net_id (2 bytes), len (2 bytes).  The 4 byte CRC will be appended to the end of the frame
