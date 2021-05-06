@@ -47,13 +47,14 @@ RxSymbGolayCorrelatorPartition = 10; % * Want to merge these due to workload but
 RxSymbGolayPeakDetectPartition = 10; % *
 RxCoarseCFOPartition = 11;           % *
 RxEQPartition = 12;
-RxFineCFOPartition = 13; % -- Need to Partition
-RxHeaderDemodPartition = 14; % * Want to merge these due to workload but need multiple execution domains in a single partition to avoid deadlock
-RxHeaderParsePartition = 14; % *
-RxDemodPartition = 15;       % *
-RxPackerPartition = 15;      % *
-RxPacketControllerPartition = 16;
-RxFreezeControllerPartition = 16;
+RxFineCFOPartition = 13;
+RxFineCFOCorrectComputePartition = 14;
+RxHeaderDemodPartition = 15; % * Want to merge these due to workload but need multiple execution domains in a single partition to avoid deadlock
+RxHeaderParsePartition = 15; % *
+RxDemodPartition = 16;       % *
+RxPackerPartition = 16;      % *
+RxPacketControllerPartition = 17;
+RxFreezeControllerPartition = 17;
 
 %% Setup Packet Format
 header_len_bytes = 8; %A 8 byte header of mod_type, type, src, dst, net_id (2 bytes), len (2 bytes).  The 4 byte CRC will be appended to the end of the frame
@@ -142,8 +143,8 @@ corr_peak_trigger = 0.40;
 corr_peak_exclude_trigger = 1+corr_peak_trigger; %Used to exclude false peaks when AGC still settling
 
 %% Setup Pulse Shaping Filter (Root Raised Cosine)
-rcFiltRolloffFactor = 0.1;
-rcFiltSpanSymbols = 32;
+rcFiltRolloffFactor = 0.5;
+rcFiltSpanSymbols = 16;
 rcFileLinearAmpGain = 1;
 
 %Setup Root Raised Cosine Matched Filters
@@ -190,7 +191,7 @@ timing_differentiator_len = 15; %The block adds 1
 timing_correlator_pipeline = 1;
 timing_differentiator_pipeline = 1;
 timing_phase_detect_delay = 1;
-timing_var_delay_out_pipeline = 2;
+timing_var_delay_out_pipeline = 0;
 
 timing_differentiator_grpDelay_roundUp = ceil((timing_differentiator_len)/2+timing_differentiator_pipeline); %The block adds one which is subtracted again here.  The group delay is rounded up to a full sample
 
@@ -214,8 +215,13 @@ trMatch = mod(-trLenToFSM, overSample);
 trEarlyLateAvgNumSamp = 64;
 % trEarlyLatePGain = -0.005;
 % trEarlyLateIGain = -0.0000005;
-trEarlyLatePGain = -0.00225;
+
+% trEarlyLatePGain = -0.00225;
+% trEarlyLateIGain = -0.000000050;
+trEarlyLatePGain = -0.00100;
 trEarlyLateIGain = -0.000000050;
+% trEarlyLatePGain = 0;
+% trEarlyLateIGain = 0;
 enableTRFreqCorrection = true;
 
 trCorrScaleFactor = correlationShape(Gb_32, overSample, rcTxFilt, rcRxFilt);
@@ -261,8 +267,8 @@ qam16_demod_scale_factor = qam16_hdl_distance/qam16_power_normalized_distance;
 
 %% Setup Fine CFO
 cr_smooth_samples = 4;
-cr_p = 0.015;
-cr_i = 0.020;
+cr_p = 0.0022;
+cr_i = 0.00010;
 cr_i_preamp = 2^-9;
 
 cr_integrator1_saturation = 0.6;
@@ -274,9 +280,11 @@ cr_int1_sat_low = -cr_integrator1_saturation;
 cr_sat2_up  =  cr_saturation2;
 cr_sat2_low = -cr_saturation2;
 
+fineCFOPipeline = 128*2;
+
 %% Setup Rx Controller
 cefEarlyWarning = 256;
-RxFeedbackPipelining = 64*16; %This is in symbols
+RxFeedbackPipelining = 128*10; %This is in symbols
 feedbackResetBuffer = 4; 
 
 delayToOutputFromDataFSM = lmsEqDepth/2-1;
