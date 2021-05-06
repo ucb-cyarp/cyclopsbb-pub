@@ -218,13 +218,7 @@ trEarlyLatePGain = -0.00225;
 trEarlyLateIGain = -0.000000050;
 enableTRFreqCorrection = true;
 
-if overSample == 4
-    trCorrScaleFactor = 0.347; %From simulation for using magnitude square correlation
-elseif overSample == 3
-    trCorrScaleFactor = 0.55; %From simulation for using magnitude square correlation
-else
-    error('TR Scale Factor Not entered for given over sample rate');
-end
+trCorrScaleFactor = correlationShape(Gb_32, overSample, rcTxFilt, rcRxFilt);
     
 trCorrTargetScaleFactor = 0.5;
 

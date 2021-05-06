@@ -1,3 +1,7 @@
+%Get the scale factor for the given correlation shape
+%Uncomment to plot 
+function scaleSq = correlationShape(Gb_32, overSample, rcTxFilt, rcRxFilt)
+
 interpRes = 1000;
 
 %Preamble STF Segment Before shaping
@@ -33,14 +37,21 @@ prambleCorr = conv(rxFiltSignal, flip(preambleSeg));
 preambleCorrMagSq = prambleCorr.*conj(prambleCorr);
 
 %Find the index of the peak
-% [pks,locs] = findpeaks(preambleCorrMagSq);
-% %Get the top 3 peaks
-% tbl = [transpose(pks), transpose(locs)];
-% tblSort = sortrows(tbl, 1, 'descend');
+[pks,locs] = findpeaks(preambleCorrMagSq);
+%Get the top 3 peaks
+tbl = [transpose(pks), transpose(locs)];
+tblSort = sortrows(tbl, 1, 'descend');
+top3 = tblSort(1:3,:);
+%Get the middle peak (in terms of location)
+topPeaksInOrder = sortrows(top3, 2, 'ascend');
+%Get the middle peak
+maxVal = topPeaksInOrder(2,1);
+maxInd = topPeaksInOrder(2,2);
+
 % maxVal = tblSort((nReps+1)/2, 1);
 % maxInd = tblSort((nReps+1)/2, 2);
-[maxVal, maxInd] = max(preambleCorrMagSq(250:350)); %TODO: Make this parameterizable
-maxInd = maxInd + 250-1;
+% [maxVal, maxInd] = max(preambleCorrMagSq(250:350)); %TODO: Make this parameterizable
+% maxInd = maxInd + 250-1;
 
 %Find the values before and after the peak
 beforePeak(del+1) = prambleCorr(maxInd-1);
@@ -55,8 +66,11 @@ end
 diffS = afterPeak./peak - beforePeak./peak;
 diffSq = afterPeakSq./peakSq - beforePeakSq./peakSq;
 
-figure;
-plot(diffS);
+% figure;
+% plot(diffS);
+% 
+% figure;
+% plot(diffSq);
 
-figure;
-plot(diffSq);
+scaleSq = (max(diffSq) - min(diffSq))/2;
+end
