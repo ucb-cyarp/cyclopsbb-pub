@@ -11,6 +11,8 @@ model_name = 'rev1BB';
 reportNameBase = 'BERvsEbN0';
 timestamp = strrep(datestr(now,'ddmmmyyyy-HH_MM_SSAM'), ' ', '');
 
+calcEVM = false;
+
 %% Sweep Parameters
 trials = 10;
 dBSnrRange = 0:2:18;
@@ -22,7 +24,7 @@ radixRange = [16, 4, 2];
 indRange = 1:1:length(dBSnrRange);
 radixIndRange = 1:1:length(radixRange);
 
-rxPhaseFixed = true; %Disable for random carrier phase offset
+rxPhaseFixed = false; %Disable for random carrier phase offset
 
 % txChanEn = [true, true, true, true];
 % rxMonitorCh = 1;
@@ -30,8 +32,10 @@ rxPhaseFixed = true; %Disable for random carrier phase offset
 %freqOffsetHz = 0;
 %txTimingOffset = 0;
 % freqOffsetHz = 5000;
-freqOffsetHz = 0;
-txTimingOffset = 0;
+% freqOffsetHz = 0;
+% txTimingOffset = 0;
+freqOffsetHz = 20000;
+txTimingOffset = 0.00002;
 
 %%Do a run for each radix
 for radInd = radixIndRange
@@ -214,8 +218,10 @@ for radInd = radixIndRange
 
     %     disp(['SNR (dB): ', num2str(dBSnrRange(dBSnrInd)), ', EbN0 (dB): ', num2str(EbN0Loc), ', Ideal BER (AWGN): ', num2str(idealBerLoc)]);
 
-        finalErrorVector = [];
-        afterTRErrorVector = [];
+        if calcEVM
+            finalErrorVector = [];
+            afterTRErrorVector = [];
+        end
 
         payloadRMSLoc = 0;
 
@@ -253,7 +259,7 @@ for radInd = radixIndRange
                            numChannels_input(configInd), packetsPerChannel_input(configInd), ...
                            header_len_bytes_input(configInd), crc_len_bytes_input(configInd), frame_len_bytes_input(configInd), ...
                            bitsPerSymbolHeader_input(configInd), bitsPerSymbol_input(configInd), ...
-                           radixHeader_input(configInd), radix_input(configInd), overSample_input(configInd), bitsPerSymbolMax_input(configInd), channelizerUpDownSampling_input(configInd), awgnSNR_input(configInd));
+                           radixHeader_input(configInd), radix_input(configInd), overSample_input(configInd), bitsPerSymbolMax_input(configInd), channelizerUpDownSampling_input(configInd), awgnSNR_input(configInd), calcEVM);
 
             if trial == 1
                 payloadRMSLoc = payloadRMS;
@@ -266,16 +272,20 @@ for radInd = radixIndRange
             trial_failures_modulation_field_corrupted(trial, dBSnrInd) = packetDecodeFailureDueToModulationFieldCorruption;
             trial_bit_payload_errors(trial, dBSnrInd) = payloadBitErrors;
             trial_bit_payload_bits_sent(trial, dBSnrInd) = payloadBits;
-            finalErrorVector = cat(1, finalErrorVector, payloadErrorVector);
-            afterTRErrorVector = cat(1, afterTRErrorVector, payloadErrorVectorTR);
+            if calcEVM
+                finalErrorVector = cat(1, finalErrorVector, payloadErrorVector);
+                afterTRErrorVector = cat(1, afterTRErrorVector, payloadErrorVectorTR);
+            end
         end
 
         sim_failures_complete(dBSnrInd) = sum(trial_failures_complete(:,dBSnrInd));
         sim_failures_modulation_field_corrupted(dBSnrInd) = sum(trial_failures_modulation_field_corrupted(:,dBSnrInd));
         sim_ber(dBSnrInd) = sum(trial_bit_payload_errors(:,dBSnrInd))/sum(trial_bit_payload_bits_sent(:,dBSnrInd));
 
-        sim_finalEvm(dBSnrInd) = rms(abs(finalErrorVector))*100/payloadRMSLoc;
-        sim_afterTREvm(dBSnrInd) = rms(abs(afterTRErrorVector))*100/payloadRMSLoc;
+        if calcEVM
+            sim_finalEvm(dBSnrInd) = rms(abs(finalErrorVector))*100/payloadRMSLoc;
+            sim_afterTREvm(dBSnrInd) = rms(abs(afterTRErrorVector))*100/payloadRMSLoc;
+        end
     end
 
     %% Plot
@@ -288,14 +298,19 @@ for radInd = radixIndRange
 
     sim_EbN0_plot = zeros(size(snrPlotRange));
     sim_idealBer_plot = zeros(size(snrPlotRange));
-    sim_idealEvm_plot = zeros(size(snrPlotRange));
+    
+    if calcEVM
+        sim_idealEvm_plot = zeros(size(snrPlotRange));
+    end
 
     for awgnSNRInd = 1:length(snrPlotRange)
         awgnSNR = snrPlotRange(awgnSNRInd);
         [EbN0Loc, EsN0Loc, idealBerLoc, idealEVMLoc] = getIdealBER(awgnSNR, effectiveOversmple, radix);
         sim_EbN0_plot(awgnSNRInd) = EbN0Loc;
         sim_idealBer_plot(awgnSNRInd) = idealBerLoc;
-        sim_idealEvm_plot(awgnSNRInd) = idealEVMLoc;
+        if calcEVM
+            sim_idealEvm_plot(awgnSNRInd) = idealEVMLoc;
+        end
     end
 
     fig1 = figure;
@@ -319,23 +334,25 @@ for radInd = radixIndRange
     xlim(xlimits);
     grid on;
 
-    fig3 = figure;
-    plot(sim_EbN0_plot, sim_idealEvm_plot, 'b-');
-    hold all;
-    plot(sim_EbN0, sim_finalEvm, 'r*-');
-    if rxPhaseFixed
-        plot(sim_EbN0, sim_afterTREvm, 'k*-');
+    if calcEVM
+        fig3 = figure;
+        plot(sim_EbN0_plot, sim_idealEvm_plot, 'b-');
+        hold all;
+        plot(sim_EbN0, sim_finalEvm, 'r*-');
+        if rxPhaseFixed
+            plot(sim_EbN0, sim_afterTREvm, 'k*-');
+        end
+        xlabel('Eb/N0 (dB)')
+        ylabel('EVM % (Normalized to RMS of Constallation Pts)')
+        if rxPhaseFixed
+            legend('Theoretical (AWGN)', ['EVM Before Demod (', channelSpec, ') - Header Excluded'], ['EVM After TR (', channelSpec, ') - Header Excluded']);
+        else
+            legend('Theoretical (AWGN)', ['EVM Before Demod (', channelSpec, ') - Header Excluded']);
+        end
+        title({['Baseband Simulation (', channelSpec, ') - Failures Excluded (Modulation Field Rep3 Coded) vs.'], ['Theoretical (Uncoded Coherent ' radixToModulationStr(radix) ' over AWGN)']})
+        xlim(xlimits);
+        grid on;
     end
-    xlabel('Eb/N0 (dB)')
-    ylabel('EVM % (Normalized to RMS of Constallation Pts)')
-    if rxPhaseFixed
-        legend('Theoretical (AWGN)', ['EVM Before Demod (', channelSpec, ') - Header Excluded'], ['EVM After TR (', channelSpec, ') - Header Excluded']);
-    else
-        legend('Theoretical (AWGN)', ['EVM Before Demod (', channelSpec, ') - Header Excluded']);
-    end
-    title({['Baseband Simulation (', channelSpec, ') - Failures Excluded (Modulation Field Rep3 Coded) vs.'], ['Theoretical (Uncoded Coherent ' radixToModulationStr(radix) ' over AWGN)']})
-    xlim(xlimits);
-    grid on;
 
     %% Cleanup
     %close_system('rev0BB');
@@ -354,12 +371,16 @@ for radInd = radixIndRange
     %Save matlab figs
     savefig(fig1, [reportName '_BER']);
     savefig(fig2, [reportName '_Failures']);
-    savefig(fig3, [reportName '_EVM']);
+    if calcEVM
+        savefig(fig3, [reportName '_EVM']);
+    end
 
     %Save png versions
     saveas(fig1, [reportName '_BER.png'])
     saveas(fig2, [reportName '_Failures.png'])
-    saveas(fig3, [reportName '_EVM.png'])
+    if calcEVM
+        saveas(fig3, [reportName '_EVM.png'])
+    end
 
     %Save workspace
     save([reportName '_workspace']);
