@@ -62,7 +62,7 @@ mod_scheme_len_bytes = 1;
 crc_len_bytes = 4;
 
 radixHeader = 2; %BPSK
-radixMax = 16;
+radixMax = 256;
 bitsPerSymbol = log2(radix);
 bitsPerSymbolHeader = log2(radixHeader);
 bitsPerSymbolMax = log2(radixMax);
@@ -72,8 +72,9 @@ bitsPerPackedWordRx = bitsPerSymbolMax; %This is what returned from the packed d
 % 0 = BPSK
 % 1 = QPSK
 % 2 = 16QAM
-modKeys = [0, 1, 2];
-modBPS  = [1, 2, 4];
+% 3 = 256QAM
+modKeys = [0, 1, 2, 3];
+modBPS  = [1, 2, 4, 8];
 
 %Set the frame size based on the modulation scheme to maintain the same
 %number of symbols per packet.
@@ -253,8 +254,8 @@ cfoNcoWordLen = 16;
 
 %% Setup EQ
 lmsEqDepth = 16;
-lmsStep_init =  0.01; %LMS
-lmsStep_final = 0.001;
+lmsStep_init =  0.02; %LMS
+lmsStep_final = 0.01;
 lmsStep_meta = (lmsStep_final - lmsStep_init)/cefLen;
 
 %% Setup Demod
@@ -264,6 +265,13 @@ qam16_points = constellation(qam16Mod);
 qam16_power_normalized_distance = abs(qam16_points(1) - qam16_points(2));
 qam16_hdl_distance = 2;
 qam16_demod_scale_factor = qam16_hdl_distance/qam16_power_normalized_distance;
+
+%For 256QAM
+qam256Mod = comm.RectangularQAMModulator('ModulationOrder', 256, 'NormalizationMethod', 'Average power', 'AveragePower', 1, 'SymbolMapping', 'Binary');
+qam256_points = constellation(qam256Mod);
+qam256_power_normalized_distance = abs(qam256_points(1) - qam256_points(2));
+qam256_hdl_distance = 2;
+qam256_demod_scale_factor = qam256_hdl_distance/qam256_power_normalized_distance;
 
 %% Setup Fine CFO
 cr_smooth_samples = 4;

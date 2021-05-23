@@ -15,7 +15,7 @@ function modType = radixToModType(radix, repcode)
             modType = 2;
         end
     else
-        if repcode
+        if repcode %256QAM
             modType = 63;
         else
             modType = 3;

@@ -6,8 +6,10 @@ if(radix == 2) %BPSK
     modType = 0;
 elseif(radix == 4) %QPSK
     modType = 1;
-else %16QAM
+elseif(radix == 16) %16QAM
     modType = 2;
+else %256QAM
+    modType = 3;
 end
 
 mod_imperfection = zeros(pad_first, 1);
