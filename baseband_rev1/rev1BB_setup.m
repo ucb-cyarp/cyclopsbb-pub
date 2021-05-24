@@ -255,8 +255,9 @@ cfoNcoWordLen = 16;
 %% Setup EQ
 lmsEqDepth = 16;
 lmsStep_init =  0.02; %LMS
-lmsStep_final = 0.01;
+lmsStep_final = 0.015;
 lmsStep_meta = (lmsStep_final - lmsStep_init)/cefLen;
+eqBatchSize = 8;
 
 %% Setup Demod
 %For 16QAM
