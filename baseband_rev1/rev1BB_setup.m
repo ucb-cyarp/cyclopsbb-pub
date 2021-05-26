@@ -81,8 +81,11 @@ modBPS  = [1, 2, 4, 8];
 payload_len_bytes = fixedPayloadLength(radix);
 
 frame_len_bytes = payload_len_bytes + crc_len_bytes;
-dataLenSymbols = header_len_bytes*8/bitsPerSymbolHeader + frame_len_bytes*8/bitsPerSymbol; %/2 for QPSK
+headerLenSymbols = header_len_bytes*8/bitsPerSymbolHeader;
+dataLenSymbols = headerLenSymbols + frame_len_bytes*8/bitsPerSymbol; %/2 for QPSK
 payload_len_symbols = payload_len_bytes*8/bitsPerSymbol; %/2 for QPSK
+
+modFieldLenSymbols = mod_scheme_len_bytes*8/bitsPerSymbolHeader;
 
 %% Setup Frequencies
 carrierFreq = 1e6+.1; %This is the carrier frequency of the mixer
@@ -129,6 +132,9 @@ x_PRE_adj = transpose((x_PRE.*-1 + 1)./2);
 after = zeros(100, 1);
 
 cefLen = length(x_CEF);
+
+%% Pkt Control
+pktLenPlusCEF = cefLen+dataLenSymbols;
 
 %% Setup CRC (Not Currently Used But Relied on By Fctns)
 % Same poly as Ethernet (IEEE 802.3)
@@ -255,7 +261,7 @@ cfoNcoWordLen = 16;
 %% Setup EQ
 lmsEqDepth = 16;
 lmsStep_init =  0.02; %LMS
-lmsStep_final = 0.015;
+lmsStep_final = 0.01;
 lmsStep_meta = (lmsStep_final - lmsStep_init)/cefLen;
 eqBatchSize = 8;
 
