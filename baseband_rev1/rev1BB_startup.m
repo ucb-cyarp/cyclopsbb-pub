@@ -4,7 +4,7 @@
 clear; close all; clc;
 
 %% Modulation
-radix = 2;
+radix = 256;
 
 %% Random Seeds
 %seed = 67;
@@ -31,7 +31,7 @@ channelSpec = 'AWGN';
 % channelSpec = 'Manual';
 % channelSpec = 'cost207RAx4';
 %Manual Delay Set
-manualChanDelaysSymb = [1,4,6,16];
+manualChanDelaysSymb = [1,3,4,16];
 manualChanPathGainDB = [0,-3,-10,-20];
 manualChanPathGain = [0.7, 0.1, 0.2, 0.0];
 

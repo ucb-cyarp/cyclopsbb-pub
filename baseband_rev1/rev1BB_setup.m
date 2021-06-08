@@ -96,6 +96,8 @@ baseFreq = overSampleFreq/overSample; %The symbol rate
 basePer = 1/baseFreq;
 overSamplePer = 1/overSampleFreq;
 
+unrollFactor = 8;
+
 %% Setup Golay
 golayType = 32;
 golay_type = golayType;
@@ -263,7 +265,7 @@ lmsEqDepth = 16;
 lmsStep_init =  0.02; %LMS
 lmsStep_final = 0.01;
 lmsStep_meta = (lmsStep_final - lmsStep_init)/cefLen;
-eqBatchSize = 8;
+eqBatchSize = 8; %Currently use a int8 counter.  Update type in simulink if batch size substantially increased
 
 %% Setup Demod
 %For 16QAM
