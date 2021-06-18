@@ -239,7 +239,7 @@ trCorrTargetScaleFactor = 0.5;
 
 timing_p = -0.215;
 
-trFeedbackPipelining = 128*4;
+trFeedbackPipelining = 120*6;
 
 trDelayThroughCorrAndPeakDetect = golayType*overSample+timing_differentiator_grpDelay_roundUp+timing_correlator_pipeline+timing_phase_detect_delay;
 trIntPhaseCounterInit = mod(-trDelayThroughCorrAndPeakDetect+timing_var_delay_out_pipeline+trTappedDelayLen/2, overSample); %The plus 1 is for the peak detect
@@ -301,7 +301,7 @@ fineCFOPipeline = 128*2;
 
 %% Setup Rx Controller
 cefEarlyWarning = 256;
-RxFeedbackPipelining = 128*10; %This is in symbols
+RxFeedbackPipelining = 120*13; %This is in symbols
 feedbackResetBuffer = 4; 
 
 delayToOutputFromDataFSM = lmsEqDepth/2-1;
