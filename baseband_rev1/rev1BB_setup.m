@@ -148,8 +148,10 @@ crc_init =    [ 1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1
 crc_xor  =    [ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 ];
 
 %% Setup Correlator Peak Detect
-corr_peak_trigger = 0.40;
-corr_peak_exclude_trigger = 1+corr_peak_trigger; %Used to exclude false peaks when AGC still settling
+corr_peak_trigger = 0.6 * golayType*golayType;
+corr_peak_exclude_trigger = 1.5 * golayType*golayType; %Used to exclude false peaks when Pwr Avg still settling
+
+corrPwrAvgSample = 32;
 
 %% Setup Pulse Shaping Filter (Root Raised Cosine)
 rcFiltRolloffFactor = 0.5;

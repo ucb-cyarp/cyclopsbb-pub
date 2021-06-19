@@ -34,6 +34,8 @@ pad_first = 1000;
 
 %% Imperfections
 
+attenuation = 1;
+
 manChan = true; %Used for AWGN and Manual channels
 
 %Declared so that rayleigh channel block is always happy even when not in
