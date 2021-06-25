@@ -199,8 +199,8 @@ agcSettleThresh = 0.65;
 timing_differentiator_len = 15; %The block adds 1
 
 %Add 
-timing_correlator_pipeline = 1;
-timing_differentiator_pipeline = 1;
+timing_correlator_pipeline = 0;
+timing_differentiator_pipeline = 0;
 timing_phase_detect_delay = 1;
 timing_var_delay_out_pipeline = 0;
 

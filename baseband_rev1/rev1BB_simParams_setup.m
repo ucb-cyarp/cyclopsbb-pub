@@ -34,7 +34,7 @@ pad_first = 1000;
 
 %% Imperfections
 
-attenuation = 1;
+attenuation = 1e-8;
 
 manChan = true; %Used for AWGN and Manual channels
 
