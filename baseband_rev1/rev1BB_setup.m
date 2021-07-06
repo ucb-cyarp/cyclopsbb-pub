@@ -47,14 +47,42 @@ RxSymbGolayCorrelatorPartition = 10; % * Want to merge these due to workload but
 RxSymbGolayPeakDetectPartition = 10; % *
 RxCoarseCFOPartition = 11;           % *
 RxEQPartition = 12;
-RxFineCFOPartition = 13;
-RxFineCFOCorrectComputePartition = 14;
-RxHeaderDemodPartition = 15; % * Want to merge these due to workload but need multiple execution domains in a single partition to avoid deadlock
-RxHeaderParsePartition = 15; % *
+RxEQ2Partition = 13;
+% RxFineCFOPartition = 13;
+% RxFineCFOCorrectComputePartition = 14;
+% RxHeaderDemodPartition = 15; % * Want to merge these due to workload but need multiple execution domains in a single partition to avoid deadlock
+% RxHeaderParsePartition = 15; % *
 RxDemodPartition = 16;       % *
 RxPackerPartition = 16;      % *
 RxPacketControllerPartition = 17;
 RxFreezeControllerPartition = 17;
+
+%All 1 Partition
+% RxRRCPartition = 1;
+% RxAGCPwrAvgPartition = 1;
+% RxAGCCorrectionLoopPartition = 1;
+% RxTimingRecoveryGolayCorrelatorPartition = 1;
+% RxTimingRecoveryGolayPeakDetectPartition = 1;
+% RxTimingRecoveryControlPartition = 1;
+% RxTimingRecoveryCalcDelayError = 1;
+% RxTimingRecoveryFreqEstPartition = 1;
+% RxTimingRecoveryDelayAccumPartition = 1;
+% RxTimingRecoveryVariableDelayPartition = 1;
+% RxTimingRecoverySymbolClockPartition = 1;
+% RxTimingRecoveryEarlyLatePartition = 1;
+% RxSymbGolayCorrelatorPartition = 1; % * Want to merge these due to workload but need multiple execution domains in a single partition to avoid deadlock
+% RxSymbGolayPeakDetectPartition = 1; % *
+% RxCoarseCFOPartition = 1;           % *
+% RxEQPartition = 1;
+% RxEQ2Partition = 1;
+% % RxFineCFOPartition = 1;
+% % RxFineCFOCorrectComputePartition = 1;
+% % RxHeaderDemodPartition = 1; % * Want to merge these due to workload but need multiple execution domains in a single partition to avoid deadlock
+% % RxHeaderParsePartition = 1; % *
+% RxDemodPartition = 1;       % *
+% RxPackerPartition = 1;      % *
+% RxPacketControllerPartition = 1;
+% RxFreezeControllerPartition = 1;
 
 %% Setup Packet Format
 header_len_bytes = 8; %A 8 byte header of mod_type, type, src, dst, net_id (2 bytes), len (2 bytes).  The 4 byte CRC will be appended to the end of the frame
@@ -262,10 +290,11 @@ cfoNcoWordLen = 16;
 
 %% Setup EQ
 lmsEqDepth = 16;
-lmsStep_init =  0.02; %LMS
-lmsStep_final = 0.01;
+lmsStep_init =  0.015; %LMS
+lmsStep_final = 0.0075;
 lmsStep_meta = (lmsStep_final - lmsStep_init)/cefLen;
 eqBatchSize = 8; %Currently use a int8 counter.  Update type in simulink if batch size substantially increased
+eqPipeline = 120*2/overSample;
 
 %% Setup Demod
 %For 16QAM
