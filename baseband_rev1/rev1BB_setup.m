@@ -295,6 +295,7 @@ lmsStep_final = 0.0075;
 lmsStep_meta = (lmsStep_final - lmsStep_init)/cefLen;
 eqBatchSize = 8; %Currently use a int8 counter.  Update type in simulink if batch size substantially increased
 eqPipeline = 120*2/overSample;
+% eqPipeline = 0;
 
 %% Setup Demod
 %For 16QAM
