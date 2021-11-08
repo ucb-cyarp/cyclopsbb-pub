@@ -84,6 +84,57 @@ RxFreezeControllerPartition = 17;
 % RxPacketControllerPartition = 1;
 % RxFreezeControllerPartition = 1;
 
+%% Sub-Blocking
+% Tx Sub-Blocking
+TxResampleModulatorSubBlocking = 24;
+TxRRCFilterSubBlocking = 24;
+
+% % Rx Sub-Blocking
+% RxRRCSubBlocking = 24;
+% RxAGCPwrAvgSubBlocking = 8;
+% RxAGCCorrectionLoopSubBlocking = 8;
+% RxTimingRecoveryGolayCorrelatorSubBlocking = 24;
+% RxTimingRecoveryGolayPeakDetectSubBlocking = 24;
+% RxTimingRecoveryControlSubBlocking = 24;
+% RxTimingRecoveryCalcDelayErrorSubBlocking = 8;
+% RxTimingRecoveryFreqEstSubBlocking = 8;
+% RxTimingRecoveryDelayAccumSubBlocking = 8;
+% RxTimingRecoveryVariableDelaySubBlocking = 8;
+% RxTimingRecoverySymbolClockSubBlocking = 8;
+% RxTimingRecoveryEarlyLateSubBlocking = 8;
+% RxSymbGolayCorrelatorSubBlocking = 24;
+% RxSymbGolayPeakDetectSubBlocking = 24;
+% RxCoarseCFOSubBlocking = 8;
+% RxEQSubBlocking = 24;
+% RxEQ2SubBlocking = 8;
+% RxDemodSubBlocking = 8;
+% RxPackerSubBlocking = 8;
+% RxPacketControllerSubBlocking = 24;
+% RxFreezeControllerSubBlocking = 24;
+
+% Rx Sub-Blocking (Clock Domains have one Sub-Blocking Length)
+RxRRCSubBlocking = 24;
+RxAGCPwrAvgSubBlocking = 8;
+RxAGCCorrectionLoopSubBlocking = 8;
+RxTimingRecoveryGolayCorrelatorSubBlocking = 24;
+RxTimingRecoveryGolayPeakDetectSubBlocking = 24;
+RxTimingRecoveryControlSubBlocking = 24;
+RxTimingRecoveryCalcDelayErrorSubBlocking = 8;
+RxTimingRecoveryFreqEstSubBlocking = 8;
+RxTimingRecoveryDelayAccumSubBlocking = 8;
+RxTimingRecoveryVariableDelaySubBlocking = 8;
+RxTimingRecoverySymbolClockSubBlocking = 24; % Actually want this to be 8 but part of this is in the symbol clock domain,
+RxTimingRecoveryEarlyLateSubBlocking = 8;
+RxSymbGolayCorrelatorSubBlocking = 24;
+RxSymbGolayPeakDetectSubBlocking = 24;
+RxCoarseCFOSubBlocking = 24;
+RxEQSubBlocking = 24;
+RxEQ2SubBlocking = 24;
+RxDemodSubBlocking = 24;
+RxPackerSubBlocking = 24;
+RxPacketControllerSubBlocking = 24;
+RxFreezeControllerSubBlocking = 24;
+
 %% Setup Packet Format
 header_len_bytes = 8; %A 8 byte header of mod_type, type, src, dst, net_id (2 bytes), len (2 bytes).  The 4 byte CRC will be appended to the end of the frame
 mod_scheme_len_bytes = 1;
