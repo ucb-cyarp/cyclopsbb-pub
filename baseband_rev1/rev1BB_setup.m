@@ -230,6 +230,17 @@ crc_xor  =    [ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
 corr_peak_trigger = 0.40;
 corr_peak_exclude_trigger = 1+corr_peak_trigger; %Used to exclude false peaks when AGC still settling
 
+%% Setup I/Q Correction
+% IQ_Imbal_Tx_I = 1.1;
+% IQ_Imbal_Tx_Q = 1.0;
+% 
+% IQ_Imbal_Rx_I = 1.0;
+% IQ_Imbal_Rx_Q = 1.1;
+
+IQ_Imbal_Alpha = 0.95;
+IQ_Imbal_Phi_Deg = -2;
+IQ_Imbal_Phi = IQ_Imbal_Phi_Deg*pi/180;
+
 %% Setup Pulse Shaping Filter (Root Raised Cosine)
 rcFiltRolloffFactor = 0.5;
 rcFiltSpanSymbols = 16;
@@ -341,6 +352,8 @@ cfoNcoWordLen = 16;
 
 %% Setup EQ
 lmsEqDepth = 16;
+% lmsStep_init =  0.005; %LMS
+% lmsStep_final = 0.005;
 lmsStep_init =  0.015; %LMS
 lmsStep_final = 0.0075;
 lmsStep_meta = (lmsStep_final - lmsStep_init)/cefLen;
