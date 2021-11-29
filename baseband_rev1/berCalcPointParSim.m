@@ -11,7 +11,7 @@ function [totalHeaderBer, totalPayloadBer, evmHeader, evmHeaderTR, evmPayload, e
                        numChannels, packetsPerChannel, ...
                        header_len_bytes, crc_len_bytes, frame_len_bytes, ...
                        bitsPerSymbolHeader, bitsPerSymbol, ...
-                       radixHeader, radix, overSample, bitsPerSymbolMax, channelizerUpDownSampling, awgnSNR, ...
+                       radixHeader, radix, radixMax, overSample, bitsPerSymbolMax, channelizerUpDownSampling, awgnSNR, ...
                        calcEVM)
 
 % header_len_bytes gives the header length in bytes
@@ -205,10 +205,13 @@ for chan=0:(numChannels-1)
            packetDecodeCompleteFailureCh = packetDecodeCompleteFailureCh+1;
 %            disp(['    Channel: ' num2str(chan) ' Packet: ' num2str(packet) ' failed to decode']);
         else
-            if lengthMultiplier ~= 2
+            if lengthMultiplier == 2
+                modulationRx = data_recieved_packed{chan+1}(cursor) + data_recieved_packed{chan+1}(cursor+1)*2^4;
+            elseif lengthMultiplier == 1
+                modulationRx = data_recieved_packed{chan+1}(cursor);
+            else
                 error('Header Decoding Needs to be updated for new packing');
             end
-            modulationRx = data_recieved_packed{chan+1}(cursor) + data_recieved_packed{chan+1}(cursor+1)*2^4;
             
             %Perform the majority function because the modulation type is
             %repcoded
@@ -224,8 +227,8 @@ for chan=0:(numChannels-1)
             %length of the packet is taken by thresholding the index of
             %the modualtion scheme.  The other blocks in the decoder also
             %assume this modulation scheme
-            if modulationRxDecoded > maxModType()
-                modulationRxDecoded = maxModType(); 
+            if modulationRxDecoded > maxModType(radixMax)
+                modulationRxDecoded = maxModType(radixMax); 
             end
             
             radixRx = modTypeToRadix(modulationRxDecoded); 

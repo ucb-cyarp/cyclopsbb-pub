@@ -16,7 +16,7 @@ calcEVM = false;
 %% Sweep Parameters
 trials = 10;
 dBSnrRange = 0:2:18;
-radixRange = [16, 4, 2];
+radixRange = [256, 16, 4, 2];
 % radixRange = [16, 4, 2];
 % dBSnrRange = [-3, 0, 3, 6, 10, 12, 15, 18, 21];
 % dBSnrRange = [12, 15];
@@ -87,6 +87,7 @@ for radInd = radixIndRange
     bitsPerSymbol_input = [];
     radixHeader_input = [];
     radix_input = [];
+    maxRadix_input = [];
     overSample_input = [];
     bitsPerSymbolMax_input = [];
     channelizerUpDownSampling_input = [];
@@ -183,6 +184,7 @@ for radInd = radixIndRange
             bitsPerSymbol_input(configInd) = bitsPerSymbol;
             radixHeader_input(configInd) = radixHeader;
             radix_input(configInd) = radix;
+            maxRadix_input(configInd) = radixMax;
             overSample_input(configInd) = overSample;
             bitsPerSymbolMax_input(configInd) = bitsPerSymbolMax;
             channelizerUpDownSampling_input(configInd) = channelizerUpDownSampling;
@@ -259,7 +261,7 @@ for radInd = radixIndRange
                            numChannels_input(configInd), packetsPerChannel_input(configInd), ...
                            header_len_bytes_input(configInd), crc_len_bytes_input(configInd), frame_len_bytes_input(configInd), ...
                            bitsPerSymbolHeader_input(configInd), bitsPerSymbol_input(configInd), ...
-                           radixHeader_input(configInd), radix_input(configInd), overSample_input(configInd), bitsPerSymbolMax_input(configInd), channelizerUpDownSampling_input(configInd), awgnSNR_input(configInd), calcEVM);
+                           radixHeader_input(configInd), radix_input(configInd), maxRadix_input(configInd), overSample_input(configInd), bitsPerSymbolMax_input(configInd), channelizerUpDownSampling_input(configInd), awgnSNR_input(configInd), calcEVM);
 
             if trial == 1
                 payloadRMSLoc = payloadRMS;
