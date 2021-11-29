@@ -11,7 +11,7 @@ else
 end
 
 %Compute ideal EVM
-idealEVM = 10^(EsN0/(-20))*100; %TODO: Check.  Keysight equation used SNR but it seems too high (doing better than ideal).  Expect EsN0 is what was really was needed
+idealEVM = 10.^(EsN0/(-20))*100; %TODO: Check.  Keysight equation used SNR but it seems too high (doing better than ideal).  Expect EsN0 is what was really was needed
 %Based on 2.10 of
 %https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=4136960, it looks
 %like there is an assumptuon that Es/N0 = SNR which is not strictly
