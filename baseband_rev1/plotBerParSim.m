@@ -14,14 +14,12 @@ timestamp = strrep(datestr(now,'ddmmmyyyy-HH_MM_SSAM'), ' ', '');
 calcEVM = false;
 
 %% Sweep Parameters
-trials = 10;
-dBSnrRange = 0:2:18;
+targetBitErrorsAtMaxSNR=10; %Used to calculate the number of trials required to get the 
+dBSnrSweep{1} = 18:1:28;
+dBSnrSweep{2} = 7:1:16;
+dBSnrSweep{3} = 0:1:9;
+dBSnrSweep{4} = -4:1:6;
 radixRange = [256, 16, 4, 2];
-% radixRange = [16, 4, 2];
-% dBSnrRange = [-3, 0, 3, 6, 10, 12, 15, 18, 21];
-% dBSnrRange = [12, 15];
-% dBSnrRange = [18];
-indRange = 1:1:length(dBSnrRange);
 radixIndRange = 1:1:length(radixRange);
 
 rxPhaseFixed = false; %Disable for random carrier phase offset
@@ -37,6 +35,8 @@ rxPhaseFixed = false; %Disable for random carrier phase offset
 freqOffsetHz = 20000;
 txTimingOffset = 0.00002;
 
+packetsPerChannel = 2;
+
 %%Do a run for each radix
 for radInd = radixIndRange
     %%Set Radix
@@ -44,9 +44,25 @@ for radInd = radixIndRange
     disp(['Radix: ' num2str(radix)]);
     disp(['Modulation Type: ' radixToModulationStr(radix)]);
     reportName = [reportNameBase '_' radixToModulationStr(radix)];
+    
+    effectiveOversmple = overSample*channelizerUpDownSampling/numChannels; %Due the channelizer, we are actually using more bandwidth than we usually would.
+
+    dBSnrRange = dBSnrSweep{radInd};
+    indRange = 1:1:length(dBSnrRange); 
 
     %For each radix need to re-do core setup as some constants are set based on it
     rev1BB_startup_core;
+    
+    maxSNR = max(dBSnrRange);
+    [~, ~, maxSNR_idealBer, ~] = getIdealBER(maxSNR, effectiveOversmple, radix); %1Error/#TxBits
+    expectedBitsTxForDesiredNumErrors = targetBitErrorsAtMaxSNR/maxSNR_idealBer;
+    numBitsPerPacket = frame_len_bytes*8;
+    numBitsPerTx = numBitsPerPacket*packetsPerChannel;
+    expectedTrials = expectedBitsTxForDesiredNumErrors/numBitsPerTx;
+    trials = max(ceil(expectedTrials), 1);
+    
+    disp(['Trials: ' num2str(trials)]);
+    disp(['SNR Range: ' mat2str(dBSnrRange)]);
     
     %Change to a temporary dir to perform the work
     addpath(pwd);
@@ -92,13 +108,12 @@ for radInd = radixIndRange
     bitsPerSymbolMax_input = [];
     channelizerUpDownSampling_input = [];
     awgnSNR_input = [];
-
+    
     for dBSnrInd = indRange
         awgnSNR = dBSnrRange(dBSnrInd);
 
         %See https://www.mathworks.com/help/comm/ug/awgn-channel.html for a
         %consise explanation of the difference between SNR, EsN0, and EbN0
-        effectiveOversmple = overSample*channelizerUpDownSampling/numChannels; %Due the channelizer, we are actually using more bandwidth than we usually would.
         [EbN0Loc, EsN0Loc, idealBerLoc, idealEVMLoc] = getIdealBER(awgnSNR, effectiveOversmple, radix);
 
         sim_idealBer(dBSnrInd) = idealBerLoc;
@@ -162,7 +177,6 @@ for radInd = radixIndRange
     %         simInputs(configInd) = simInputs(configInd).setModelParameter('SimulationMode', 'normal');
 
             %Store 
-            packetsPerChannel = 2;
             expected_packed_data_input{configInd, 1} = transpose(cat(2, header_payload_packed_ch0, header_payload_packed_ch0));
     %         expected_packed_data_input{configInd, 1} = transpose(cat(2, header_payload_packed_ch0, header_payload_packed_ch0));
     %         expected_packed_data_input{configInd, 2} = transpose(cat(2, header_payload_packed_ch1, header_payload_packed_ch1));
