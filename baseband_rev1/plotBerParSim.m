@@ -18,7 +18,7 @@ targetBitErrorsAtMaxSNR=10; %Used to calculate the number of trials required to 
 dBSnrSweep{1} = 18:1:27;
 dBSnrSweep{2} = 7:1:15;
 dBSnrSweep{3} = 0:1:8;
-dBSnrSweep{4} = -4:1:7;
+dBSnrSweep{4} = -4:1:5;
 radixRange = [256, 16, 4, 2];
 radixIndRange = 1:1:length(radixRange);
 
