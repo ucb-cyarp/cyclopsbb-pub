@@ -15,10 +15,10 @@ calcEVM = false;
 
 %% Sweep Parameters
 targetBitErrorsAtMaxSNR=10; %Used to calculate the number of trials required to get the 
-dBSnrSweep{1} = 18:1:28;
-dBSnrSweep{2} = 7:1:16;
-dBSnrSweep{3} = 0:1:9;
-dBSnrSweep{4} = -4:1:6;
+dBSnrSweep{1} = 18:1:27;
+dBSnrSweep{2} = 7:1:15;
+dBSnrSweep{3} = 0:1:8;
+dBSnrSweep{4} = -4:1:7;
 radixRange = [256, 16, 4, 2];
 radixIndRange = 1:1:length(radixRange);
 
