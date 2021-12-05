@@ -48,8 +48,8 @@ RxSymbGolayPeakDetectPartition = 10; % *
 RxCoarseCFOPartition = 11;           % *
 RxEQPartition = 12;
 RxEQ2Partition = 13;
-% RxFineCFOPartition = 13;
-% RxFineCFOCorrectComputePartition = 14;
+RxFineCFOPartition = 14;
+RxFineCFOCorrectComputePartition = 15;
 % RxHeaderDemodPartition = 15; % * Want to merge these due to workload but need multiple execution domains in a single partition to avoid deadlock
 % RxHeaderParsePartition = 15; % *
 RxDemodPartition = 16;       % *
@@ -130,6 +130,8 @@ RxSymbGolayPeakDetectSubBlocking = 24;
 RxCoarseCFOSubBlocking = 24;
 RxEQSubBlocking = 24;
 RxEQ2SubBlocking = 24;
+RxFineCFOSubBlocking = 24;
+RxFineCFOCorrectComputeSubBlocking = 24;
 RxDemodSubBlocking = 24;
 RxPackerSubBlocking = 24;
 RxPacketControllerSubBlocking = 24;
@@ -317,7 +319,7 @@ trEarlyLateAvgNumSamp = 64;
 
 % trEarlyLatePGain = -0.00225;
 % trEarlyLateIGain = -0.000000050;
-trEarlyLatePGain = -0.00100;
+trEarlyLatePGain = -0.00300;
 trEarlyLateIGain = -0.000000050;
 % trEarlyLatePGain = 0;
 % trEarlyLateIGain = 0;
@@ -354,12 +356,16 @@ cfoNcoWordLen = 16;
 lmsEqDepth = 16;
 % lmsStep_init =  0.005; %LMS
 % lmsStep_final = 0.005;
-lmsStep_init =  0.015; %LMS
-lmsStep_final = 0.0075;
+% lmsStep_init =  0.015; %LMS
+% lmsStep_final = 0.0075;
+lmsStep_init =  0.05; %LMS
+lmsStep_final = 0.01;
 lmsStep_meta = (lmsStep_final - lmsStep_init)/cefLen;
 eqBatchSize = 8; %Currently use a int8 counter.  Update type in simulink if batch size substantially increased
-eqPipeline = 120*2/overSample;
-% eqPipeline = 0;
+% eqPipeline = 120*2/overSample;
+eqPipeline = 8;
+
+eqTrainingEarlyShutoff=128;%Allow Fine CFO to begin training at end of CEF
 
 %% Setup Demod
 %For 16QAM
@@ -378,7 +384,7 @@ qam256_demod_scale_factor = qam256_hdl_distance/qam256_power_normalized_distance
 
 %% Setup Fine CFO
 cr_smooth_samples = 4;
-cr_p = 0.0022;
+cr_p = 0.0030;
 cr_i = 0.00010;
 cr_i_preamp = 2^-9;
 
@@ -391,7 +397,14 @@ cr_int1_sat_low = -cr_integrator1_saturation;
 cr_sat2_up  =  cr_saturation2;
 cr_sat2_low = -cr_saturation2;
 
-fineCFOPipeline = 128*2;
+fineCFOPipeline = 120*2;
+
+cfoEarlyWarningStartTraining = eqTrainingEarlyShutoff;
+cfoEarlyWarningReset = fineCFOPipeline+1+eqTrainingEarlyShutoff; %Need to allow reset to propagate to correction bock before training starts
+
+if(cfoEarlyWarningReset>cefLen)
+   error('CEF Ending Early Warning Occurs Before CEF Even Starts.  No EQ Training Occurs'); 
+end
 
 %% Setup Rx Controller
 cefEarlyWarning = 256;
