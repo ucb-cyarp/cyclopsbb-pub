@@ -365,7 +365,7 @@ eqBatchSize = 8; %Currently use a int8 counter.  Update type in simulink if batc
 % eqPipeline = 120*2/overSample;
 eqPipeline = 8;
 
-eqTrainingEarlyShutoff=128;%Allow Fine CFO to begin training at end of CEF
+eqTrainingEarlyShutoff=256;%Allow Fine CFO to begin training at end of CEF
 
 %% Setup Demod
 %For 16QAM
@@ -384,9 +384,9 @@ qam256_demod_scale_factor = qam256_hdl_distance/qam256_power_normalized_distance
 
 %% Setup Fine CFO
 cr_smooth_samples = 4;
-cr_p = 0.0030;
-cr_i = 0.00010;
-cr_i_preamp = 2^-9;
+cr_p = 0.0050;
+cr_i = 0.00020;
+cr_i_preamp = 2^-5;
 
 cr_integrator1_saturation = 0.6;
 cr_integrator1_decay = 1;
