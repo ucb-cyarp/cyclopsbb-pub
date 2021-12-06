@@ -320,7 +320,7 @@ trEarlyLateAvgNumSamp = 64;
 % trEarlyLatePGain = -0.00225;
 % trEarlyLateIGain = -0.000000050;
 trEarlyLatePGain = -0.00300;
-trEarlyLateIGain = -0.000000050;
+trEarlyLateIGain = -0.000000005;
 % trEarlyLatePGain = 0;
 % trEarlyLateIGain = 0;
 enableTRFreqCorrection = true;
@@ -331,7 +331,7 @@ trCorrTargetScaleFactor = 0.5;
 
 timing_p = -0.215;
 
-trFeedbackPipelining = 120*6;
+trFeedbackPipelining = 120*4;
 
 trDelayThroughCorrAndPeakDetect = golayType*overSample+timing_differentiator_grpDelay_roundUp+timing_correlator_pipeline+timing_phase_detect_delay;
 trIntPhaseCounterInit = mod(-trDelayThroughCorrAndPeakDetect+timing_var_delay_out_pipeline+trTappedDelayLen/2, overSample); %The plus 1 is for the peak detect
@@ -358,14 +358,14 @@ lmsEqDepth = 16;
 % lmsStep_final = 0.005;
 % lmsStep_init =  0.015; %LMS
 % lmsStep_final = 0.0075;
-lmsStep_init =  0.05; %LMS
+lmsStep_init =  0.06; %LMS
 lmsStep_final = 0.01;
 lmsStep_meta = (lmsStep_final - lmsStep_init)/cefLen;
 eqBatchSize = 8; %Currently use a int8 counter.  Update type in simulink if batch size substantially increased
 % eqPipeline = 120*2/overSample;
 eqPipeline = 8;
 
-eqTrainingEarlyShutoff=128;%Allow Fine CFO to begin training at end of CEF
+eqTrainingEarlyShutoff=100;%Allow Fine CFO to begin training at end of CEF
 
 %% Setup Demod
 %For 16QAM
@@ -385,7 +385,7 @@ qam256_demod_scale_factor = qam256_hdl_distance/qam256_power_normalized_distance
 %% Setup Fine CFO
 cr_smooth_samples = 4;
 cr_p = 0.0030;
-cr_i = 0.00010;
+cr_i = 0.0001;
 cr_i_preamp = 2^-5;
 
 cr_integrator1_saturation = 0.6;
