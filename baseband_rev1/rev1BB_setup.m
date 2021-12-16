@@ -349,8 +349,14 @@ timing_cefEarlyWarningTollerance = 5; %This is because CEF early warning does no
 timingControlToGolay = 128*2; %This many sample can be missed if packets are back to back
 
 %% Setup Coarse CFO
-cfoNcoQuantizedAccumBits = 12;
-cfoNcoWordLen = 16;
+% cfoNcoQuantizedAccumBits = 14;
+% cfoNcoWordLen = 16;
+
+cfoNcoQuantizedAccumBits = 18;
+cfoNcoWordLen = 20;
+
+% cfoNcoQuantizedAccumBits = 30;
+% cfoNcoWordLen = 32;
 
 %% Setup EQ
 lmsEqDepth = 16;
