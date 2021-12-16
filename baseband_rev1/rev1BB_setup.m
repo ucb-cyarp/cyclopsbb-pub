@@ -317,8 +317,8 @@ trEarlyLateAvgNumSamp = 64;
 
 % trEarlyLatePGain = -0.00225;
 % trEarlyLateIGain = -0.000000050;
-trEarlyLatePGain = -0.00100;
-trEarlyLateIGain = -0.000000050;
+trEarlyLatePGain = -0.00300;
+trEarlyLateIGain = -0.000000005;
 % trEarlyLatePGain = 0;
 % trEarlyLateIGain = 0;
 enableTRFreqCorrection = true;
@@ -329,7 +329,7 @@ trCorrTargetScaleFactor = 0.5;
 
 timing_p = -0.215;
 
-trFeedbackPipelining = 120*6;
+trFeedbackPipelining = 120*4;
 
 trDelayThroughCorrAndPeakDetect = golayType*overSample+timing_differentiator_grpDelay_roundUp+timing_correlator_pipeline+timing_phase_detect_delay;
 trIntPhaseCounterInit = mod(-trDelayThroughCorrAndPeakDetect+timing_var_delay_out_pipeline+trTappedDelayLen/2, overSample); %The plus 1 is for the peak detect
