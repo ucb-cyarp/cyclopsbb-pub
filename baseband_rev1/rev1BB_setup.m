@@ -348,7 +348,7 @@ timingControlToGolay = 128*2; %This many sample can be missed if packets are bac
 
 %% Setup Coarse CFO
 cfoNcoQuantizedAccumBits = 12;
-cfoNcoWordLen = 16;
+cfoNcoWordLen = 22;
 
 %% Setup EQ
 lmsEqDepth = 16;
