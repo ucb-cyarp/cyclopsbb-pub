@@ -303,7 +303,7 @@ timingRecoveryFreqCorrectionAvgLen = 32;
 timingRecoveryFreqCorrectionDiscardLastN = 3; %Discard the last 2 peaks before the CFO due to changing signal changing the shape of the correlation
 
 trTappedDelayBase = 40;
-trFarrowTaps = 4;
+trFarrowTaps = 6;
 trTappedDelayLen = trTappedDelayBase+trFarrowTaps; %Include samples for the interpolator
 trInitialDelay = round((trTappedDelayLen+1-trFarrowTaps)/2+1);
 
@@ -334,7 +334,7 @@ timing_p = -0.215;
 trFeedbackPipelining = 120*4;
 
 trDelayThroughCorrAndPeakDetect = golayType*overSample+timing_differentiator_grpDelay_roundUp+timing_correlator_pipeline+timing_phase_detect_delay;
-trIntPhaseCounterInit = mod(-trDelayThroughCorrAndPeakDetect+timing_var_delay_out_pipeline+trTappedDelayLen/2, overSample); %The plus 1 is for the peak detect
+trIntPhaseCounterInit = mod(-trDelayThroughCorrAndPeakDetect+timing_var_delay_out_pipeline+trTappedDelayLen/2+1, overSample); %The plus 1 is for the peak detect
  
 %Will also delay the line being decimated (going into the selector) so that
 %the feedback path of the integer phase when the packet is first detected
