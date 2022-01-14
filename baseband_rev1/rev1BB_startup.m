@@ -49,11 +49,11 @@ rxPhaseFixed = false;
 % awgnSNR = 18;
 % awgnSNR = 20;
 % awgnSNR = 24;
-% awgnSNR = 27;
+awgnSNR = 27;
 % awgnSNR = 30;
 % awgnSNR = 50;
 %awgnSNR = 92;
-awgnSNR = 100;
+% awgnSNR = 100;
 %awgnSNR = 1000;
 
 % freqOffsetHz = 0;

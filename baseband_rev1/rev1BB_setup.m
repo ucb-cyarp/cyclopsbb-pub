@@ -279,6 +279,17 @@ agc_sat_low = -agcSaturation;
 agcDesired = 0;
 agcStep = 2^-8;
 
+agcLnStart = 1e-2;
+agcLnStep = 2^-6;
+agcLnSteps = 2e3;
+agcLnBreakpoints = (agcLnStep.*(0:(agcLnSteps-1)))+agcLnStart;
+
+agcExpStart = agc_sat_low;
+agcExpStop = agc_sat_up;
+agcExpStep = 2^-6;
+agcExpSteps = ceil((agcExpStop-agcExpStart)/agcExpStep);
+agcExpBreakpoints = (agcExpStep.*(0:agcExpSteps))+agcExpStart;
+
 %Threshold for post AGC power before correlator peaks are passed
 %Prevents triggering when AGC still settling
 agcSettleThresh = 0.65;
