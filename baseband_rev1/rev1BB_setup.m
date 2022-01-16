@@ -44,8 +44,8 @@ RxTimingRecoveryVariableDelayPartition = 7;
 RxTimingRecoverySymbolClockPartition = 8;
 RxTimingRecoveryEarlyLatePartition = 9;
 RxSymbGolayCorrelatorPartition = 10; % * Want to merge these due to workload but need multiple execution domains in a single partition to avoid deadlock
-RxSymbGolayPeakDetectPartition = 10; % *
-RxCoarseCFOPartition = 11;           % *
+RxSymbGolayPeakDetectPartition = 10; % * - Using delays to break deadlock (with delay matching)
+RxCoarseCFOPartition = 10;           % *
 RxEQPartition = 12;
 RxEQ2Partition = 13;
 % RxFineCFOPartition = 13;
@@ -360,6 +360,8 @@ timingControlToGolay = 128*2; %This many sample can be missed if packets are bac
 %% Setup Coarse CFO
 cfoNcoQuantizedAccumBits = 12;
 cfoNcoWordLen = 22;
+
+coarseCFODeadlockResolvingDelay = 120*3;
 
 %% Setup EQ
 lmsEqDepth = 16;
