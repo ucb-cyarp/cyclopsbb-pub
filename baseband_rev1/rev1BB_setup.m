@@ -54,8 +54,8 @@ RxEQ2Partition = 13;
 % RxHeaderParsePartition = 15; % *
 RxDemodPartition = 16;       % *
 RxPackerPartition = 16;      % *
-RxPacketControllerPartition = 17;
-RxFreezeControllerPartition = 17;
+RxPacketControllerPartition = 16;
+RxFreezeControllerPartition = 16;
 
 %All 1 Partition
 % RxRRCPartition = 1;
@@ -373,6 +373,8 @@ lmsStep_meta = (lmsStep_final - lmsStep_init)/cefLen;
 eqBatchSize = 8; %Currently use a int8 counter.  Update type in simulink if batch size substantially increased
 eqPipeline = 120*2/overSample;
 % eqPipeline = 0;
+
+packetRxControllerDataPackerDeadlockResolvingDelay = 120*3;
 
 %% Setup Demod
 %For 16QAM
