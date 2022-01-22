@@ -4,7 +4,7 @@
 clear; close all; clc;
 
 %% Modulation
-radix = 4;
+radix = 256;
 
 %% Random Seeds
 %seed = 67;
@@ -44,7 +44,7 @@ rxPhaseFixed = false;
 % awgnSNR = 5.5;
 % awgnSNR = 6;
 % awgnSNR = 8;
-awgnSNR = 10;
+% awgnSNR = 10;
 % awgnSNR = 15;
 % awgnSNR = 18;
 % awgnSNR = 20;
@@ -53,7 +53,7 @@ awgnSNR = 10;
 % awgnSNR = 30;
 % awgnSNR = 50;
 %awgnSNR = 92;
-% awgnSNR = 100;
+awgnSNR = 100;
 %awgnSNR = 1000;
 
 % freqOffsetHz = 0;
