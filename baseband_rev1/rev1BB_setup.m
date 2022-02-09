@@ -30,12 +30,12 @@ TxRRCFilterPartition = 2;
 % RxPacketControllerPartition = 19;
 % RxFreezeControllerPartition = 19;
 
-% -Fine Grain Partitioning (16 Cores)
+% -Fine Grain Partitioning
 RxRRCPartition = 1;
 RxAGCPwrAvgPartition = 2;
 RxAGCCorrectionLoopPartition = 2;
 RxTimingRecoveryGolayCorrelatorPartition = 3;
-RxTimingRecoveryGolayPeakDetectPartition = 4;
+RxTimingRecoveryGolayPeakDetectPartition = 3;
 RxTimingRecoveryControlPartition = 5;
 RxTimingRecoveryCalcDelayError = 6;
 RxTimingRecoveryFreqEstPartition = 6;
