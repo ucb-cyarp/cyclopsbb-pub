@@ -294,6 +294,8 @@ agcExpBreakpoints = (agcExpStep.*(0:agcExpSteps))+agcExpStart;
 %Prevents triggering when AGC still settling
 agcSettleThresh = 0.65;
 
+agcLoopPipeline = RxAGCCorrectionLoopSubBlocking;
+
 %% Setup Timing Recovery
 timing_differentiator_len = 15; %The block adds 1
 
