@@ -148,6 +148,23 @@ simInputs(configInd) = simInputs(configInd).setVariable('agc_sat_up', agc_sat_up
 simInputs(configInd) = simInputs(configInd).setVariable('agc_sat_low', agc_sat_low);
 simInputs(configInd) = simInputs(configInd).setVariable('agcDesired', agcDesired);
 simInputs(configInd) = simInputs(configInd).setVariable('agcStep', agcStep);
+%From 4d4fdbfdc0f7718f9033e80cd732e5a63ca2a085
+simInputs(configInd) = simInputs(configInd).setVariable('agcLnStart', agcLnStart);
+simInputs(configInd) = simInputs(configInd).setVariable('agcLnStep', agcLnStep);
+simInputs(configInd) = simInputs(configInd).setVariable('agcLnSteps', agcLnSteps);
+simInputs(configInd) = simInputs(configInd).setVariable('agcLnBreakpoints', agcLnBreakpoints);
+simInputs(configInd) = simInputs(configInd).setVariable('agcExpStart', agcExpStart);
+simInputs(configInd) = simInputs(configInd).setVariable('agcExpStop', agcExpStop);
+simInputs(configInd) = simInputs(configInd).setVariable('agcExpStep', agcExpStep);
+simInputs(configInd) = simInputs(configInd).setVariable('agcExpSteps', agcExpSteps);
+simInputs(configInd) = simInputs(configInd).setVariable('agcExpBreakpoints', agcExpBreakpoints);
+%From 960076f57ecaee9b5322f66a7d16fc35022e5976
+simInputs(configInd) = simInputs(configInd).setVariable('coarseCFODeadlockResolvingDelay', coarseCFODeadlockResolvingDelay);
+%From dd1dd95fe6730cf8d1573a9a4c855fbf4df4deab
+simInputs(configInd) = simInputs(configInd).setVariable('packetRxControllerDataPackerDeadlockResolvingDelay', packetRxControllerDataPackerDeadlockResolvingDelay);
+%From 7df651d2ea8d21c3754b39521baff9a0a0255285
+simInputs(configInd) = simInputs(configInd).setVariable('agcLoopPipeline', agcLoopPipeline);
+%Existing
 simInputs(configInd) = simInputs(configInd).setVariable('agcSettleThresh', agcSettleThresh);
 simInputs(configInd) = simInputs(configInd).setVariable('timing_correlator_pipeline', timing_correlator_pipeline);
 simInputs(configInd) = simInputs(configInd).setVariable('timing_differentiator_len', timing_differentiator_len);
