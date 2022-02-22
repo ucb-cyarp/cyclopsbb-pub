@@ -35,6 +35,8 @@ rxPhaseFixed = false; %Disable for random carrier phase offset
 freqOffsetHz = 20000;
 txTimingOffset = 0.00002;
 
+seedOffset = 123456;
+
 packetsPerChannel = 2;
 
 %%Do a run for each radix
@@ -129,8 +131,8 @@ for radInd = radixIndRange
 
             disp(['Trial ' num2str(trial) ' of ' num2str(trials)]);
 
-            seed = abs(dBSnrRange(dBSnrInd)*1000+trial);
-            awgnSeed = abs(dBSnrRange(dBSnrInd)*1000+trial+10000000);
+            seed = abs(dBSnrRange(dBSnrInd)*1000+trial+seedOffset);
+            awgnSeed = abs(dBSnrRange(dBSnrInd)*1000+trial+10000000+seedOffset);
 
             %Setup the Simulation
             rev1BB_simParams_setup; %Using the core function to avoid recomputing core radio configuration.  This will set up the packet and simulation parameters
