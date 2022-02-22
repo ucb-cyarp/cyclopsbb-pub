@@ -34,4 +34,4 @@ mv "${timestamp}_gitStatus.log" "${dstDir}/."
 mv "${timestamp}_gitDiff.patch" "${dstDir}/."
 mv "${timestamp}_matlab.log" "${dstDir}/."
 
-mv -r "BERvsEbN0_*" "${dstDir}/."
+mv "BERvsEbN0_*" "${dstDir}/."
