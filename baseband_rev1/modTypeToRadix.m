@@ -6,6 +6,8 @@ function radix = modTypeToRadix(modType)
         radix = 4;
     elseif(modType == 2) %16QAM
         radix = 16;
+    elseif(modType == 3) %256QAM
+        radix = 256;
     else
         radix = 0;
     end

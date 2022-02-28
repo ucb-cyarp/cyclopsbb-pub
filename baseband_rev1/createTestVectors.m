@@ -6,8 +6,10 @@ if(radix == 2) %BPSK
     modType = 0;
 elseif(radix == 4) %QPSK
     modType = 1;
-else %16QAM
+elseif(radix == 16) %16QAM
     modType = 2;
+else %256QAM
+    modType = 3;
 end
 
 mod_imperfection = zeros(pad_first, 1);
@@ -21,15 +23,15 @@ modulationMask = cat(1, mod_imperfection, preambleMask, headerMask, packetMask, 
 zeroMask =  cat(1, true(size(mod_imperfection)), false(size(preambleMask)), false(size(headerMask)), false(size(packetMask)), true(size(afterMask)));
 
 simX.time = [];
-simX.signals.values = cat(1, testMsgFPGA, zeros(round(size(testMsgFPGA)./2)), testMsgFPGA);
+simX.signals.values = cat(1, testMsgFPGA, testMsgFPGA);
 simX.signals.dimensions = 1;
 
 modX.time = [];
-modX.signals.values = cat(1, modulationMask, zeros(round(size(modulationMask)./2)), modulationMask);
+modX.signals.values = cat(1, modulationMask, modulationMask);
 modX.signals.dimensions = 1;
 
 zeroX.time = [];
-zeroX.signals.values = cat(1, zeroMask, true(round(size(modulationMask)./2)), zeroMask, true(round(size(modulationMask)./2))); %Adding some additional zeros at the end
+zeroX.signals.values = cat(1, zeroMask, zeroMask, true(round(size(modulationMask)./2))); %Adding some additional zeros at the end
 zeroX.signals.dimensions = 1;
 
 dataDelay = length(cat(1, x_PRE_adj)) + 1 + 187+360+1;%delay in computing

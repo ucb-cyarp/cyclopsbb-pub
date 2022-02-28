@@ -4,7 +4,7 @@
 clear; close all; clc;
 
 %% Modulation
-radix = 16;
+radix = 256;
 
 %% Random Seeds
 %seed = 67;
@@ -31,41 +31,44 @@ channelSpec = 'AWGN';
 % channelSpec = 'Manual';
 % channelSpec = 'cost207RAx4';
 %Manual Delay Set
-manualChanDelaysSymb = [1,6,11,16];
+manualChanDelaysSymb = [1,3,4,16];
 manualChanPathGainDB = [0,-3,-10,-20];
-manualChanPathGain = [0.25, 0.25, 0.25, 0.25];
+manualChanPathGain = [0.7, 0.1, 0.2, 0.0];
 
-rxPhaseFixed = true;
+rxPhaseFixed = false;
 
 %awgnSNR = -6;
 % awgnSNR = -3;
 % awgnSNR = 0;
 % awgnSNR = 2;
-%awgnSNR = 5.5;
+% awgnSNR = 5.5;
 % awgnSNR = 6;
 % awgnSNR = 8;
 % awgnSNR = 10;
 % awgnSNR = 15;
 % awgnSNR = 18;
 % awgnSNR = 20;
-awgnSNR = 30;
-%awgnSNR = 50;
+% awgnSNR = 24;
+awgnSNR = 27;
+% awgnSNR = 30;
+% awgnSNR = 50;
 %awgnSNR = 92;
-%awgnSNR = 100;
+% awgnSNR = 100;
 %awgnSNR = 1000;
 
-freqOffsetHz = 0;
-% freqOffsetHz = -1000;
+% freqOffsetHz = 0;
+freqOffsetHz = -1000;
 % freqOffsetHz = 2000;
 % freqOffsetHz = 5000;
-%freqOffsetHz = 10000;
-%freqOffsetHz = 20000;
-%freqOffsetHz = 100000;
+% freqOffsetHz = 10000;
+%%freqOffsetHz = 20000;
+% freqOffsetHz = 100000;
 
-% txTimingOffset = 0.0002;
+%%txTimingOffset = 0.00002;
+txTimingOffset = 0.0002;
 % txTimingOffset = -0.0001;
 % txTimingOffset = 0.00001;
-txTimingOffset = 0;
+% txTimingOffset = 0;
 
 %% Setup Parameters
 rev1BB_startup_core;

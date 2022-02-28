@@ -11,7 +11,8 @@ function [totalHeaderBer, totalPayloadBer, evmHeader, evmHeaderTR, evmPayload, e
                        numChannels, packetsPerChannel, ...
                        header_len_bytes, crc_len_bytes, frame_len_bytes, ...
                        bitsPerSymbolHeader, bitsPerSymbol, ...
-                       radixHeader, radix, overSample, bitsPerSymbolMax, channelizerUpDownSampling, awgnSNR)
+                       radixHeader, radix, radixMax, overSample, bitsPerSymbolMax, channelizerUpDownSampling, awgnSNR, ...
+                       calcEVM)
 
 % header_len_bytes gives the header length in bytes
 % payload_len_bytes gives the payload length
@@ -169,10 +170,12 @@ payloadBits = 0;
 packetDecodeCompleteFailure = 0;
 packetDecodeFailureDueToModulationFieldCorruption = 0;
 
-headerErrorVector = [];
-payloadErrorVector = [];
-headerErrorVectorTR = [];
-payloadErrorVectorTR = [];
+if calcEVM
+    headerErrorVector = [];
+    payloadErrorVector = [];
+    headerErrorVectorTR = [];
+    payloadErrorVectorTR = [];
+end
 
 disp(['SNR (dB): ', num2str(awgnSNR), ', EbN0 (dB): ', num2str(EbN0)])
 
@@ -181,7 +184,7 @@ for chan=0:(numChannels-1)
     cursor = 1;
     symbolCursor = 1;
     expectedCursor = 1;
-    expectedSymbolCursor = 1;
+%     expectedSymbolCursor = 1;
     headerBitErrorsCh = 0;
     headerBitsCh = 0;
     payloadBitErrorsCh = 0;
@@ -189,10 +192,12 @@ for chan=0:(numChannels-1)
     packetDecodeCompleteFailureCh = 0;
     packetDecodeFailureDueToModulationFieldCorruptionCh = 0;
     
-    headerErrorVectorCh = [];
-    payloadErrorVectorCh = [];
-    headerErrorVectorTRCh = [];
-    payloadErrorVectorTRCh = [];
+    if calcEVM
+        headerErrorVectorCh = [];
+        payloadErrorVectorCh = [];
+        headerErrorVectorTRCh = [];
+        payloadErrorVectorTRCh = [];
+    end
     
     for packet = 0:(packetsPerChannel-1)
         if cursor + header_len_bytes*lengthMultiplier-1 > length(data_recieved_packed{chan+1})
@@ -200,10 +205,13 @@ for chan=0:(numChannels-1)
            packetDecodeCompleteFailureCh = packetDecodeCompleteFailureCh+1;
 %            disp(['    Channel: ' num2str(chan) ' Packet: ' num2str(packet) ' failed to decode']);
         else
-            if lengthMultiplier ~= 2
+            if lengthMultiplier == 2
+                modulationRx = data_recieved_packed{chan+1}(cursor) + data_recieved_packed{chan+1}(cursor+1)*2^4;
+            elseif lengthMultiplier == 1
+                modulationRx = data_recieved_packed{chan+1}(cursor);
+            else
                 error('Header Decoding Needs to be updated for new packing');
             end
-            modulationRx = data_recieved_packed{chan+1}(cursor) + data_recieved_packed{chan+1}(cursor+1)*2^4;
             
             %Perform the majority function because the modulation type is
             %repcoded
@@ -219,8 +227,8 @@ for chan=0:(numChannels-1)
             %length of the packet is taken by thresholding the index of
             %the modualtion scheme.  The other blocks in the decoder also
             %assume this modulation scheme
-            if modulationRxDecoded > maxModType()
-                modulationRxDecoded = maxModType(); 
+            if modulationRxDecoded > maxModType(radixMax)
+                modulationRxDecoded = maxModType(radixMax); 
             end
             
             radixRx = modTypeToRadix(modulationRxDecoded); 
@@ -229,20 +237,27 @@ for chan=0:(numChannels-1)
             headerBitErrorsLocal = biterr(data_recieved_packed{chan+1}(cursor:(cursor+header_len_bytes*lengthMultiplier-1)), expected_packed_data{chan+1}(expectedCursor:(expectedCursor+header_len_bytes*lengthMultiplier-1)));
             headerBERLocal = headerBitErrorsLocal/header_len_bytes*8;
 
-            %Compute the Error Vectors for the header
-            headerErrorVectorChTmp = expected_const_pts{chan+1}(expectedSymbolCursor:(expectedSymbolCursor+headerSymbols-1)) - symbols_recieved{chan+1}(symbolCursor:(symbolCursor+headerSymbols-1));
-            headerErrorVectorTRChTmp = expected_const_pts{chan+1}(expectedSymbolCursor:(expectedSymbolCursor+headerSymbols-1)) - symbols_afterTR_recieved{chan+1}(symbolCursor:(symbolCursor+headerSymbols-1));
-
+            if calcEVM
+                %Compute the Error Vectors for the header
+                headerErrorVectorChTmp = expected_const_pts{chan+1}(expectedSymbolCursor:(expectedSymbolCursor+headerSymbols-1)) - symbols_recieved{chan+1}(symbolCursor:(symbolCursor+headerSymbols-1));
+                headerErrorVectorTRChTmp = expected_const_pts{chan+1}(expectedSymbolCursor:(expectedSymbolCursor+headerSymbols-1)) - symbols_afterTR_recieved{chan+1}(symbolCursor:(symbolCursor+headerSymbols-1));
+            end
+            
             cursor = cursor + header_len_bytes*lengthMultiplier;
             symbolCursor = symbolCursor + headerSymbols;
             expectedCursor = expectedCursor + header_len_bytes*lengthMultiplier;
-            expectedSymbolCursor = expectedSymbolCursor + headerSymbols;
+            
+            if calcEVM
+                expectedSymbolCursor = expectedSymbolCursor + headerSymbols;
+            end
             
             headerBitErrorsCh = headerBitErrorsCh + headerBitErrorsLocal;
             headerBitsCh = headerBitsCh + header_len_bytes*8;
-
-            headerErrorVectorCh = cat(1, headerErrorVectorCh, headerErrorVectorChTmp);
-            headerErrorVectorTRCh = cat(1, headerErrorVectorTRCh, headerErrorVectorTRChTmp);
+                        
+            if calcEVM
+                headerErrorVectorCh = cat(1, headerErrorVectorCh, headerErrorVectorChTmp);
+                headerErrorVectorTRCh = cat(1, headerErrorVectorTRCh, headerErrorVectorTRChTmp);
+            end
 
             %Check if decoded radix is different from expected radix
             if(radixRx ~= radix)
@@ -256,8 +271,11 @@ for chan=0:(numChannels-1)
                 frameLengthLengthRx = payloadLengthRx + crc_len_bytes;
                 cursor = cursor + frameLengthLengthRx*lengthMultiplier;
                 expectedCursor = expectedCursor + frame_len_bytes*lengthMultiplier;
-                symbolCursor = symbolCursor + frameLengthLengthRx*8/radixRx; %This should be the same as symbolCursor + payloadCRCSymbols
-                expectedSymbolCursor = expectedSymbolCursor + payloadCRCSymbols;
+                
+                if calcEVM
+                    symbolCursor = symbolCursor + frameLengthLengthRx*8/radixRx; %This should be the same as symbolCursor + payloadCRCSymbols
+                    expectedSymbolCursor = expectedSymbolCursor + payloadCRCSymbols;
+                end
             else
                 %Calculate BER for the payload
 
@@ -270,26 +288,34 @@ for chan=0:(numChannels-1)
                     payloadBitsCh = payloadBitsCh + frame_len_bytes*8;
 
                     %Calculate Error vector for the payload
-                    payloadErrorVectorChTmp = expected_const_pts{chan+1}(expectedSymbolCursor:(expectedSymbolCursor+payloadCRCSymbols-1)) - symbols_recieved{chan+1}(symbolCursor:(symbolCursor+payloadCRCSymbols-1));
-                    payloadErrorVectorTRChTmp = expected_const_pts{chan+1}(expectedSymbolCursor:(expectedSymbolCursor+payloadCRCSymbols-1)) - symbols_afterTR_recieved{chan+1}(symbolCursor:(symbolCursor+payloadCRCSymbols-1));
-                    
-                    payloadErrorVectorCh = cat(1, payloadErrorVectorCh, payloadErrorVectorChTmp);
-                    payloadErrorVectorTRCh = cat(1, payloadErrorVectorTRCh, payloadErrorVectorTRChTmp);
+                    if calcEVM
+                        payloadErrorVectorChTmp = expected_const_pts{chan+1}(expectedSymbolCursor:(expectedSymbolCursor+payloadCRCSymbols-1)) - symbols_recieved{chan+1}(symbolCursor:(symbolCursor+payloadCRCSymbols-1));
+                        payloadErrorVectorTRChTmp = expected_const_pts{chan+1}(expectedSymbolCursor:(expectedSymbolCursor+payloadCRCSymbols-1)) - symbols_afterTR_recieved{chan+1}(symbolCursor:(symbolCursor+payloadCRCSymbols-1));
 
-                    evmHeader = rms(abs(headerErrorVectorChTmp))*100/headerRMS;
-                    evmHeaderTR = rms(abs(headerErrorVectorTRChTmp))*100/headerRMS;
-                    evmPayload = rms(abs(payloadErrorVectorChTmp))*100/payloadRMS;
-                    evmPayloadTR = rms(abs(payloadErrorVectorTRChTmp))*100/payloadRMS;
+                        payloadErrorVectorCh = cat(1, payloadErrorVectorCh, payloadErrorVectorChTmp);
+                        payloadErrorVectorTRCh = cat(1, payloadErrorVectorTRCh, payloadErrorVectorTRChTmp);
+                        
+                        evmHeader = rms(abs(headerErrorVectorChTmp))*100/headerRMS;
+                        evmHeaderTR = rms(abs(headerErrorVectorTRChTmp))*100/headerRMS;
+                        evmPayload = rms(abs(payloadErrorVectorChTmp))*100/payloadRMS;
+                        evmPayloadTR = rms(abs(payloadErrorVectorTRChTmp))*100/payloadRMS;
+                    end
 
                     cursor = cursor + frame_len_bytes*lengthMultiplier;
-                    symbolCursor = symbolCursor + payloadCRCSymbols;
                     expectedCursor = expectedCursor + frame_len_bytes*lengthMultiplier;
-                    expectedSymbolCursor = expectedSymbolCursor + payloadCRCSymbols;
+                    
+                    if calcEVM
+                        symbolCursor = symbolCursor + payloadCRCSymbols;
+                        expectedSymbolCursor = expectedSymbolCursor + payloadCRCSymbols;
+                    end
 
                     disp(['    Packet: ' num2str(packet) ', BER (Header): ' num2str(headerBERLocal) ' [Ideal: ' num2str(headerIdealBer) '], BER (Payload): ' num2str(payloadBERLocal) ' [Ideal: ' num2str(idealBer) ']']);
                     disp(['      Errors (Header): ' num2str(headerBitErrorsLocal) '/' num2str(header_len_bytes*8) ', Errors (Payload): ' num2str(payloadBitErrorsLocal) '/' num2str(frame_len_bytes*8)]);
-                    disp(['      After TR: EVM (Header): ' num2str(evmHeaderTR) ' [Ideal: ' num2str(idealEVM) '], EVM (Payload): ' num2str(evmPayloadTR) ' [Ideal: ' num2str(idealEVM) ']']);
-                    disp(['      B4 Demod: EVM (Header): ' num2str(evmHeader) ' [Ideal: ' num2str(idealEVM) '], EVM (Payload): ' num2str(evmPayload) ' [Ideal: ' num2str(idealEVM) ']']);
+                    
+                    if calcEVM
+                        disp(['      After TR: EVM (Header): ' num2str(evmHeaderTR) ' [Ideal: ' num2str(idealEVM) '], EVM (Payload): ' num2str(evmPayloadTR) ' [Ideal: ' num2str(idealEVM) ']']);
+                        disp(['      B4 Demod: EVM (Header): ' num2str(evmHeader) ' [Ideal: ' num2str(idealEVM) '], EVM (Payload): ' num2str(evmPayload) ' [Ideal: ' num2str(idealEVM) ']']);
+                    end
                 end
             end
         end
@@ -303,15 +329,17 @@ for chan=0:(numChannels-1)
     packetDecodeCompleteFailure = packetDecodeCompleteFailure + packetDecodeCompleteFailureCh;
     packetDecodeFailureDueToModulationFieldCorruption = packetDecodeFailureDueToModulationFieldCorruption + packetDecodeFailureDueToModulationFieldCorruptionCh;
 
-    headerErrorVector = cat(1, headerErrorVector, headerErrorVectorCh);
-    headerErrorVectorTR = cat(1, headerErrorVectorTR, headerErrorVectorTRCh);
-    payloadErrorVector = cat(1, payloadErrorVector, payloadErrorVectorCh);
-    payloadErrorVectorTR = cat(1, payloadErrorVectorTR, payloadErrorVectorTRCh);
-
-    evmHeader = rms(abs(headerErrorVectorCh))*100/headerRMS;
-    evmHeaderTR = rms(abs(headerErrorVectorTRCh))*100/headerRMS;
-    evmPayload = rms(abs(payloadErrorVectorCh))*100/payloadRMS;
-    evmPayloadTR = rms(abs(payloadErrorVectorTRCh))*100/payloadRMS;
+    if calcEVM
+        headerErrorVector = cat(1, headerErrorVector, headerErrorVectorCh);
+        headerErrorVectorTR = cat(1, headerErrorVectorTR, headerErrorVectorTRCh);
+        payloadErrorVector = cat(1, payloadErrorVector, payloadErrorVectorCh);
+        payloadErrorVectorTR = cat(1, payloadErrorVectorTR, payloadErrorVectorTRCh);
+        
+        evmHeader = rms(abs(headerErrorVectorCh))*100/headerRMS;
+        evmHeaderTR = rms(abs(headerErrorVectorTRCh))*100/headerRMS;
+        evmPayload = rms(abs(payloadErrorVectorCh))*100/payloadRMS;
+        evmPayloadTR = rms(abs(payloadErrorVectorTRCh))*100/payloadRMS;
+    end
 
     headerBERCh = headerBitErrorsCh/headerBitsCh;
     payloadBERCh = payloadBitErrorsCh/payloadBitsCh;
@@ -332,10 +360,23 @@ end
 %Report Total
 totalHeaderBer = headerBitErrors/headerBits;
 totalPayloadBer = payloadBitErrors/payloadBits;
-evmHeader = rms(abs(headerErrorVector))*100/headerRMS;
-evmHeaderTR = rms(abs(headerErrorVectorTR))*100/headerRMS;
-evmPayload = rms(abs(payloadErrorVector))*100/payloadRMS;
-evmPayloadTR = rms(abs(payloadErrorVectorTR))*100/payloadRMS;
+
+if calcEVM
+    evmHeader = rms(abs(headerErrorVector))*100/headerRMS;
+    evmHeaderTR = rms(abs(headerErrorVectorTR))*100/headerRMS;
+    evmPayload = rms(abs(payloadErrorVector))*100/payloadRMS;
+    evmPayloadTR = rms(abs(payloadErrorVectorTR))*100/payloadRMS;
+end
+
+if ~calcEVM
+    %Return blanks
+    evmHeader = 0;
+    evmHeaderTR = 0;
+    evmPayload = 0;
+    evmPayloadTR = 0;
+    payloadErrorVector = [];
+    payloadErrorVectorTR = [];
+end
 
 % disp(['  Global Summary: Packet Decode Failures (Did Not Rx): ' num2str(packetDecodeCompleteFailure) ', Packet Decode Failures (Corrupted Modulation Fld): ' num2str(packetDecodeFailureDueToModulationFieldCorruption) ]);
 % disp(['    BER (Header): ' num2str(totalHeaderBer) ' [Ideal: ' num2str(headerIdealBer) '], BER (Payload): ' num2str(totalPayloadBer) ' [Ideal: ' num2str(idealBer) ']']);

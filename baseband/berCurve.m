@@ -1,4 +1,4 @@
-overSample =4;
+overSample =3;
 awgnSNR = -4:1:35;
 EsN0 = awgnSNR + 10*log10(overSample);
 infoBitsPerSymbol64 = log2(64); %Change when coding introduced
@@ -13,6 +13,7 @@ idealBerBPSK = berawgn(EbN0BPSK, 'psk', 2, 'nondiff');
 idealBerQPSK = berawgn(EbN0QPSK, 'psk', 4, 'nondiff');
 idealBer16QAM = berawgn(EbN016, 'qam', 16, 'nondiff');
 idealBer64QAM = berawgn(EbN016, 'qam', 64, 'nondiff');
+idealBer256QAM = berawgn(EbN016, 'qam', 256, 'nondiff');
 
 figure;
 subplot(2, 1, 1);
@@ -21,7 +22,8 @@ hold on;
 semilogy(EbN0QPSK, idealBerQPSK, 'r--');
 semilogy(EbN016, idealBer16QAM, 'b-');
 semilogy(EbN064, idealBer64QAM, 'g-');
-legend('BPSK', 'QPSK', '16QAM', '64QAM');
+semilogy(EbN064, idealBer256QAM, 'm-');
+legend('BPSK', 'QPSK', '16QAM', '64QAM', '256QAM');
 xlabel('EbN0');
 ylabel('BER');
 title('BER vs. EbN0');
@@ -33,7 +35,8 @@ hold on;
 semilogy(awgnSNR, idealBerQPSK, 'r--');
 semilogy(awgnSNR, idealBer16QAM, 'b-');
 semilogy(awgnSNR, idealBer64QAM, 'g-');
-legend('BPSK', 'QPSK', '16QAM', '64QAM');
+semilogy(awgnSNR, idealBer256QAM, 'm-');
+legend('BPSK', 'QPSK', '16QAM', '64QAM', '256QAM');
 xlabel('SNR');
 ylabel('BER');
 title('BER vs. SNR');
