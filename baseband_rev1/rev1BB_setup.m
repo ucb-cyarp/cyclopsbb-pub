@@ -177,6 +177,34 @@ overSamplePer = 1/overSampleFreq;
 
 unrollFactor = 8;
 
+channelizeRateConvertNumerator = 7;
+channelizeRateConvertDenominator = 6;
+
+%Splitting Channel into 3 parts
+%B = Fs
+%Bandwidth of each channel = B/3
+%Center Frequencies at 0, 2B/3, -2B/3
+
+%Calculate phase increment of NCOs
+channels = 3;
+channelizerNCOWidth = 16;
+channelizerNCOAccumulatorBits = 12;
+chan0NCOPhaseIncrement = -2*2^channelizerNCOWidth/3;
+chan2NCOPhaseIncrement = 2*2^channelizerNCOWidth/3;
+
+channelizedOversampleFreq = overSampleFreq*channelizeRateConvertNumerator/channelizeRateConvertDenominator;
+channelizedEffectiveOversampleForChannelSimulation = channelizedOversampleFreq/(baseFreq*overSample);
+
+% txChannelizerFilter = designMultirateFIR(channelizeRateConvertNumerator, channelizeRateConvertDenominator, 0.01);
+%The RRC filter does not provice great stopband attenuation, will filter
+%again to form a narrower signal
+% txChannelizerBasebandFilter = firpm(txChannelizerBasebandFilterOrder, [0, (1/overSample+1/overSample*channelizedEffectiveOversampleForChannelSimulation)/2, 1/overSample*channelizedEffectiveOversampleForChannelSimulation, 1], [1, 1, 0, 0]);
+% txChannelizerBasebandFilterOrder = 120;
+% txChannelizerBasebandFilterSepc = fdesign.lowpass('N,Fp,Fst,Ap', txChannelizerBasebandFilterOrder, (1/overSample+1/overSample*channelizedEffectiveOversampleForChannelSimulation)/2, 1/overSample*channelizedEffectiveOversampleForChannelSimulation, 0.1);
+txChannelizerBasebandFilterSepc = fdesign.lowpass('Fp,Fst,Ap,Ast', 1/overSample*(1+(channelizedEffectiveOversampleForChannelSimulation-1)*2/3), 1/overSample*channelizedEffectiveOversampleForChannelSimulation, 0.05, 60);
+txChannelizerBasebandFilterDesign = design(txChannelizerBasebandFilterSepc,'equiripple');
+txChannelizerBasebandFilter = txChannelizerBasebandFilterDesign.Numerator;
+
 %% Setup Golay
 golayType = 32;
 golay_type = golayType;
@@ -242,8 +270,8 @@ IQ_Imbal_Phi_Deg = -2;
 IQ_Imbal_Phi = IQ_Imbal_Phi_Deg*pi/180;
 
 %% Setup Pulse Shaping Filter (Root Raised Cosine)
-rcFiltRolloffFactor = 0.5;
-rcFiltSpanSymbols = 16;
+rcFiltRolloffFactor = 0.2;
+rcFiltSpanSymbols = 20;
 rcFileLinearAmpGain = 1;
 
 %Setup Root Raised Cosine Matched Filters
