@@ -1,4 +1,6 @@
 # cyclopsbb
+Zenodo Concept DOI: [![Concept DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.6525769.svg)](https://doi.org/10.5281/zenodo.6525769)
+
 Cyclops Baseband used in xG, SC2, and Christopher Yarp's Ph.D Thesis
 
 The baseband is a single carrier design capable of BPSK, QPSK, 16 QAM, and 256 QAM modulation schemes.  It includes AGC, timing recovery, carrier recovery, Equilization, and packet parsing logic.
